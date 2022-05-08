@@ -1,0 +1,7 @@
+{
+  "name": "master_thesis",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
