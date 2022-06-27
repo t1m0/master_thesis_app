@@ -1,0 +1,41 @@
+.color-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    margin: 40px;
+    font-size: 40px;
+    line-height: 40px;
+    height: 80px;
+}
+
+.color-container:hover {
+    cursor: pointer;
+}
+.color-container-disabled {
+    visibility: hidden;
+}
+
+.color-container-green {
+    color: green;
+}
+
+.color-container-blue {
+    color: blue;
+}
+
+.color-container-red {
+    color: red;
+}
+
+.color-container-yellow {
+    color: yellow;
+}
+
+.color-container-pink {
+    color: pink;
+}
+
+.color-container-placeholder {
+    visibility: hidden;
+}
