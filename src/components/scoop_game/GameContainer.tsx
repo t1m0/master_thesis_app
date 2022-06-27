@@ -1,7 +1,7 @@
 import './GameContainer.css';
-import GameBoardContainer from '../components/GameBoardContainer';
-import LaunchGameContainer from '../components/LaunchGameContainer';
-import ResultContainer from '../components/ResultContainer';
+import GameBoardContainer from './GameBoardContainer';
+import LaunchGameContainer from './LaunchGameContainer';
+import ResultContainer from './ResultContainer';
 
 import React, {useState, useEffect} from "react";
 

@@ -1,5 +1,5 @@
 import './GameBoardContainer.css';
-import ColorContainer from '../components/ColorContainer';
+import ColorContainer from './ColorContainer';
 
 interface GameBoardContainerProps {
     invalidContainerCount: number,
