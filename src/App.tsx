@@ -1,6 +1,7 @@
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
+import { IonApp, IonNav, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import ColorSelector from './pages/ColorSelector';
 import Home from './pages/Home';
 
 /* Core CSS required for Ionic components to work properly */
@@ -26,16 +27,18 @@ setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
+    <IonNav/>
+    <BrowserRouter>
+      <Route exact path="/home">
           <Home />
+        </Route>
+        <Route exact path="/color">
+          <ColorSelector />
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
+    </BrowserRouter>
   </IonApp>
 );
 
