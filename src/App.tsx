@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { IonApp, setupIonicReact } from '@ionic/react';
 import ColorSelector from './pages/ColorSelector';
+import Spiral from './pages/Spiral';
 import Home from './pages/Home';
 
 /* Core CSS required for Ionic components to work properly */
@@ -30,6 +31,7 @@ const App: React.FC = () => (
       <Routes>
           <Route path="/home" element={<Home />}/>
           <Route path="/color" element={<ColorSelector />}/>
+          <Route path="/spiral" element={<Spiral />}/>
           <Route path="/" element={<Navigate to="/home" />}/>
         </Routes>
     </BrowserRouter>

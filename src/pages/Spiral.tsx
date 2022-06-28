@@ -1,8 +1,20 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import GameContainer from '../components/scoop_game/GameContainer';
+import CanvasContainer from '../components/spiral/CanvasContainer';
+import SpiralDrawingResult from '../components/spiral/model/SpiralDrawingResult';
 
 const ColorSelector: React.FC = () => {
 
+  const styles = {
+    border: '0.0625rem solid #9c9c9c',
+    borderRadius: '0.25rem',
+  };
+
+  const drawingFinished = (result:SpiralDrawingResult) => {
+    console.log("finished");
+    console.log(result.blob);
+    console.log(result.start);
+    console.log(result.end);
+  }
 
   return (
     <IonPage>
@@ -12,7 +24,7 @@ const ColorSelector: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        
+        <CanvasContainer drawingFinishedCallback={drawingFinished}/>
       </IonContent>
     </IonPage>
   );

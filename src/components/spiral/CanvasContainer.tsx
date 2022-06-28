@@ -1,33 +1,31 @@
-import { TouchEventHandler, useRef } from 'react';
+import { IonContent } from '@ionic/react';
+import React, { useReducer } from 'react'
+import { SpiralCanvasContainer } from './SpiralCanvasContainer';
+import ImageCoordinate from './model/ImageCoordinate';
+import SpiralDrawingResult from './model/SpiralDrawingResult';
 import './CanvasContainer.css';
 
 interface CanvasContainerProps {
-  timeOut: number,
-  drawingFinishedCallback:() => void
+  drawingFinishedCallback:(result:SpiralDrawingResult) => void
 }
 
-const ColorContainer: React.FC<CanvasContainerProps> = (props: CanvasContainerProps) => {
 
-  function touchStartCallback() {
-    
+const CanvasContainer: React.FC<CanvasContainerProps> = (props: CanvasContainerProps) => {
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+
+  function restart() {
+    forceUpdate();
   }
-
-  function touchMoveCallback(event:TouchEventHandler<HTMLCanvasElement>) {
-    
-  }
-
-  function touchEndCallback() {
-    
-  }
-
-  const canvasRef = useRef(null)
 
   return (
-    //<canvas id='canvas' ref={canvasRef} onTouchStart={touchStartCallback()} onTouchMove={touchMoveCallback} onTouchEnd={touchEndCallback}> </canvas>
-    <div>
-      
-    </div>
-  );
+    <IonContent fullscreen className='canvas-container'>    
+      <SpiralCanvasContainer key={ignored} onSave={props.drawingFinishedCallback} initialLineWidth={1} initialColor='white' render={({ triggerSave, canvas }) => (
+        <div>
+          <button onClick={restart}>Restart</button>
+          <button onClick={triggerSave}>Save Canvas</button>
+          <div>{canvas}</div>
+        </div>)}/>
+      </IonContent>);
 };
 
-export default ColorContainer;
+export default CanvasContainer;
