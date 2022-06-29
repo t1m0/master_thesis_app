@@ -1,19 +1,23 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { useState } from 'react';
 import CanvasContainer from '../components/spiral/CanvasContainer';
 import SpiralDrawingResult from '../components/spiral/model/SpiralDrawingResult';
+import SprialAnalysis from '../components/spiral/SprialAnalysis';
 
 const ColorSelector: React.FC = () => {
 
-  const styles = {
-    border: '0.0625rem solid #9c9c9c',
-    borderRadius: '0.25rem',
-  };
+  const [result, setResult]=useState<SpiralDrawingResult | undefined>(undefined);
 
   const drawingFinished = (result:SpiralDrawingResult) => {
-    console.log("finished");
-    console.log(result.imageWrapper);
-    console.log(result.start);
-    console.log(result.end);
+      setResult(result);
+  }
+
+  const getContainer = () => {
+    if (result == undefined) {
+      return <CanvasContainer drawingFinishedCallback={drawingFinished}/>;
+    } else {
+      return <SprialAnalysis spiralDrawingResult={result}/>;
+    }
   }
 
   return (
@@ -24,7 +28,7 @@ const ColorSelector: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <CanvasContainer drawingFinishedCallback={drawingFinished}/>
+        {getContainer()}
       </IonContent>
     </IonPage>
   );

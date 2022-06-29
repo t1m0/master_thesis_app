@@ -139,7 +139,7 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
     handleMouseDown = (event: React.SyntheticEvent<HTMLCanvasElement>) => {
         if (this.canvasRef){
             const { offsetX, offsetY } = this.extractOffSetFromEvent(event,this.scalingFactor,this.canvasRef);
-            this.spiralCoordinates.push({x:offsetX,y:offsetY});
+            this.spiralCoordinates.push(new ImageCoordinate(offsetX,offsetY));
             this.lastX = offsetX;
             this.lastY = offsetY;
             if( this.firstX < 0 ) {
@@ -156,7 +156,7 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
         const { color, lineWidth } = this.state;
         if (this.state.isDrawing && this.canvasRef) {
             const { offsetX, offsetY } = this.extractOffSetFromEvent(event,this.scalingFactor,this.canvasRef);
-            this.spiralCoordinates.push({x:offsetX,y:offsetY});
+            this.spiralCoordinates.push(new ImageCoordinate(offsetX,offsetY));
             const ctx = this.ctx;
             if (ctx) {
                 ctx.strokeStyle = color;
@@ -183,8 +183,8 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
 
     handleSave = () => {
         if(this.canvasRef) {
-            const start = {x:this.firstX,y:this.firstY};
-            const end = {x:this.lastX,y:this.lastY};
+            const start = new ImageCoordinate(this.firstX,this.firstY);
+            const end = new ImageCoordinate(this.lastX,this.lastY);
             const height = this.canvasRef.height;
             const width = this.canvasRef.width;
             const coordinates = this.spiralCoordinates;

@@ -6,7 +6,7 @@ export default class UnravelSpiral {
     transform_to_center(startPoint:ImageCoordinate, point:ImageCoordinate): ImageCoordinate {
         const x = (point.x-startPoint.x);
         const y = (startPoint.y - point.y);
-        return {x:x, y:y};
+        return new ImageCoordinate(x,y);
     }
 
     calc_distance(point:ImageCoordinate) {
@@ -28,9 +28,10 @@ export default class UnravelSpiral {
     }
 
     unravel_spiral(center:ImageCoordinate, path:ImageCoordinate[]) {
+        console.log("Processing "+path.length+" spiral coordinates");
         let angle_cuts = 0;
-        const unraveled_spiral = new Collections.Dictionary<ImageCoordinate, PolarCoordinate>();
-        for (const point of path) {
+        const unraveled_spiral :PolarCoordinate[] = [];
+        path.forEach( point => {
             const centered_point = this.transform_to_center(center,point);
             const rho = this.calc_distance(centered_point);
             if (rho > 3 && (center.x == point.x || center.y == point.y)) {
@@ -39,8 +40,8 @@ export default class UnravelSpiral {
             }
             const theta = this.calc_angle(centered_point) + (90*angle_cuts);
             const polar = {rho:rho, theta:theta};
-            unraveled_spiral.setValue(point, polar);
-        }
+            unraveled_spiral.push(polar);
+        });
         return unraveled_spiral;
     }
 }

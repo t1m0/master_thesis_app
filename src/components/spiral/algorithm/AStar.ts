@@ -40,7 +40,7 @@ export default class AStar {
         return total_path;
     }
 
-    aStar(startpoint:ImageCoordinate, endpoint:ImageCoordinate, imageWrapper:ImageWrapper) {
+    aStar(startpoint:ImageCoordinate, endpoint:ImageCoordinate, imageWrapper:ImageWrapper) : ImageCoordinate[] {
         // The set of discovered nodes that may need to be (re-)expanded.
         // Initially, only the start node is known.
         const open_set = new Set<ImageCoordinate>();
@@ -63,7 +63,7 @@ export default class AStar {
             current = this.find_lowest_f_score_node(f_score, open_set);
             if(current == undefined) {
                 console.log("Current undefined!");
-                return;
+                return [];
             }
             if (current == endpoint) {
                 const path = this.reconstruct_path(came_from, f_score, current);
@@ -97,7 +97,7 @@ export default class AStar {
         // Open set is empty but goal was never reached
         console.log("No path found :(")
         if (current == undefined) {
-            current = {x:0,y:0};
+            current = new ImageCoordinate(0,0);
         }
         return this.reconstruct_path(came_from, f_score, current)
     }

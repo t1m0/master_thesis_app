@@ -26,7 +26,7 @@ export default class ImageWrapper {
     walk_vertical_line(start:number,end:number,stable:number) {
         const cells : ImageCoordinate[] = []
         for (let index = start; index < end+1; index++) {
-            cells.push({x:index,y:stable})   
+            cells.push(new ImageCoordinate(index,stable));
         }
         return cells
     }
@@ -34,7 +34,7 @@ export default class ImageWrapper {
     walk_horizontal_line(start:number,end:number,stable:number) {
         const cells : ImageCoordinate[] = []
         for (let index = start; index < end+1; index++) {
-            cells.push({x:stable,y:index})   
+            cells.push(new ImageCoordinate(stable,index));
         }
         return cells
     }
