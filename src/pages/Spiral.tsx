@@ -11,7 +11,7 @@ const ColorSelector: React.FC = () => {
 
   const drawingFinished = (result:SpiralDrawingResult) => {
     console.log("finished");
-    console.log(result.blob);
+    console.log(result.imageWrapper);
     console.log(result.start);
     console.log(result.end);
   }

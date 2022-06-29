@@ -1,6 +1,7 @@
 import ImageCoordinate from './model/ImageCoordinate';
 import SpiralDrawingResult from './model/SpiralDrawingResult';
 import React, { SyntheticEvent } from 'react';
+import ImageWrapper from './model/ImageWrapper';
 
 type AnyFunction = (...params: any[]) => any;
 
@@ -65,6 +66,7 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
     lastX = 0;
     lastY = 0;
     scalingFactor = 1;
+    spiralCoordinates:ImageCoordinate[]=[]
 
     state: PainterState = {
         canvasHeight: 0,
@@ -137,6 +139,7 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
     handleMouseDown = (event: React.SyntheticEvent<HTMLCanvasElement>) => {
         if (this.canvasRef){
             const { offsetX, offsetY } = this.extractOffSetFromEvent(event,this.scalingFactor,this.canvasRef);
+            this.spiralCoordinates.push({x:offsetX,y:offsetY});
             this.lastX = offsetX;
             this.lastY = offsetY;
             if( this.firstX < 0 ) {
@@ -153,6 +156,7 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
         const { color, lineWidth } = this.state;
         if (this.state.isDrawing && this.canvasRef) {
             const { offsetX, offsetY } = this.extractOffSetFromEvent(event,this.scalingFactor,this.canvasRef);
+            this.spiralCoordinates.push({x:offsetX,y:offsetY});
             const ctx = this.ctx;
             if (ctx) {
                 ctx.strokeStyle = color;
@@ -181,9 +185,13 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
         if(this.canvasRef) {
             const start = {x:this.firstX,y:this.firstY};
             const end = {x:this.lastX,y:this.lastY};
+            const height = this.canvasRef.height;
+            const width = this.canvasRef.width;
+            const coordinates = this.spiralCoordinates;
             this.canvasToBlob(this.canvasRef, 'image/png')
                 .then((blob: Blob) => { 
-                    const result = new SpiralDrawingResult(blob, start, end);
+                    const imageWrapper = new ImageWrapper(blob,coordinates,height,width)
+                    const result = new SpiralDrawingResult(imageWrapper, start, end);
                     this.props.onSave(result); 
                 })
                 .catch(err => console.error('in ReactPainter handleSave', err));
