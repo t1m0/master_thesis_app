@@ -22,11 +22,19 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { useEffect } from 'react';
+import { createStore } from './IonicStorage';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
+const App: React.FC = () => {
+
+  useEffect(() => {
+    const setupStore = async () => {await createStore("AlansDB");}
+    setupStore();
+	}, []);
+  
+  return (<IonApp>
     <BrowserRouter>
       <Routes>
           <Route path="/home" element={<Home />}/>
@@ -35,7 +43,7 @@ const App: React.FC = () => (
           <Route path="/" element={<Navigate to="/home" />}/>
         </Routes>
     </BrowserRouter>
-  </IonApp>
-);
+  </IonApp>)
+};
 
 export default App;

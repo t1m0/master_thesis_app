@@ -3,6 +3,7 @@ import { useState } from 'react';
 import CanvasContainer from '../components/spiral/CanvasContainer';
 import SpiralDrawingResult from '../components/spiral/model/SpiralDrawingResult';
 import SprialAnalysis from '../components/spiral/SprialAnalysis';
+import { readAllFromStorage, readFromStorage, writeInStorage } from '../IonicStorage';
 
 const ColorSelector: React.FC = () => {
 
@@ -10,6 +11,9 @@ const ColorSelector: React.FC = () => {
 
   const drawingFinished = (result:SpiralDrawingResult) => {
       setResult(result);
+      writeInStorage(result.uuid, result);
+      setTimeout(() => {  console.log("World!");readAllFromStorage(); }, 5000);
+
   }
 
   const getContainer = () => {
