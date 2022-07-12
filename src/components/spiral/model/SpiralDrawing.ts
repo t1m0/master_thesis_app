@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import  ImageCoordinate  from "./ImageCoordinate";
 import ImageWrapper from "./ImageWrapper";
-export default class SpiralDrawingResult {
+export default class SpiralDrawing {
     uuid:string;
     imageWrapper:ImageWrapper;
     start:ImageCoordinate;

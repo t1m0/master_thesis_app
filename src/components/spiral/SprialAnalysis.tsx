@@ -1,6 +1,6 @@
 import { IonContent } from '@ionic/react';
 import './CanvasContainer.css';
-import SpiralDrawingResult from './model/SpiralDrawingResult';
+import SpiralDrawingResult from './model/SpiralDrawing';
 import SpiralRating from './algorithm/SpiralRating';
 
 interface SprialAnalysisProps {

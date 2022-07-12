@@ -3,12 +3,12 @@ import { writeInStorage } from '../IonicStorage';
 import React, { useReducer } from 'react'
 
 import { SpiralCanvasContainer } from '../components/spiral/SpiralCanvasContainer';
-import SpiralDrawingResult from '../components/spiral/model/SpiralDrawingResult';
 import { useNavigate } from 'react-router';
 
 import './SpiralDrawing.css';
+import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 
-const SpiralDrawing: React.FC = () => {
+const SpiralDrawingCanvas: React.FC = () => {
   const navigate = useNavigate();
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -16,7 +16,7 @@ const SpiralDrawing: React.FC = () => {
     forceUpdate();
   }
 
-  const drawingFinished = (result:SpiralDrawingResult) => {
+  const drawingFinished = (result:SpiralDrawing) => {
       writeInStorage(result.uuid, result).then(()=> {
         console.log("Saved "+result.uuid+" transition to analysis.")
         navigate("/spiral/"+result.uuid);
@@ -42,4 +42,4 @@ const SpiralDrawing: React.FC = () => {
   );
 };
 
-export default SpiralDrawing;
+export default SpiralDrawingCanvas;

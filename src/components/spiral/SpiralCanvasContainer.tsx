@@ -1,5 +1,5 @@
 import ImageCoordinate from './model/ImageCoordinate';
-import SpiralDrawingResult from './model/SpiralDrawingResult';
+import SpiralDrawingResult from './model/SpiralDrawing';
 import React, { SyntheticEvent } from 'react';
 import ImageWrapper from './model/ImageWrapper';
 

@@ -1,19 +1,9 @@
-import * as Collections from 'typescript-collections';
 import ImageCoordinate from "../model/ImageCoordinate"
 import PolarCoordinate from "../model/PolarCoordinate"
+import { transform_to_center, calc_distance } from "./SpiralMath";
 
 export default class UnravelSpiral {
-    transform_to_center(startPoint:ImageCoordinate, point:ImageCoordinate): ImageCoordinate {
-        const x = (point.x-startPoint.x);
-        const y = (startPoint.y - point.y);
-        return new ImageCoordinate(x,y);
-    }
-
-    calc_distance(point:ImageCoordinate) {
-        const x = point.x**2;
-        const y = point.y**2;
-        return Math.sqrt(x + y);
-    }
+    
 
     calc_angle(point:ImageCoordinate) {
         if (point.x != 0) {
@@ -32,8 +22,8 @@ export default class UnravelSpiral {
         let angle_cuts = 0;
         const unraveled_spiral :PolarCoordinate[] = [];
         path.forEach( point => {
-            const centered_point = this.transform_to_center(center,point);
-            const rho = this.calc_distance(centered_point);
+            const centered_point = transform_to_center(center,point);
+            const rho = calc_distance(centered_point);
             if (rho > 3 && (center.x == point.x || center.y == point.y)) {
                 console.log(point + "cuts angle");
                 angle_cuts += 1;

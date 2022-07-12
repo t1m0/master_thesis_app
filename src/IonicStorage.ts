@@ -1,5 +1,5 @@
 import { Storage, Drivers } from "@ionic/storage";
-import SpiralDrawingResult from "./components/spiral/model/SpiralDrawingResult";
+import SpiralDrawingResult from "./components/spiral/model/SpiralDrawing";
 
 var storage:Storage | undefined = undefined;
 
