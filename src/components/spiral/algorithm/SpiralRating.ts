@@ -1,3 +1,4 @@
+import { removeEmitHelper } from "typescript";
 import ImageCoordinate from "../model/ImageCoordinate";
 import PolarCoordinate from "../model/PolarCoordinate";
 import SpiralDrawingResult from "../model/SpiralDrawing";
@@ -12,41 +13,85 @@ export default class SpiralRating {
         return arr.reduce((a, b) => a + b, 0) / arr.length;
     }
 
+    get_polar_at_index(unraveld_spiral:Map<number,number>, index:number) {
+        const keys = Array.from(unraveld_spiral.keys());
+        let selected_theta = 0;
+        let selected_rho = 0;
+        if (index < unraveld_spiral.size) {
+            selected_theta = keys[index];
+            selected_rho = unraveld_spiral.get(selected_theta)!;
+        }
+        return {rho:selected_rho, theta:selected_theta}
+    }
+
+    calc_first_order_slope(unraveld_spiral:Map<number,number>, index:number) {
+        const current_polar = this.get_polar_at_index(unraveld_spiral,index);
+        const next_polar = this.get_polar_at_index(unraveld_spiral,index+1);
+        
+        const delta_theta = next_polar.theta - current_polar.theta
+        const delta_rho = next_polar.rho - current_polar.rho    
+        
+        let current_slope = 0;
+        if (delta_theta != 0 && current_polar.theta != 0){
+            current_slope = delta_rho/delta_theta/current_polar.theta
+        }
+
+        return current_slope
+    }
+
+    calc_second_order_slope(unraveld_spiral:Map<number,number>, index:number) {
+        const current_polar = this.get_polar_at_index(unraveld_spiral,index);
+        const next_polar = this.get_polar_at_index(unraveld_spiral,index+1);
+        
+        const delta_theta = next_polar.theta - current_polar.theta
+        const delta_rho = next_polar.rho - current_polar.rho    
+        
+        let current_slope = 0;
+        if (delta_theta != 0){
+            current_slope = delta_rho/delta_theta
+        }
+
+        return current_slope
+    }
+
     calc_mean_slope(polar:Map<number,number>){
-        const mean_radius = this.calc_mean(this.to_list(polar.values()));
-        const mean_angles = this.calc_mean(this.to_list(polar.keys()));
-        const result = new Array<number>();
-        polar.forEach((v,k) => {
-            const r = v/k;
-            if((!Number.isNaN(r)) && Number.isFinite(r)) {
-                result.push(r);
-            }
-        });
-        return this.calc_mean(result);
+        let sum_first_order_slope = 0;
+        let sum_second_order_slope = 0;
+
+        const length = polar.size;
+
+        for (let index = 0; index < length; index++) {
+            sum_first_order_slope += this.calc_first_order_slope(polar,index);
+            sum_second_order_slope += this.calc_second_order_slope(polar,index);
+        }
+    
+        const mean_first_order_slope = sum_first_order_slope / length;
+        const mean_second_order_slope = sum_second_order_slope / length;
+        return [mean_first_order_slope, mean_second_order_slope];
     }
 
     calc_first_order_smoothness(polar:Map<number,number>, mean_slope:number) {
         let smoothness_sum = 0
-        polar.forEach( (theta, rho) => {
-            let current_slope = 0;
-            if(theta != 0) {
-                current_slope = rho/theta
-            }
-            smoothness_sum += ((current_slope - mean_slope))**2
-        });
-        return (1/Math.max(...this.to_list(polar.keys())))*smoothness_sum
+        for (let index = 0; index < polar.size; index++) {
+            const first_order_slope = this.calc_first_order_slope(polar,index);
+            smoothness_sum += ((first_order_slope - mean_slope))**2;
+        }
+
+        const total_angular_change = Math.max(...this.to_list(polar.keys()));
+        const mean_smoothness = smoothness_sum / polar.size;
+        return Math.log((1/total_angular_change)*mean_smoothness);
     }
     
     calc_second_order_smoothness(polar:Map<number,number>, mean_slope:number) {
-        let smoothness_sum = 0;
-        polar.forEach( (theta, rho) => {
-            let current_slope = 0;
-            if (theta != 0) {
-                current_slope = (rho/theta)/theta
-            }
-            smoothness_sum += ((current_slope - mean_slope))**2;
-        });
-        return (1/Math.max(...this.to_list(polar.keys())))*smoothness_sum
+        let smoothness_sum = 0
+        for (let index = 0; index < polar.size; index++) {
+            const second_order_slope = this.calc_second_order_slope(polar,index);
+            smoothness_sum += ((second_order_slope - mean_slope))**2;
+        }
+        
+        const total_angular_change = Math.max(...this.to_list(polar.keys()));
+        const mean_smoothness = smoothness_sum / polar.size;
+        return Math.log((1/total_angular_change)*mean_smoothness);
     }
 
     calc_zero_crossing_rate(polar:Map<number,number>) {
@@ -98,10 +143,6 @@ export default class SpiralRating {
         return calc_distance(transformed_end)
     }
 
-    calc_degree_of_severity(unraveled_spiral:PolarCoordinate[]) {
-        
-    }
-
     to_list(iterator:IterableIterator<number>) {
         return Array.from( iterator );
     }
@@ -110,14 +151,21 @@ export default class SpiralRating {
         const unraveled_spiral = this.unravelSpiral.unravel_spiral(result.start, result.imageWrapper.coordinates);
         const polar_map = new Map<number,number>;
         for (const polar of unraveled_spiral) {
-            const rho = (Math.round(polar.rho * 1000) / 1000);
-            const theta = (Math.round(polar.theta * 1000) / 1000);
+            const rho = (Math.round(polar.rho * 100) / 100);
+            const theta = (Math.round(polar.theta * 100) / 100);
             polar_map.set(theta,rho);
         }
+        console.log(polar_map.size);
+        const mean_radius = this.calc_mean(this.to_list(polar_map.values()));
+        const mean_angles = this.calc_mean(this.to_list(polar_map.keys()));
+        console.log("Mean radius: "+mean_radius);
+        console.log("Mean angle: "+mean_angles);
         const mean_slope = this.calc_mean_slope(polar_map);
+
+        console.log("Mean slope: "+mean_slope);
         
-        const firstOrderSmoothness = this.calc_first_order_smoothness(polar_map,mean_slope);
-        const secondOrderSmoothness = this.calc_second_order_smoothness(polar_map,mean_slope);
+        const firstOrderSmoothness = this.calc_first_order_smoothness(polar_map,mean_slope[0]);
+        const secondOrderSmoothness = this.calc_second_order_smoothness(polar_map,mean_slope[1]);
         const thightness = this.calc_thightness(polar_map);
         const zeroCrossingRate = this.calc_zero_crossing_rate(polar_map);
         const degreeOfSeverity = firstOrderSmoothness * secondOrderSmoothness * thightness * zeroCrossingRate;
