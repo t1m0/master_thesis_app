@@ -79,7 +79,7 @@ export default class SpiralRating {
 
         const total_angular_change = Math.max(...this.to_list(polar.keys()));
         const mean_smoothness = smoothness_sum / polar.size;
-        return Math.log((1/total_angular_change)*mean_smoothness);
+        return Math.abs(Math.log((1/total_angular_change)*mean_smoothness));
     }
     
     calc_second_order_smoothness(polar:Map<number,number>, mean_slope:number) {
@@ -91,7 +91,7 @@ export default class SpiralRating {
         
         const total_angular_change = Math.max(...this.to_list(polar.keys()));
         const mean_smoothness = smoothness_sum / polar.size;
-        return Math.log((1/total_angular_change)*mean_smoothness);
+        return Math.abs(Math.log((1/total_angular_change)*mean_smoothness));
     }
 
     calc_zero_crossing_rate(polar:Map<number,number>) {
@@ -130,12 +130,12 @@ export default class SpiralRating {
             }
         });
         // divide crossing count by amount of entries
-        return crossing_count/sortedKeys.length;
+        return Math.abs(crossing_count/sortedKeys.length);
         
     }
 
     calc_thightness(polar:Map<number,number>) {
-        return ((Math.max(...this.to_list(polar.values())) / Math.max(...this.to_list(polar.keys())))-(14*Math.PI))/(2*Math.PI)
+        return Math.abs(((Math.max(...this.to_list(polar.values())) / Math.max(...this.to_list(polar.keys())))-(14*Math.PI))/(2*Math.PI));
     }
     
     calc_spiral_radius(center_point:ImageCoordinate, end_point:ImageCoordinate) {
@@ -147,6 +147,18 @@ export default class SpiralRating {
         return Array.from( iterator );
     }
 
+    determine_severity_level(degreeOfSeverity:number) {
+        if(degreeOfSeverity < 2.13) {
+            return 'Healthy';
+        } else if (degreeOfSeverity > 2.13 && degreeOfSeverity < 3.40) {
+            return 'Good';
+        } else if(degreeOfSeverity > 3.40 && degreeOfSeverity < 5.54) {
+            return 'Medium';
+        } else {
+            return 'Poor';
+        }
+    }
+
     rate(result:SpiralDrawingResult) {
         const unraveled_spiral = this.unravelSpiral.unravel_spiral(result.start, result.imageWrapper.coordinates);
         const polar_map = new Map<number,number>;
@@ -155,20 +167,17 @@ export default class SpiralRating {
             const theta = (Math.round(polar.theta * 100) / 100);
             polar_map.set(theta,rho);
         }
-        console.log(polar_map.size);
+
         const mean_radius = this.calc_mean(this.to_list(polar_map.values()));
         const mean_angles = this.calc_mean(this.to_list(polar_map.keys()));
-        console.log("Mean radius: "+mean_radius);
-        console.log("Mean angle: "+mean_angles);
         const mean_slope = this.calc_mean_slope(polar_map);
-
-        console.log("Mean slope: "+mean_slope);
         
         const firstOrderSmoothness = this.calc_first_order_smoothness(polar_map,mean_slope[0]);
         const secondOrderSmoothness = this.calc_second_order_smoothness(polar_map,mean_slope[1]);
         const thightness = this.calc_thightness(polar_map);
         const zeroCrossingRate = this.calc_zero_crossing_rate(polar_map);
         const degreeOfSeverity = firstOrderSmoothness * secondOrderSmoothness * thightness * zeroCrossingRate;
-        return new SpiralRatingResult(firstOrderSmoothness, secondOrderSmoothness, thightness, zeroCrossingRate, degreeOfSeverity);
+        const severityLevel = this.determine_severity_level(degreeOfSeverity);
+        return new SpiralRatingResult(unraveled_spiral.length, firstOrderSmoothness, secondOrderSmoothness, thightness, zeroCrossingRate, degreeOfSeverity, severityLevel);
     }
 }

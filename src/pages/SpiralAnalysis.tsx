@@ -48,6 +48,7 @@ const SpiralAnalysis: React.FC = () => {
             <tr><td>Tightness</td><td>{result?.thightness}</td></tr>
             <tr><td>Zero Crossing Rate</td><td>{result?.zeroCrossingRate}</td></tr>
             <tr><td>Degree of Severity</td><td>{result?.degreeOfSeverity}</td></tr>
+            <tr><td>Severity Level</td><td>{result?.severityLevel}</td></tr>
           </tbody>
         </table>
         
