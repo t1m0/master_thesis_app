@@ -32,6 +32,8 @@ setupIonicReact();
 
 const App: React.FC = () => {
 
+  document.body.classList.toggle('dark', true);
+
   useEffect(() => {
     const setupStore = async () => {createStore();}
     setupStore();
