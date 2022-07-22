@@ -13,6 +13,7 @@ const Home: React.FC = () => {
       <IonContent fullscreen>
         <Link to="/color">Color Selector</Link>
         <Link to="/spiral">Spiral Drawing</Link>
+        <Link to="/ble">BLE Test</Link>
       </IonContent>
     </IonPage>
   );

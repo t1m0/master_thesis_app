@@ -26,7 +26,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import SpiralDrawing from './pages/SpiralDrawingCanvas';
-
+import BLETest from './pages/BLETest';
 
 setupIonicReact();
 
@@ -36,13 +36,13 @@ const App: React.FC = () => {
     const setupStore = async () => {createStore();}
     setupStore();
 	}, []);
-
   return (<IonApp>
     <BrowserRouter>
       <Routes>
           <Route path="/home" element={<Home />}/>
           <Route path="/color" element={<ColorSelector />}/>
           <Route path="/spiral" element={<SpiralDrawing />}/>
+          <Route path="/ble" element={<BLETest />}/>
           <Route path="/spiral/:uuid" element={<SpiralAnalysis />}/>
           <Route path="/" element={<Navigate to="/home" />}/>
         </Routes>
