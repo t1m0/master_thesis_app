@@ -1,4 +1,17 @@
+.spiral-drawing-containe {
+    width: 100%;
+    height: 100%;
+}
 
-.canvas-container canvas {
+.spiral-canvas-container {
+    width: 100%;
+    height: 100%;
+}
+
+.spiral-canvas-container .spiral-button-bar {
+    height: 60px;
+}
+
+.spiral-canvas {
     border: 1px solid white;
 }

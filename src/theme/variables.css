@@ -76,6 +76,11 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-tint: #f5f6f9;
 }
 
+button {
+  width: auto;
+  padding: 0px 10px 0px;
+}
+
 @media (prefers-color-scheme: dark) {
   /*
    * Dark Colors

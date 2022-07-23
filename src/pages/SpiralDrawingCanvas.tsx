@@ -23,6 +23,8 @@ const SpiralDrawingCanvas: React.FC = () => {
       });
   }
 
+  const canvasHeight = window.innerHeight-56/*header*/-60/*buttons*/-50;
+
   return (
     <IonPage>
       <IonHeader>
@@ -30,12 +32,14 @@ const SpiralDrawingCanvas: React.FC = () => {
           <IonTitle>Spiral Drawing</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className='canvas-container' fullscreen>
-        <SpiralCanvasContainer key={ignored} onSave={drawingFinished} initialLineWidth={1} initialColor='white' render={({ triggerSave, canvas }) => (
-          <div>
-            <button onClick={restart}>Restart</button>
-            <button onClick={triggerSave}>Save Canvas</button>
-            <div>{canvas}</div>
+      <IonContent className='spiral-drawing-container' scrollY={false} fullscreen>
+        <SpiralCanvasContainer key={ignored} height={canvasHeight} onSave={drawingFinished} initialLineWidth={1} initialColor='white' render={({ triggerSave, canvas }) => (
+          <div className='spiral-canvas-container'>
+            <div className='spiral-button-bar'>
+              <button onClick={restart}>Restart</button>
+              <button onClick={triggerSave}>Save Canvas</button>
+            </div>
+            <div className='spiral-canvas'>{canvas}</div>
           </div>)}/>
       </IonContent>
     </IonPage>
