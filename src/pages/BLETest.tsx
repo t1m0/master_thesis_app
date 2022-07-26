@@ -1,5 +1,5 @@
 import { BleDevice } from '@capacitor-community/bluetooth-le';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, {useEffect, useState} from "react";
 import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
 
@@ -38,6 +38,9 @@ const BLETest: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>BLETest</IonTitle>
+          <IonButtons>
+            <IonBackButton defaultHref='/home'/>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { writeInStorage } from '../IonicStorage';
 import React, { useReducer } from 'react'
 
@@ -30,6 +30,9 @@ const SpiralDrawingCanvas: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Spiral Drawing</IonTitle>
+          <IonButtons>
+            <IonBackButton defaultHref='/home'/>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent className='spiral-drawing-container' scrollY={false} fullscreen>
