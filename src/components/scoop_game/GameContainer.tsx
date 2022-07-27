@@ -4,12 +4,14 @@ import LaunchGameContainer from './LaunchGameContainer';
 import ResultContainer from './ResultContainer';
 
 import React, {useState, useEffect} from "react";
+import { GameType } from './GameType';
 
 interface GameContainerProps {
-  totalContainerCount: number,
-  placeholderRatio:number,
-  validRatio:number,
-  timeOut:number
+    gameType: GameType;
+    totalContainerCount: number,
+    placeholderRatio:number,
+    validRatio:number,
+    timeOut:number
 }
 
 class GameSession {
@@ -59,7 +61,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
     function getContainer() {
         if (gameStarted && !gameFinished) {
-            return <GameBoardContainer validContainerCount={validContainerCount} invalidContainerCount={invalidContainerCount} placeholderContainerCount={placeholderContainerCount} clickCallback={clickCallback} />
+            return <GameBoardContainer gameType={props.gameType} validContainerCount={validContainerCount} invalidContainerCount={invalidContainerCount} placeholderContainerCount={placeholderContainerCount} clickCallback={clickCallback} />
         } else if (gameStarted && gameFinished) {
             return <ResultContainer validSelections={gameSession.validSelections} invalidSelections={gameSession.invalidSelections} duration={gameSession.duration} launchGameCallback={launchGameCallback} />
         } else {

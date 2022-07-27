@@ -1,8 +1,12 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import GameContainer from '../components/scoop_game/GameContainer';
-import './ColorSelector.css';
+import { GameType } from '../components/scoop_game/GameType';
 
-const ColorSelector: React.FC = () => {
+interface ScoopGameProps {
+  gameType:GameType
+}
+
+const ScoopGame: React.FC<ScoopGameProps> = (props: ScoopGameProps) => {
   let availableHeight = window.screen.availHeight;
   let availableWidth = window.screen.availWidth;
   let isMobile = window.navigator.userAgent.includes('Mobi');
@@ -40,10 +44,10 @@ const ColorSelector: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <GameContainer totalContainerCount={colorContainerCount} placeholderRatio={.4} validRatio={.4} timeOut={180000}/>
+        <GameContainer gameType={props.gameType} totalContainerCount={colorContainerCount} placeholderRatio={.4} validRatio={.4} timeOut={180000}/>
       </IonContent>
     </IonPage>
   );
 };
 
-export default ColorSelector;
+export default ScoopGame;

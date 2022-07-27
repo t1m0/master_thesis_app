@@ -3,7 +3,7 @@ import { IonApp, setupIonicReact } from '@ionic/react';
 import { createStore } from './IonicStorage';
 import { useEffect } from 'react';
 
-import ColorSelector from './pages/ColorSelector';
+import ScoopGame from './pages/ScoopGame';
 import SpiralAnalysis from './pages/SpiralAnalysis';
 import Home from './pages/Home';
 
@@ -27,6 +27,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import SpiralDrawing from './pages/SpiralDrawingCanvas';
 import BLETest from './pages/BLETest';
+import { GameType } from './components/scoop_game/GameType';
 
 setupIonicReact();
 
@@ -42,7 +43,9 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Routes>
           <Route path="/home" element={<Home />}/>
-          <Route path="/color" element={<ColorSelector />}/>
+          <Route path="/scoop" element={<Navigate to="/scoop/color" />}/>
+          <Route path="/scoop/color" element={<ScoopGame gameType={GameType.Color}/>}/>
+          <Route path="/scoop/triangle" element={<ScoopGame gameType={GameType.Triangle}/>}/>
           <Route path="/spiral" element={<SpiralDrawing />}/>
           <Route path="/ble" element={<BLETest />}/>
           <Route path="/spiral/:uuid" element={<SpiralAnalysis />}/>

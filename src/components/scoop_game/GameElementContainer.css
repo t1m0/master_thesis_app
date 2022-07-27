@@ -1,4 +1,4 @@
-.color-container {
+.game-element {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,33 +9,41 @@
     height: 80px;
 }
 
-.color-container:hover {
+.game-element:hover {
     cursor: pointer;
 }
-.color-container-disabled {
+.game-element-disabled {
     visibility: hidden;
 }
 
-.color-container-green {
+.game-element-green {
     color: green;
 }
 
-.color-container-blue {
+.game-element-blue {
     color: blue;
 }
 
-.color-container-red {
+.game-element-red {
     color: red;
 }
 
-.color-container-yellow {
+.game-element-yellow {
     color: yellow;
 }
 
-.color-container-pink {
+.game-element-pink {
     color: pink;
 }
 
-.color-container-placeholder {
+.game-element-placeholder {
     visibility: hidden;
+}
+
+.game-element-triangle svg {
+    display: block;
+    margin: auto;
+    fill: transparent;
+    stroke: green;
+    stroke-width: 8;
 }

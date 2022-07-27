@@ -11,7 +11,7 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <Link to="/color">Color Selector</Link>
+        <Link to="/scoop">Color Selector</Link>
         <Link to="/spiral">Spiral Drawing</Link>
         <Link to="/ble">BLE Test</Link>
       </IonContent>
