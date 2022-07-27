@@ -26,6 +26,14 @@ const SpiralAnalysis: React.FC = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if(drawing != undefined) {
+      const result = spiralRating.rate(drawing);
+      console.log(result);
+      setResult(result);
+    }
+  }, [drawing]);
+
   
   return (
     <IonPage>
@@ -52,9 +60,11 @@ const SpiralAnalysis: React.FC = () => {
             <tr><td>Zero Crossing Rate</td><td>{result?.zeroCrossingRate}</td></tr>
             <tr><td>Degree of Severity</td><td>{result?.degreeOfSeverity}</td></tr>
             <tr><td>Severity Level</td><td>{result?.severityLevel}</td></tr>
+            <tr><td>Total Time</td><td>{drawing?.time}</td></tr>
           </tbody>
         </table>
         
+        {drawing?.accelerations.map(v => <p>count: {v.recordCount} xAxis: {v.xAxis} yAxis: {v.yAxis} zAxis: {v.zAxis}</p>)}
       </IonContent>
     </IonPage>
   );

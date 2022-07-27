@@ -2,6 +2,7 @@ import ImageCoordinate from './model/ImageCoordinate';
 import SpiralDrawingResult from './model/SpiralDrawing';
 import React, { SyntheticEvent } from 'react';
 import ImageWrapper from './model/ImageWrapper';
+import AccelerationRecord from './ble/AccelerationRecord';
 
 type AnyFunction = (...params: any[]) => any;
 
@@ -36,6 +37,7 @@ export interface SpiralCanvasContainerProps {
     height?: number,
     initialColor?: string;
     initialLineWidth?: number;
+    onStart: () => void;
     onSave: (result:SpiralDrawingResult) => void;
     render?: (props: RenderProps) => JSX.Element;
 }
@@ -146,6 +148,9 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
                 this.firstX = offsetX;
                 this.firstY = offsetY;
             }
+            if (!this.state.isDrawing) {
+                this.props.onStart();
+            }
             this.setState({
                 isDrawing: true
             });
@@ -191,7 +196,7 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
             this.canvasToBlob(this.canvasRef, 'image/png')
                 .then((blob: Blob) => { 
                     const imageWrapper = new ImageWrapper(blob,coordinates,height,width)
-                    const result = new SpiralDrawingResult(imageWrapper, start, end);
+                    const result = new SpiralDrawingResult(imageWrapper, start, end, 0, new Array<AccelerationRecord>());
                     this.props.onSave(result); 
                 })
                 .catch(err => console.error('in ReactPainter handleSave', err));
