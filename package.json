@@ -24,6 +24,7 @@
     "start": "ionic serve",
     "start_ios": "ionic capacitor run ios --livereload --external",
     "build": "ionic build",
+    "build_ios": "ionic capacitor build ios --prod",
     "test": "",
     "eject": "react-scripts eject"
   },
