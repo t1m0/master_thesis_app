@@ -59,7 +59,18 @@ const SpiralDrawingCanvas: React.FC = () => {
       setAccelerations(accelerations => [...accelerations,accelerationRecodr] );
   }
 
-  const canvasHeight = window.innerHeight-56/*header*/-60/*buttons*/-50;
+  const portrait = window.matchMedia("(orientation: portrait)").matches
+  let canvasHeight = 0;
+  let canvasWidth = 0;
+  if (true) {
+    canvasHeight = window.innerHeight-56/*header*/-60/*buttons*/-50;
+    canvasWidth = window.innerWidth;
+  } else {
+    canvasWidth = window.innerHeight-56/*header*/-60/*buttons*/-50;
+    canvasHeight = window.innerWidth;
+  }
+
+  console.log(`potrait: ${portrait} width: ${canvasWidth} height: ${canvasHeight}`)
 
   return (
     <IonPage>
@@ -72,7 +83,7 @@ const SpiralDrawingCanvas: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className='spiral-drawing-container' scrollY={false} fullscreen>
-        <SpiralCanvasContainer key={ignored} height={canvasHeight} onStart={drawingStarted} onSave={drawingFinished} initialLineWidth={1} initialColor='white' render={({ triggerSave, canvas }) => (
+        <SpiralCanvasContainer key={ignored} height={canvasHeight} width={canvasWidth} onStart={drawingStarted} onSave={drawingFinished} initialLineWidth={1} initialColor='white' render={({ triggerSave, canvas }) => (
           <div className='spiral-canvas-container'>
             <div className='spiral-button-bar'>
               <button onClick={restart}>Restart</button>

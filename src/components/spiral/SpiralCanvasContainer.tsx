@@ -161,7 +161,8 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
         const { color, lineWidth } = this.state;
         if (this.state.isDrawing && this.canvasRef) {
             const { offsetX, offsetY } = this.extractOffSetFromEvent(event,this.scalingFactor,this.canvasRef);
-            this.spiralCoordinates.push(new ImageCoordinate(offsetX,offsetY));
+            const imageCoordinate = new ImageCoordinate(offsetX,offsetY);
+            this.spiralCoordinates.push(imageCoordinate);
             const ctx = this.ctx;
             if (ctx) {
                 ctx.strokeStyle = color;
@@ -176,6 +177,7 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
                 ctx.stroke();
                 this.lastX = offsetX;
                 this.lastY = offsetY;
+                console.log("Drawing Spiral",imageCoordinate)
             }
         }
     };
