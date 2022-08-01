@@ -12,6 +12,7 @@
     "@ionic/storage": "^3.0.6",
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.5",
+    "@types/jest": "^27.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.3.0",
@@ -25,7 +26,7 @@
     "start_ios": "ionic capacitor run ios --livereload --external",
     "build": "ionic build",
     "build_ios": "ionic capacitor build ios --prod",
-    "test": "",
+    "test": "react-scripts test --watchAll=false --transformIgnorePatterns \"node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -48,7 +49,8 @@
   },
   "devDependencies": {
     "@capacitor/cli": "3.6.0",
-    "@types/uuid": "^8.3.4"
+    "@types/uuid": "^8.3.4",
+    "react-scripts": "^5.0.1"
   },
   "description": "An Ionic project"
 }
