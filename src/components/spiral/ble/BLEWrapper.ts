@@ -1,4 +1,4 @@
-import { BleClient, BleDevice, BleService, dataViewToHexString, dataViewToNumbers, dataViewToText, numbersToDataView, numberToUUID, ScanResult } from '@capacitor-community/bluetooth-le';
+import { BleClient, BleDevice, dataViewToNumbers, numbersToDataView } from '@capacitor-community/bluetooth-le';
 import AccelerationRecord from './AccelerationRecord';
 
 const LIVE_SENSOR_SERVICE_UUID = "01550001-5555-5507-0002-01EEDDCCBBAA";
