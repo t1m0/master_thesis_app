@@ -1,5 +1,6 @@
 import { BleClient, BleDevice, dataViewToNumbers, numbersToDataView } from '@capacitor-community/bluetooth-le';
 import AccelerationRecord from './AccelerationRecord';
+import { mapAccelerationRecord } from './AccelerationRecordMapper';
 
 const LIVE_SENSOR_SERVICE_UUID = "01550001-5555-5507-0002-01EEDDCCBBAA";
 const LIVE_SENSOR_FRAME_RATE_GUID = "01550009-5555-5507-0002-01EEDDCCBBAA";
@@ -15,9 +16,9 @@ export async function connectToDevice(): Promise<BleDevice> {
 
         const device = await BleClient.requestDevice({
             services: [BLE_SERVICE]
-          });
+        });
         console.log('connecting to device', device.deviceId);
-        await BleClient.connect(device.deviceId, onDisconnect,{timeout:10000});
+        await BleClient.connect(device.deviceId, onDisconnect, { timeout: 10000 });
         console.log('connected to device', device.deviceId);
         return device;
     } catch (error) {
@@ -25,7 +26,7 @@ export async function connectToDevice(): Promise<BleDevice> {
     }
 }
 
-export async function subscribeToNotifications(device:BleDevice, dataCallback: (record: AccelerationRecord) => void):Promise<void> {
+export async function subscribeToNotifications(device: BleDevice, dataCallback: (record: AccelerationRecord) => void): Promise<void> {
     try {
         await BleClient.write(device.deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([1]));
         console.log('live sensor flag updated');
@@ -34,7 +35,7 @@ export async function subscribeToNotifications(device:BleDevice, dataCallback: (
             LIVE_SENSOR_SERVICE_UUID,
             LIVE_SENSOR_ACCELERATION_GUID,
             value => {
-                const record = createAccelerationRecord(value);
+                const record = mapAccelerationRecord(value);
                 console.log(record);
                 dataCallback(record);
             });
@@ -45,7 +46,7 @@ export async function subscribeToNotifications(device:BleDevice, dataCallback: (
 }
 
 
-export async function unSubscribeToNotifications(device:BleDevice):Promise<void> {
+export async function unSubscribeToNotifications(device: BleDevice): Promise<void> {
     try {
         await BleClient.stopNotifications(device.deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_ACCELERATION_GUID);
         await BleClient.write(device.deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([0]));
@@ -60,35 +61,3 @@ export async function unSubscribeToNotifications(device:BleDevice):Promise<void>
 function onDisconnect(deviceId: string): void {
     console.log(`device ${deviceId} disconnected`);
 }
-
-function createAccelerationRecord(value:DataView) {
-    console.log("Numbers: ",dataViewToNumbers(value));
-    const byteArray = dataViewToNumbers(value);
-
-    let startPosition = 0;
-    const recordCount =  toNumber(byteArray,startPosition,4)
-    startPosition += 4;
-    const xAxis = toNumber(byteArray,startPosition,2)
-    startPosition += 2;
-    const yAxis = toNumber(byteArray,startPosition,2)
-    startPosition += 2;  
-    const zAxis = toNumber(byteArray,startPosition,2)
-    return new AccelerationRecord(recordCount,xAxis,yAxis,zAxis);
-}
-
-function toNumber(bArray:number[], start:number, length:number){
-    const array = new Array<number>();
-    let current = start
-    while (current < (start+length)) {
-        array.push(bArray[current])
-        current += 1
-    }
-    console.log(`Slice ${start} - ${start+length}for calc: `,array);
-    let value = 0;
-    for (var i = array.length - 1; i >= 0; i--) {
-        value = (value * 256) + array[i];
-    }
-
-    return value
-}
-
