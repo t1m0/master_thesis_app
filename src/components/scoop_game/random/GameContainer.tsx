@@ -1,10 +1,9 @@
-import './GameContainer.css';
 import GameBoardContainer from './GameBoardContainer';
-import LaunchGameContainer from './LaunchGameContainer';
-import ResultContainer from './ResultContainer';
+import LaunchGameContainer from '../LaunchGameContainer';
+import ResultContainer from '../ResultContainer';
 
 import React, {useState, useEffect} from "react";
-import { GameType } from './GameType';
+import { GameType } from '../GameType';
 
 interface GameContainerProps {
     gameType: GameType;

@@ -1,5 +1,5 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import GameContainer from '../components/scoop_game/GameContainer';
+import GameContainer from '../components/scoop_game/random/GameContainer';
 import { GameType } from '../components/scoop_game/GameType';
 
 interface ScoopGameProps {

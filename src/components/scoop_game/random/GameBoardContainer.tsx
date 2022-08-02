@@ -1,6 +1,6 @@
 import './GameBoardContainer.css';
 import { v4 as uuid } from 'uuid';
-import { GameType } from './GameType';
+import { GameType } from '../GameType';
 import GameElementContainer from './GameElementContainer';
 
 interface GameBoardContainerProps {
