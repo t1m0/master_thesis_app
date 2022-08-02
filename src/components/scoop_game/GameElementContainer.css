@@ -43,7 +43,7 @@
 .game-element-triangle svg {
     display: block;
     margin: auto;
-    fill: transparent;
+    fill: green;
     stroke: green;
     stroke-width: 8;
 }
