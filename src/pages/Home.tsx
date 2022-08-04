@@ -13,6 +13,7 @@ const Home: React.FC = () => {
       <IonContent fullscreen>
         <IonButton href="/scoop">Color Scoop Game</IonButton><br/>
         <IonButton href="/scoop/triangle">Color Triangle Game</IonButton><br/>
+        <IonButton href="/scoop/static">Static Scoop Game</IonButton><br/>
         <IonButton href="/spiral">Spiral Drawing</IonButton><br/>
         <IonButton href="/ble">BLE Test</IonButton>
       </IonContent>

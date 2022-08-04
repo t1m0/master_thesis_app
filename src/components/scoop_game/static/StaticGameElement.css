@@ -1,0 +1,22 @@
+.static-game-element {
+    position: relative;
+    height: 110px;
+    width: 110px;
+    display: flex;
+    justify-content: center;
+}
+
+.static-game-element:hover {
+    cursor: pointer;
+}
+.static-game-element-disabled {
+    visibility: hidden;
+}
+
+.static-game-element svg {
+    display: block;
+    margin: auto;
+    fill: green;
+    stroke: green;
+    stroke-width: 8;
+}

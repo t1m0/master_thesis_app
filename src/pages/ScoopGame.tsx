@@ -1,33 +1,26 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import GameContainer from '../components/scoop_game/random/GameContainer';
+import GameContainer from '../components/scoop_game/GameContainer';
 import { GameType } from '../components/scoop_game/GameType';
+import { isPortrait, isMobile, getWidth, getHeight, getCorrectedHeight } from '../util/layout';
 
 interface ScoopGameProps {
   gameType:GameType
 }
 
 const ScoopGame: React.FC<ScoopGameProps> = (props: ScoopGameProps) => {
-  let availableHeight = window.screen.availHeight;
-  let availableWidth = window.screen.availWidth;
-  let isMobile = window.navigator.userAgent.includes('Mobi');
+  
   
 
   console.log(isMobile);
 
-  function isPortrait(height:number, width:number) {
-    return height > width;
-  }
+  
 
-  function calcRowCount(mobile:boolean, height:number, width:number) {
-    if (!isPortrait(height, width) && mobile) {
-      return Math.round((width-200) / 160);
-    } else {
-      return Math.round((height - 200) / 160);
-    }
+  function calcRowCount() {
+    return Math.round((getCorrectedHeight()-200) / 160);
   }
 
 
-  let rowCount = calcRowCount(isMobile, availableHeight, availableWidth);
+  let rowCount = calcRowCount();
   console.log(rowCount);
   let colorContainerCount = 4 * rowCount;
 

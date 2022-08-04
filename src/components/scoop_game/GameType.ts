@@ -1,3 +1,3 @@
 export enum GameType {
-    Color, Triangle
+    Color, Triangle, Static
 }

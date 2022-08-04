@@ -46,6 +46,7 @@ const App: React.FC = () => {
           <Route path="/scoop" element={<Navigate to="/scoop/color" />}/>
           <Route path="/scoop/color" element={<ScoopGame gameType={GameType.Color}/>}/>
           <Route path="/scoop/triangle" element={<ScoopGame gameType={GameType.Triangle}/>}/>
+          <Route path="/scoop/static" element={<ScoopGame gameType={GameType.Static}/>}/>
           <Route path="/spiral" element={<SpiralDrawing />}/>
           <Route path="/ble" element={<BLETest />}/>
           <Route path="/spiral/:uuid" element={<SpiralAnalysis />}/>
