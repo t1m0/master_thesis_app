@@ -30,7 +30,7 @@ const ScoopGame: React.FC<ScoopGameProps> = (props: ScoopGameProps) => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <GameContainer gameType={props.gameType} totalContainerCount={colorContainerCount} placeholderRatio={.4} validRatio={.4} timeOut={180000}/>
+        <GameContainer gameType={props.gameType} totalContainerCount={colorContainerCount} placeholderRatio={.4} validRatio={.4}/>
       </IonContent>
     </IonPage>
   );
