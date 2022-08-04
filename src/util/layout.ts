@@ -11,11 +11,13 @@ export function getWidth() {
 }
 
 export function getCorrectedHeight() {
-    return getHeight() - 200;
+    const correction = isMobile() ? 100 : 150;
+    const height = isLandscape() ? getHeight() : getWidth();
+    return height - correction;
 }
 
 export function getCorrectedWidth() {
-    return getWidth();
+    return isLandscape() ? getWidth() : getHeight();
 }
 
 export function isPortrait() {

@@ -10,6 +10,7 @@ import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 import { connectToDevice, subscribeToNotifications, unSubscribeToNotifications } from '../components/spiral/ble/BLEWrapper';
 import { BleDevice } from '@capacitor-community/bluetooth-le';
 import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
+import { getCorrectedHeight, getCorrectedWidth } from '../util/layout';
 
 const SpiralDrawingCanvas: React.FC = () => {
   const navigate = useNavigate();
@@ -58,19 +59,9 @@ const SpiralDrawingCanvas: React.FC = () => {
       console.log('acceleration data', accelerationRecodr);
       setAccelerations(accelerations => [...accelerations,accelerationRecodr] );
   }
-
-  const portrait = window.matchMedia("(orientation: portrait)").matches
-  let canvasHeight = 0;
-  let canvasWidth = 0;
-  if (true) {
-    canvasHeight = window.innerHeight-56/*header*/-60/*buttons*/-50;
-    canvasWidth = window.innerWidth;
-  } else {
-    canvasWidth = window.innerHeight-56/*header*/-60/*buttons*/-50;
-    canvasHeight = window.innerWidth;
-  }
-
-  console.log(`potrait: ${portrait} width: ${canvasWidth} height: ${canvasHeight}`)
+  
+  const canvasHeight = getCorrectedHeight()/*buttons*/-50;
+  const canvasWidth = getCorrectedWidth();
 
   return (
     <IonPage>

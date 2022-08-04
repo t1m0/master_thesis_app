@@ -20,7 +20,7 @@ const StaticGameBoardContainer: React.FC<StaticGameBoardContainerProps> = (props
     const getElement = (input: StaticGameElementInput) => {
         const id = `${elementCount++}-static-element`;
         console.log(`height: ${getHeight()} corrected height: ${getCorrectedHeight()}`)
-        const top =  (getCorrectedHeight() - 200) * (input.yPercentage / 100);
+        const top =  (getCorrectedHeight()) * (input.yPercentage / 100)+50;
         const left = getCorrectedWidth() * (input.xPercentage / 100);
         return <StaticGameElement key={id} top={top} left={left} disabled={false} clickCallback={clickCallback} />
     }

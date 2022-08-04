@@ -1,8 +1,10 @@
 import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { Link } from 'react-router-dom';
+import { getCorrectedHeight, getCorrectedWidth, isLandscape, isMobile, isPortrait } from '../util/layout';
 
 const Home: React.FC = () => {
-
+  console.log(`portrait: ${isPortrait()} landscape: ${isLandscape()} mobile: ${isMobile()}`)
+  console.log(`height: ${getCorrectedHeight()} width: ${getCorrectedWidth()}`)
   return (
     <IonPage>
       <IonHeader>

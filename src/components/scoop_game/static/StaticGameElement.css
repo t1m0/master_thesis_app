@@ -1,5 +1,5 @@
 .static-game-element {
-    position: relative;
+    position: absolute;
     height: 110px;
     width: 110px;
     display: flex;

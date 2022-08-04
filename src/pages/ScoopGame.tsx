@@ -9,22 +9,15 @@ interface ScoopGameProps {
 
 const ScoopGame: React.FC<ScoopGameProps> = (props: ScoopGameProps) => {
   
-  
-
-  console.log(isMobile);
-
-  
-
   function calcRowCount() {
-    return Math.round((getCorrectedHeight()-200) / 160);
+    return Math.round((getCorrectedHeight()) / 160);
   }
 
 
   let rowCount = calcRowCount();
-  console.log(rowCount);
   let colorContainerCount = 4 * rowCount;
 
-  console.log(colorContainerCount);
+  console.log(`rows: ${rowCount} colorContainerCount: ${colorContainerCount}`);
 
   return (
     <IonPage>

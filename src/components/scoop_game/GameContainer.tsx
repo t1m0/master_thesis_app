@@ -65,7 +65,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         elements.push({ xPercentage: 50, yPercentage: 30 })
         elements.push({ xPercentage: 80, yPercentage: 20 })
         elements.push({ xPercentage: 20, yPercentage: 50 })
-        elements.push({ xPercentage: 80, yPercentage: 70 })
+        elements.push({ xPercentage: 80, yPercentage: 85 })
         return <StaticGameBoardContainer elements={elements} timeOut={10} />
     }
 
