@@ -31,14 +31,19 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setGameSession(new GameSession());
     }   
 
-    function getStaticContainer() {
+    function getElements() {
         const elements = new Array<StaticGameElementInput>();
-        elements.push({ xPercentage: 10, yPercentage: 10 })
-        elements.push({ xPercentage: 50, yPercentage: 30 })
-        elements.push({ xPercentage: 80, yPercentage: 20 })
-        elements.push({ xPercentage: 20, yPercentage: 50 })
-        elements.push({ xPercentage: 80, yPercentage: 85 })
-        return <StaticGameBoardContainer elements={elements} timeOut={10000} finishedCallback={finishedCallback} />
+        elements.push({ xPercentage: 10, yPercentage: 10 });
+        elements.push({ xPercentage: 50, yPercentage: 30 });
+        elements.push({ xPercentage: 80, yPercentage: 20 });
+        elements.push({ xPercentage: 20, yPercentage: 50 });
+        elements.push({ xPercentage: 80, yPercentage: 85 });
+        return elements;
+    }
+
+    function getStaticContainer() {
+        const elements = getElements();
+        return <StaticGameBoardContainer elements={elements} timeOut={elements.length * 1500} finishedCallback={finishedCallback} />
     }
 
     function finishedCallback(session:GameSession) {
