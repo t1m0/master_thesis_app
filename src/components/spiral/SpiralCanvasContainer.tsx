@@ -78,33 +78,47 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
         lineWidth: this.props.initialLineWidth!
     };
 
-    extractOffSetFromEvent = (event: SyntheticEvent<HTMLCanvasElement>,scalingFactor: number,canvasRef: HTMLCanvasElement) => {
-        const {
-          offsetX,
-          offsetY,
-          touches,
-          clientX: mouseClientX,
-          clientY: mouseClientY
-        } = event.nativeEvent as any;
-        // If offset coords are directly on the event we use them
-        if (offsetX && offsetY) {
-          return {
-            offsetX: offsetX * scalingFactor,
-            offsetY: offsetY * scalingFactor
-          };
-        }
-        // Otherwise we need to calculate them as difference between (x, y) of event and (left, top) corner of canvas
-        // We need to check whether user is using a touch device or just the mouse and extract
-        // the touch/click coords accordingly
-        const clientX = touches && touches.length ? touches[0].clientX : mouseClientX;
-        const clientY = touches && touches.length ? touches[0].clientY : mouseClientY;
-        const rect = canvasRef.getBoundingClientRect();
-        const x = (clientX - rect.left) * scalingFactor;
-        const y = (clientY - rect.top) * scalingFactor;
+    extractOffSetFromMouseEvent = (event:MouseEvent, scalingFactor:number) => {
         return {
-          offsetX: x,
-          offsetY: y
-        };
+            offsetX: event.offsetX * scalingFactor,
+            offsetY: event.offsetY * scalingFactor
+          };
+    }
+
+    extractOffSetFromTouchEvent = (event:TouchEvent, scalingFactor: number,canvasRef: HTMLCanvasElement) => {
+        if (event.touches && event.touches.length) {
+            const clientX = event.touches[0].clientX;
+            const clientY = event.touches[0].clientY;
+            const rect = canvasRef.getBoundingClientRect();
+            const x = (clientX - rect.left) * scalingFactor;
+            const y = (clientY - rect.top) * scalingFactor;
+            return {
+                offsetX: x,
+                offsetY: y
+              };
+        } else {
+            console.error(`No touches available on event`, event);
+            return {
+                offsetX: 0,
+                offsetY: 0
+              };
+        }
+        
+        
+    }
+
+    extractOffSetFromEvent = (event: SyntheticEvent<HTMLCanvasElement>,scalingFactor: number,canvasRef: HTMLCanvasElement) => {
+        if (event.nativeEvent instanceof MouseEvent) {
+            return this.extractOffSetFromMouseEvent(event.nativeEvent, scalingFactor);
+        } else if (event.nativeEvent instanceof TouchEvent) { 
+            return this.extractOffSetFromTouchEvent(event.nativeEvent,scalingFactor,canvasRef);
+        } else {
+            console.error(`Unexpected event type: ${event.type}`)
+            return {
+                offsetX: 0,
+                offsetY: 0
+              };
+        }
       };
 
     dataUrlToArrayBuffer = (dataURI: string): [string, ArrayBuffer] => {

@@ -1,9 +1,9 @@
 import ImageCoordinate from "../model/ImageCoordinate"
 
-export function transform_to_center(startPoint:ImageCoordinate, point:ImageCoordinate): ImageCoordinate {
-    const x = (point.x-startPoint.x);
-    const y = (startPoint.y - point.y);
-    return new ImageCoordinate(x,y);
+export function transform_to_center(center:ImageCoordinate, point:ImageCoordinate) {
+    const x = (point.x-center.x);
+    const y = (center.y - point.y);
+    return {x:x, y:y} as ImageCoordinate
 }
 
 export function calc_distance(point:ImageCoordinate) {

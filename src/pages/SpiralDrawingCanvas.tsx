@@ -44,6 +44,7 @@ const SpiralDrawingCanvas: React.FC = () => {
       }
       const totalTime = Date.now() - startTime;
       const updatedResult = new SpiralDrawing(result.imageWrapper, result.start, result.end, totalTime, accelerations);
+      console.log(updatedResult);
       writeInStorage(updatedResult.uuid, updatedResult).then(()=> {
         console.log("Saved "+updatedResult.uuid+" transition to analysis.")
         navigate("/spiral/"+updatedResult.uuid);

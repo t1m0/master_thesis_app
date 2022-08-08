@@ -4,10 +4,9 @@ import PolarCoordinate from "../model/PolarCoordinate";
 import SpiralDrawingResult from "../model/SpiralDrawing";
 import SpiralRatingResult from "../model/SpiralDrawingRating";
 import { calc_distance, transform_to_center } from "./SpiralMath";
-import UnravelSpiral from "./UnravelSpiral";
+import { unravel_spiral } from "./UnravelSpiral";
 
 export default class SpiralRating {
-    unravelSpiral = new UnravelSpiral();
 
     calc_mean(arr:number[]) {
         return arr.reduce((a, b) => a + b, 0) / arr.length;
@@ -32,8 +31,8 @@ export default class SpiralRating {
         const delta_rho = next_polar.rho - current_polar.rho    
         
         let current_slope = 0;
-        if (delta_theta != 0 && current_polar.theta != 0){
-            current_slope = delta_rho/delta_theta/current_polar.theta
+        if (delta_theta != 0){
+            current_slope = delta_rho/delta_theta
         }
 
         return current_slope
@@ -47,8 +46,8 @@ export default class SpiralRating {
         const delta_rho = next_polar.rho - current_polar.rho    
         
         let current_slope = 0;
-        if (delta_theta != 0){
-            current_slope = delta_rho/delta_theta
+        if (delta_theta != 0 && current_polar.theta != 0){
+            current_slope = delta_rho/delta_theta/current_polar.theta
         }
 
         return current_slope
@@ -76,9 +75,9 @@ export default class SpiralRating {
             const first_order_slope = this.calc_first_order_slope(polar,index);
             smoothness_sum += ((first_order_slope - mean_slope))**2;
         }
-
-        const total_angular_change = Math.max(...this.to_list(polar.keys()));
         const mean_smoothness = smoothness_sum / polar.size;
+        const total_angular_change = Math.max(...this.to_list(polar.keys()));
+
         return Math.abs(Math.log((1/total_angular_change)*mean_smoothness));
     }
     
@@ -160,7 +159,7 @@ export default class SpiralRating {
     }
 
     rate(result:SpiralDrawingResult) {
-        const unraveled_spiral = this.unravelSpiral.unravel_spiral(result.start, result.imageWrapper.coordinates);
+        const unraveled_spiral = unravel_spiral(result.start, result.imageWrapper.coordinates);
         const polar_map = new Map<number,number>;
         for (const polar of unraveled_spiral) {
             const rho = (Math.round(polar.rho * 100) / 100);
