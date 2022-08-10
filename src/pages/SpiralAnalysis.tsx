@@ -1,10 +1,12 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'
 import SpiralRating from '../components/spiral/algorithm/SpiralRating';
 import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 import SpiralDrawingRating from '../components/spiral/model/SpiralDrawingRating';
 import { readFromStorage } from '../IonicStorage';
+
+import { Share } from '@capacitor/share';
 
 
 const SpiralAnalysis: React.FC = () => {
@@ -34,6 +36,18 @@ const SpiralAnalysis: React.FC = () => {
     }
   }, [drawing]);
 
+  const share = () => {
+    if (result != undefined && drawing != undefined && navigator.share) {
+      const data = {"drawing": drawing, "result": result};
+      const file = new File([JSON.stringify(data)], `${drawing.uuid}.json`, {type: "application/json"})
+      navigator.share({
+        title: `Spiral Drawing ${drawing.uuid}`,
+        files:[file],
+      }).then(() => console.log('Successful share'))
+      .catch((error) => console.log('Error sharing', error)); 
+    }
+  }
+
   const getTableBody = () => {
     if (result != undefined && drawing != undefined) {
       return <tbody>
@@ -44,6 +58,7 @@ const SpiralAnalysis: React.FC = () => {
         <tr><td>Degree of Severity</td><td>{result.degreeOfSeverity}</td></tr>
         <tr><td>Severity Level</td><td>{result.severityLevel}</td></tr>
         <tr><td>Total Time</td><td>{Math.round(drawing.time / 1000 * 100) / 100}sec</td></tr>
+        <tr><td><IonButton onClick={share}>Share</IonButton></td></tr>
       </tbody>
     } else {
       return <tbody></tbody>
