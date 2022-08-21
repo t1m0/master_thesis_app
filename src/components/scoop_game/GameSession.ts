@@ -3,6 +3,7 @@ export class GameSession {
     invalidSelections: number = 0;
     duration: number = 0;
     startTime: number;
+    clickDistance = new Array<number>();
 
     constructor() {
         this.startTime = performance.now()

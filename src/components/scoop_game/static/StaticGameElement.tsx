@@ -1,5 +1,5 @@
 
-import React, {ReactNode, useState} from "react";
+import React, {useState} from "react";
 
 import './StaticGameElement.css'
 interface StaticGameElementProps {
@@ -7,17 +7,30 @@ interface StaticGameElementProps {
     disabled:boolean,
     top:number,
     left:number,
-    clickCallback:(id:string) => void
+    clickCallback:(id:string, distance:number) => void
 }
 
 const StaticGameElement: React.FC<StaticGameElementProps> = (props: StaticGameElementProps) => {
   const [disabled, setDisabled]=useState(props.disabled);
-
-  function onClick(e:any) {
+  
+  function onClick(event:React.MouseEvent<any>) {
     if(!disabled) {
       setDisabled(true)
     }
-    props.clickCallback(props.key);
+    const distance = calcDistance(event.nativeEvent);
+    props.clickCallback(props.key, distance);
+  }
+
+  function calcDistance(event:MouseEvent) {
+    const center_x = props.left+47;
+    const center_y = props.top+51;
+
+    const delta_x = Math.abs(event.clientX - center_x);
+    const delta_y = Math.abs(event.clientY - center_y);
+    console.log(`dx: ${delta_x} dy: ${delta_y}`);
+    const x = delta_x**2;
+    const y = delta_y**2;
+    return Math.sqrt(delta_x + delta_y);
   }
 
 

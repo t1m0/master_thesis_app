@@ -21,9 +21,10 @@ const StaticGameBoardContainer: React.FC<StaticGameBoardContainerProps> = (props
         return gameSession.validSelections >= props.elements.length || gameSession.duration >= props.timeOut;
     }
 
-    const clickCallback = (id:string) => {
+    const clickCallback = (id:string, distance:number) => {
         gameSession.validSelections += 1;
         gameSession.duration = performance.now() - gameSession.startTime;
+        gameSession.clickDistance.push(distance);
         if(isFinished()) {
             props.finishedCallback(gameSession);
         }
@@ -31,11 +32,12 @@ const StaticGameBoardContainer: React.FC<StaticGameBoardContainerProps> = (props
 
     const getElement = (input: StaticGameElementInput) => {
         const id = `${elementCount++}-static-element`;
-        console.log(`height: ${getHeight()} corrected height: ${getCorrectedHeight()}`)
         const top =  (getCorrectedHeight()) * (input.yPercentage / 100)+50;
         const left = getCorrectedWidth() * (input.xPercentage / 100);
         return <StaticGameElement key={id} top={top} left={left} disabled={false} clickCallback={clickCallback} />
     }
+
+    
 
     return (
         <div className="static-game-container">

@@ -59,7 +59,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
                 return <GameBoardContainer gameType={props.gameType} validContainerCount={validContainerCount} invalidContainerCount={invalidContainerCount} placeholderContainerCount={placeholderContainerCount} timeOut={18000} finishedCallback={finishedCallback} />
             }
         } else if (gameStarted && gameFinished) {
-            return <ResultContainer validSelections={gameSession.validSelections} invalidSelections={gameSession.invalidSelections} duration={gameSession.duration} launchGameCallback={launchGameCallback} />
+            return <ResultContainer gameSession={gameSession} launchGameCallback={launchGameCallback} />
         } else {
             return <LaunchGameContainer launchGameCallback={launchGameCallback} />
         }
