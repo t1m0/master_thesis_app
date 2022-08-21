@@ -6,9 +6,6 @@ import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 import SpiralDrawingRating from '../components/spiral/model/SpiralDrawingRating';
 import { readFromStorage } from '../IonicStorage';
 
-import { Share } from '@capacitor/share';
-
-
 const SpiralAnalysis: React.FC = () => {
   const spiralRating = new SpiralRating();
   const [drawing, setDrawing] = useState<SpiralDrawing | undefined>(undefined);
