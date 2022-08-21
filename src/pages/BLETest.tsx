@@ -1,5 +1,5 @@
 import { BleDevice } from '@capacitor-community/bluetooth-le';
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, {useEffect, useState} from "react";
 import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
 
@@ -32,6 +32,30 @@ const BLETest: React.FC = () => {
         console.log('acceleration data', accelerationRecodr);
         setResults(results => [...results,accelerationRecodr] );
     }
+
+    const share = () => {
+        const date = new Date();
+        const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}.json`;
+        const file = new File([JSON.stringify(results)], fileName, { type: "application/json" })
+        if (navigator.share) {
+          navigator.share({
+            title: `Acceleration Data`,
+            files: [file],
+          }).then(() => console.log('Successful share'))
+            .catch((error) => console.log('Error sharing', error));
+        } else {
+          download(file, fileName)
+        }
+    }
+  
+    const download = (file: File, fileName: string) => {
+      const elem = window.document.createElement('a');
+      elem.href = window.URL.createObjectURL(file);
+      elem.download = fileName;
+      document.body.appendChild(elem);
+      elem.click();
+      document.body.removeChild(elem);
+    }
     
   return (
     <IonPage>
@@ -44,6 +68,7 @@ const BLETest: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <IonButton onClick={share}>Share</IonButton>
         <p>{bondedDevice?.deviceId}</p>
 
         {results.map(v => <p>count: {v.recordCount} xAxis: {v.xAxis} yAxis: {v.yAxis} zAxis: {v.zAxis}</p>)}
