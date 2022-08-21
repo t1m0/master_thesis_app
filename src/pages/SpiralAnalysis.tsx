@@ -22,7 +22,6 @@ const SpiralAnalysis: React.FC = () => {
         console.log(d);
         setDrawing(d);
         const result = spiralRating.rate(d);
-        console.log(result);
         setResult(result);
       }
     });
@@ -31,21 +30,40 @@ const SpiralAnalysis: React.FC = () => {
   useEffect(() => {
     if (drawing != undefined) {
       const result = spiralRating.rate(drawing);
-      console.log(result);
       setResult(result);
     }
   }, [drawing]);
 
-  const share = () => {
-    if (result != undefined && drawing != undefined && navigator.share) {
-      const data = {"drawing": drawing, "result": result};
-      const file = new File([JSON.stringify(data)], `${drawing.uuid}.json`, {type: "application/json"})
-      navigator.share({
-        title: `Spiral Drawing ${drawing.uuid}`,
-        files:[file],
-      }).then(() => console.log('Successful share'))
-      .catch((error) => console.log('Error sharing', error)); 
+
+  const click = () => {
+    if (result != undefined && drawing != undefined) {
+      const data = { "drawing": drawing, "result": result };
+      const fileName = `${drawing.uuid}.json`;
+      const file = new File([JSON.stringify(data)], fileName, { type: "application/json" })
+      if ('share' in navigator) {
+        shareFile(file, fileName)
+      } else {
+        download(file, fileName)
+      }
     }
+  }
+
+  const shareFile = (file: File, fileName: string) => {
+    navigator.share({
+      title: `Sharing ${fileName}`,
+      files: [file],
+    }).then(() => console.log('Successful share'))
+      .catch((error) => console.log('Error sharing', error));
+
+  }
+
+  const download = (file: File, fileName: string) => {
+    const elem = window.document.createElement('a');
+    elem.href = window.URL.createObjectURL(file);
+    elem.download = fileName;
+    document.body.appendChild(elem);
+    elem.click();
+    document.body.removeChild(elem);
   }
 
   const getTableBody = () => {
@@ -58,7 +76,7 @@ const SpiralAnalysis: React.FC = () => {
         <tr><td>Degree of Severity</td><td>{result.degreeOfSeverity}</td></tr>
         <tr><td>Severity Level</td><td>{result.severityLevel}</td></tr>
         <tr><td>Total Time</td><td>{Math.round(drawing.time / 1000 * 100) / 100}sec</td></tr>
-        <tr><td><IonButton onClick={share}>Share</IonButton></td></tr>
+        <tr><td><IonButton onClick={click}>Share</IonButton></td></tr>
       </tbody>
     } else {
       return <tbody></tbody>
