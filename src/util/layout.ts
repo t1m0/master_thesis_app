@@ -11,7 +11,7 @@ export function getWidth() {
 }
 
 export function getCorrectedHeight() {
-    const correction = isMobile() ? 100 : 150;
+    const correction = 100;
     const height = isLandscape() ? getHeight() : getWidth();
     return height - correction;
 }
