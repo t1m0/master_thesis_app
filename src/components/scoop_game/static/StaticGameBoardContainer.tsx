@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import StaticGameElementInput from './StaticGameElementInput';
 import './StaticGameBoardContainer.css'
 import StaticGameElement from "./StaticGameElement";
@@ -23,8 +23,8 @@ const StaticGameBoardContainer: React.FC<StaticGameBoardContainerProps> = (props
 
     const clickCallback = (id:string, distance:number) => {
         gameSession.validSelections += 1;
-        gameSession.duration = performance.now() - gameSession.startTime;
         gameSession.clickDistance.push(distance);
+        gameSession.duration = performance.now() - gameSession.startTime;
         if(isFinished()) {
             props.finishedCallback(gameSession);
         }
@@ -37,10 +37,16 @@ const StaticGameBoardContainer: React.FC<StaticGameBoardContainerProps> = (props
         return <StaticGameElement key={id} top={top} left={left} disabled={false} clickCallback={clickCallback} />
     }
 
-    
+    const boardClickCallback = (event:MouseEvent<HTMLDivElement>) => {
+        gameSession.invalidSelections += 1;
+        gameSession.duration = performance.now() - gameSession.startTime;
+        if(isFinished()) {
+            props.finishedCallback(gameSession);
+        }
+    }    
 
     return (
-        <div className="static-game-container">
+        <div className="static-game-container" onClick={boardClickCallback} style={{height:getHeight()}}>
             {props.elements.map(getElement)}
         </div>
     );

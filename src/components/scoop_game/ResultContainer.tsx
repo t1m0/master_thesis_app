@@ -17,8 +17,8 @@ const ColorContainer: React.FC<ColorContainerProps> = (props: ColorContainerProp
       const mean = props.gameSession.clickDistance.reduce((a, b) => a + b, 0) / n;
       const standardDeviation = Math.sqrt(props.gameSession.clickDistance.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
       return [
-        <p>Mean Click Distance: {mean}</p>,
-        <p>Standard Deviation Click Distance: {standardDeviation}</p>
+        <p key={"mean-distance"}>Mean Click Distance: {mean}</p>,
+        <p key={"sd-distance"}>Standard Deviation Click Distance: {standardDeviation}</p>
       ]
     } else {
       return []
@@ -28,8 +28,8 @@ const ColorContainer: React.FC<ColorContainerProps> = (props: ColorContainerProp
   return (
     <div className={`result-container`} >
       {displayClickDistanceData()}
-      <p>Success Rate: {successRate}%</p>
-      <p>Duration: {Math.round((props.gameSession.duration/1000) * 100) / 100}sec</p>
+      <p key={"success-rate"}>Success Rate: {successRate}%</p>
+      <p key={"duration"}>Duration: {Math.round((props.gameSession.duration/1000) * 100) / 100}sec</p>
       <button onClick={props.launchGameCallback}>Try Again</button>
     </div>
   );

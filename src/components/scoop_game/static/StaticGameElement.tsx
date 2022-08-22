@@ -14,6 +14,7 @@ const StaticGameElement: React.FC<StaticGameElementProps> = (props: StaticGameEl
   const [disabled, setDisabled]=useState(props.disabled);
   
   function onClick(event:React.MouseEvent<any>) {
+    event.stopPropagation();
     if(!disabled) {
       setDisabled(true)
     }
@@ -27,9 +28,10 @@ const StaticGameElement: React.FC<StaticGameElementProps> = (props: StaticGameEl
 
     const delta_x = Math.abs(event.clientX - center_x);
     const delta_y = Math.abs(event.clientY - center_y);
-    console.log(`dx: ${delta_x} dy: ${delta_y}`);
+    
     const x = delta_x**2;
     const y = delta_y**2;
+    
     return Math.sqrt(delta_x + delta_y);
   }
 
