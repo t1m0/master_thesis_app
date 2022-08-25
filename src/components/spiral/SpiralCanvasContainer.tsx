@@ -1,5 +1,5 @@
 import ImageCoordinate from './model/ImageCoordinate';
-import SpiralDrawingResult from './model/SpiralDrawing';
+import SpiralDrawing from './model/SpiralDrawing';
 import React, { SyntheticEvent } from 'react';
 import ImageWrapper from './model/ImageWrapper';
 import AccelerationRecord from './ble/AccelerationRecord';
@@ -38,7 +38,7 @@ export interface SpiralCanvasContainerProps {
     initialColor?: string;
     initialLineWidth?: number;
     onStart: () => void;
-    onSave: (result:SpiralDrawingResult) => void;
+    onSave: (result:SpiralDrawing) => void;
     render?: (props: RenderProps) => JSX.Element;
 }
 
@@ -210,10 +210,15 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
             const width = this.canvasRef.width;
             const coordinates = this.spiralCoordinates;
             this.canvasToBlob(this.canvasRef, 'image/png')
-                .then((blob: Blob) => { 
-                    const imageWrapper = new ImageWrapper(blob,coordinates,height,width)
-                    const result = new SpiralDrawingResult(imageWrapper, start, end, 0, new Array<AccelerationRecord>());
-                    this.props.onSave(result); 
+                .then((blob: Blob) => {
+                    blob.arrayBuffer().
+                        then((arrayBuffer:ArrayBuffer) => {
+                            const uintArry = Array.from(new Uint8Array(arrayBuffer))
+                            const imageWrapper = new ImageWrapper(uintArry,coordinates,height,width)
+                            const result = new SpiralDrawing(imageWrapper, start, end, 0, new Array<AccelerationRecord>());
+                            this.props.onSave(result); 
+                        })
+                        .catch(err => console.error('Failed to extract ArrayBuffer', err));
                 })
                 .catch(err => console.error('in ReactPainter handleSave', err));
         }
