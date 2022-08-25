@@ -38,7 +38,7 @@ const ColorContainer: React.FC<ColorContainerProps> = (props: ColorContainerProp
   }
 
   const clickShareAws = () => {
-    shareAws(id, props.gameType.toString(), props.gameSession);
+    shareAws(id, GameType[props.gameType], props.gameSession);
   }
 
   return (
