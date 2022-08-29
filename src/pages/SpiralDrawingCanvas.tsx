@@ -1,5 +1,5 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { writeInStorage } from '../IonicStorage';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonViewDidLeave } from '@ionic/react';
+import { readFromStorage, writeInStorage } from '../IonicStorage';
 import React, { useEffect, useReducer, useState } from 'react'
 
 import { SpiralCanvasContainer } from '../components/spiral/SpiralCanvasContainer';
@@ -7,41 +7,31 @@ import { useNavigate } from 'react-router';
 
 import './SpiralDrawing.css';
 import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
-import { connectToDevice, subscribeToNotifications, unSubscribeToNotifications } from '../components/spiral/ble/BLEWrapper';
-import { BleDevice } from '@capacitor-community/bluetooth-le';
+import { subscribeToNotifications, unSubscribeToNotifications } from '../components/spiral/ble/BLEWrapper';
 import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
 import { getCorrectedHeight, getCorrectedWidth } from '../util/layout';
 
-const SpiralDrawingCanvas: React.FC = () => {
+interface SpiralDrawingCanvasProps {
+  
+}
+
+const SpiralDrawingCanvas: React.FC<SpiralDrawingCanvasProps> = (props: SpiralDrawingCanvasProps) => {
   const navigate = useNavigate();
   const [startTime, setStartTime]=useState(0);
-  const [bondedDevice, setBondedDevice]=useState<BleDevice>();
   const [accelerations, setAccelerations]=useState(new Array<AccelerationRecord>());
-  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
-
-  useEffect(() => {    
-    console.log("Connecting to Live Data")
-    connectToDevice()
-        .then(setBondedDevice)
-        .catch(console.error);
-    
-}, []);   
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);  
 
   function restart() {
     forceUpdate();
   }
 
   const drawingStarted = () => {
-    if (bondedDevice != undefined){
-      subscribeToNotifications(bondedDevice, dataCallback).catch(console.error);
-    }
+    subscribeToNotifications(dataCallback).catch(console.error);
     setStartTime(Date.now());
   };
 
   const drawingFinished = (result:SpiralDrawing) => {
-      if (bondedDevice != undefined){
-        unSubscribeToNotifications(bondedDevice).catch(console.error)
-      }
+      unSubscribeToNotifications().catch(console.error);
       const totalTime = Date.now() - startTime;
       const updatedResult = new SpiralDrawing(result.imageWrapper, result.start, result.end, totalTime, accelerations);
       console.log(updatedResult);
@@ -51,15 +41,14 @@ const SpiralDrawingCanvas: React.FC = () => {
       });
   }
 
-  useEffect(() => {
-    
-  }, [bondedDevice]);
-
-
   const dataCallback = (accelerationRecodr:AccelerationRecord) => {
       console.log('acceleration data', accelerationRecodr);
       setAccelerations(accelerations => [...accelerations,accelerationRecodr] );
   }
+
+  useIonViewDidLeave(() => {
+    unSubscribeToNotifications().catch(console.error);
+  });
   
   const canvasHeight = getCorrectedHeight()/*buttons*/-50;
   const canvasWidth = getCorrectedWidth();

@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { IonApp, setupIonicReact } from '@ionic/react';
-import { createStore } from './IonicStorage';
+import { readFromStorage } from './IonicStorage';
 import { useEffect } from 'react';
 
 import ScoopGame from './pages/ScoopGame';
@@ -29,6 +29,8 @@ import SpiralDrawing from './pages/SpiralDrawingCanvas';
 import BLETest from './pages/BLETest';
 import { GameType } from './components/scoop_game/GameType';
 
+import { connectToDevice } from './components/spiral/ble/BLEWrapper';
+
 setupIonicReact();
 
 const App: React.FC = () => {
@@ -36,9 +38,16 @@ const App: React.FC = () => {
   document.body.classList.toggle('dark', true);
 
   useEffect(() => {
-    const setupStore = async () => {createStore();}
-    setupStore();
+    readFromStorage("BleDeviceId")
+      .then(deviceId => {
+        if (deviceId == undefined) {
+          connectToDevice()
+            .then(() => console.log("Connected to a device"))
+            .catch(err => console.log("Failed to connect!", err));
+        }
+      })
 	}, []);
+
   return (<IonApp>
     <BrowserRouter>
       <Routes>

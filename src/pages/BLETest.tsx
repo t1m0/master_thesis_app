@@ -1,31 +1,29 @@
-import { BleDevice } from '@capacitor-community/bluetooth-le';
 import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useEffect, useState } from "react";
 import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
 
-import { connectToDevice, subscribeToNotifications, unSubscribeToNotifications } from "../components/spiral/ble/BLEWrapper";
+import { subscribeToNotifications, unSubscribeToNotifications } from "../components/spiral/ble/BLEWrapper";
+import { readFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
 const BLETest: React.FC = () => {
-  const [bondedDevice, setBondedDevice] = useState<BleDevice>();
+  const [bondedDevice, setBondedDevice] = useState<string>();
   const [results, setResults] = useState(new Array<AccelerationRecord>());
 
 
   useEffect(() => {
     console.log("Connecting to Live Data")
-    connectToDevice()
+    readFromStorage<string>("DeviceId")
       .then(setBondedDevice)
       .catch(console.error);
 
   }, []);
 
   useEffect(() => {
-    if (bondedDevice != undefined) {
-      subscribeToNotifications(bondedDevice, dataCallback).catch(console.error);
+      subscribeToNotifications(dataCallback).catch(console.error);
       setTimeout(async () => {
-        unSubscribeToNotifications(bondedDevice).catch(console.error)
+        unSubscribeToNotifications().catch(console.error)
       }, 10000);
-    }
   }, [bondedDevice]);
 
 
@@ -60,7 +58,7 @@ const BLETest: React.FC = () => {
       <IonContent fullscreen>
         <IonButton onClick={clickShareLocal}>Share Local</IonButton>
         <IonButton onClick={clickShareAws}>Share Aws</IonButton>
-        <p>{bondedDevice?.deviceId}</p>
+        <p>{bondedDevice}</p>
 
         {results.map(v => <p>count: {v.recordCount} xAxis: {v.xAxis} yAxis: {v.yAxis} zAxis: {v.zAxis}</p>)}
       </IonContent>

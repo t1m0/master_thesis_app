@@ -191,7 +191,6 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
                 ctx.stroke();
                 this.lastX = offsetX;
                 this.lastY = offsetY;
-                console.log("Drawing Spiral",imageCoordinate)
             }
         }
     };

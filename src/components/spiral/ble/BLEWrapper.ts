@@ -1,4 +1,5 @@
 import { BleClient, BleDevice, dataViewToNumbers, numbersToDataView } from '@capacitor-community/bluetooth-le';
+import { readFromStorage, writeInStorage } from '../../../IonicStorage';
 import AccelerationRecord from './AccelerationRecord';
 import { mapAccelerationRecord } from './AccelerationRecordMapper';
 
@@ -10,28 +11,33 @@ const LIVE_SENSOR_FLAG_GUID = "0155000B-5555-5507-0002-01EEDDCCBBAA";
 const BLE_SERVICE = "0000180f-0000-1000-8000-00805f9b34fb";
 
 
-export async function connectToDevice(): Promise<BleDevice> {
+export async function connectToDevice(): Promise<void> {
     try {
-        BleClient.initialize();
+        const deviceId = await readFromStorage("DeviceId") as string;
+        if (deviceId == undefined) {
+            BleClient.initialize();
 
-        const device = await BleClient.requestDevice({
-            services: [BLE_SERVICE]
-        });
-        console.log('connecting to device', device.deviceId);
-        await BleClient.connect(device.deviceId, onDisconnect, { timeout: 10000 });
-        console.log('connected to device', device.deviceId);
-        return device;
+            const device = await BleClient.requestDevice({
+                services: [BLE_SERVICE]
+            });
+            console.log('connecting to device', device.deviceId);
+            await BleClient.connect(device.deviceId, onDisconnect, { timeout: 10000 });
+            console.log('connected to device', device.deviceId);
+            writeInStorage("DeviceId", device.deviceId);
+        }
+        return Promise.resolve();
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-export async function subscribeToNotifications(device: BleDevice, dataCallback: (record: AccelerationRecord) => void): Promise<void> {
+export async function subscribeToNotifications(dataCallback: (record: AccelerationRecord) => void): Promise<void> {
     try {
-        await BleClient.write(device.deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([1]));
+        const deviceId = await readFromStorage("DeviceId") as string;
+        await BleClient.write(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([1]));
         console.log('live sensor flag updated');
         await BleClient.startNotifications(
-            device.deviceId,
+            deviceId,
             LIVE_SENSOR_SERVICE_UUID,
             LIVE_SENSOR_ACCELERATION_GUID,
             value => {
@@ -45,13 +51,12 @@ export async function subscribeToNotifications(device: BleDevice, dataCallback: 
     }
 }
 
-
-export async function unSubscribeToNotifications(device: BleDevice): Promise<void> {
+export async function unSubscribeToNotifications(): Promise<void> {
     try {
-        await BleClient.stopNotifications(device.deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_ACCELERATION_GUID);
-        await BleClient.write(device.deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([0]));
-        await BleClient.disconnect(device.deviceId);
-        console.log('disconnected from device', device.deviceId);
+        const deviceId = await readFromStorage("DeviceId") as string;
+        await BleClient.stopNotifications(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_ACCELERATION_GUID);
+        await BleClient.write(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([0]));
+        console.log('disconnected from device', deviceId);
         return Promise.resolve()
     } catch (error) {
         return Promise.reject(error);

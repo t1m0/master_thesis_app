@@ -22,14 +22,14 @@ export const createStore = (name = "__mydb") => {
 
 
 export const writeInStorage = <T>(key:string, val:T) => {
-    return getStorage().set(key, val);
-    return Promise.reject("Storage undefined!");
+    sessionStorage.setItem(key, JSON.stringify(val));
+    return Promise.resolve();
 }
 
 export const readFromStorage = async <T>(key:string):Promise<T|undefined> => {
-    const val = await getStorage().get(key);
+    const val = sessionStorage.getItem(key);
     if (val != null)
-        return val as T; 
+        return JSON.parse(val) as T; 
     return undefined;
 }
 
