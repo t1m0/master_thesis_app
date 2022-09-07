@@ -1,19 +1,23 @@
 import ImageCoordinate from "../model/ImageCoordinate";
 import PolarCoordinate from "../model/PolarCoordinate";
 import { unravel_spiral } from "./UnravelSpiral";
+import sampleDrawing from './sample_drawing.json'; 
+import sampleDrawingUnraveled from './sample_drawing_unraveled.json'; 
+import SpiralDrawing from "../model/SpiralDrawing";
 
 test('Unravel spiral', () => {
-    const center_point = {x:308, y:198} as ImageCoordinate;
-    const coordinates = [
-        {x:308, y:198} as ImageCoordinate,
-        {x:307, y:180} as ImageCoordinate,
-        {x:271, y:199} as ImageCoordinate,
-        {x:309, y:253} as ImageCoordinate,
-    ]
-
-    const unraveld = unravel_spiral(center_point,coordinates);
-    expect(unraveld[0]).toStrictEqual({theta:0,rho:0} as PolarCoordinate);
-    expect(unraveld[1].theta).toBeCloseTo(3.1798, 3);
-    expect(unraveld[2].theta).toBeCloseTo(1.5481, 3);
-    expect(unraveld[3].theta).toBeCloseTo(1.0416, 3);
+    const spiralDrawing = sampleDrawing as unknown as SpiralDrawing;
+    const unraveld = unravel_spiral(spiralDrawing.start,spiralDrawing.imageWrapper.coordinates);
+    for (let index = 0; index < unraveld.length; index++) {
+        const actualValue = unraveld[index];
+        const expectedValue = sampleDrawingUnraveled[index];
+        try {
+        expect(actualValue.theta).toBeCloseTo(expectedValue.theta, 3);
+        expect(actualValue.rho).toBeCloseTo(expectedValue.rho, 3);
+        } catch (e) {
+            throw new Error(`Failed at index ${index}. Expected: {theta: ${expectedValue.theta}, rho: ${expectedValue.rho}} Actual: {theta: ${actualValue.theta}, rho: ${actualValue.rho}}`);
+        }
+        
+    }
+    expect(unraveld.length).toStrictEqual(434);
 });

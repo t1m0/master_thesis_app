@@ -47,6 +47,7 @@ export async function subscribeToNotifications(dataCallback: (record: Accelerati
             });
         return Promise.resolve();
     } catch (error) {
+        console.error(error)
         return Promise.reject(error);
     }
 }
@@ -59,6 +60,7 @@ export async function unSubscribeToNotifications(): Promise<void> {
         console.log('disconnected from device', deviceId);
         return Promise.resolve()
     } catch (error) {
+        console.error(error)
         return Promise.reject(error);
     }
 }

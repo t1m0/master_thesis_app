@@ -11,3 +11,7 @@ export function calc_distance(point:ImageCoordinate) {
     const y = point.y**2;
     return Math.sqrt(x + y);
 }
+
+export function roundValue(value:number) {
+    return Math.round(value * 100000) / 100000;
+}
