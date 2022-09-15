@@ -7,6 +7,9 @@ import { GameType } from './GameType';
 import StaticGameBoardContainer from './static/StaticGameBoardContainer';
 import StaticGameElementInput from './static/StaticGameElementInput';
 import { GameSession } from './GameSession';
+import { subscribeToNotifications, unSubscribeToNotifications } from '../spiral/ble/BLEWrapper';
+import AccelerationRecord from '../spiral/ble/AccelerationRecord';
+import { useIonViewDidLeave } from '@ionic/react';
 
 interface GameContainerProps {
     gameType: GameType;
@@ -29,7 +32,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setGameStarted(true);
         setGameFinished(false);
         setGameSession(new GameSession());
-    }   
+        subscribeToNotifications(gameSession.accelerations.push).catch(console.error);
+    }
 
     function getElements() {
         const elements = new Array<StaticGameElementInput>();
@@ -49,7 +53,12 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     function finishedCallback(session:GameSession) {
         setGameSession(session);
         setGameFinished(true);
+        unSubscribeToNotifications();
     }
+
+    useIonViewDidLeave(() => {
+        unSubscribeToNotifications().catch(console.error);
+      });
 
     function getContainer() {
         if (gameStarted && !gameFinished) {
