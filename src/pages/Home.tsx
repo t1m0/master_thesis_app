@@ -1,6 +1,7 @@
-import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { Link } from 'react-router-dom';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { getCorrectedHeight, getCorrectedWidth, isLandscape, isMobile, isPortrait } from '../util/layout';
+
+import './Home.css';
 
 const Home: React.FC = () => {
   console.log(`portrait: ${isPortrait()} landscape: ${isLandscape()} mobile: ${isMobile()}`)
@@ -9,15 +10,19 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Sample Aapp</IonTitle>
+          <IonTitle>Sample App</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonButton href="/scoop">Color Scoop Game</IonButton><br/>
-        <IonButton href="/scoop/triangle">Color Triangle Game</IonButton><br/>
-        <IonButton href="/scoop/static">Static Scoop Game</IonButton><br/>
-        <IonButton href="/spiral">Spiral Drawing</IonButton><br/>
-        <IonButton href="/ble">BLE Test</IonButton>
+        <div className='center-childs'>
+          <div className='activity-collection'>
+            <a className='button' href="/scoop">Color Scoop Game</a><br />
+            <a className='button' href="/scoop/triangle">Color Triangle Game</a><br />
+            <a className='button' href="/scoop/static">Static Scoop Game</a><br />
+            <a className='button' href="/spiral">Spiral Drawing</a><br />
+            <a className='button' href="/ble">BLE Test</a>
+          </div>
+        </div>
       </IonContent>
     </IonPage>
   );

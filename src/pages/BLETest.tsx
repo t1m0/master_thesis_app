@@ -56,8 +56,8 @@ const BLETest: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonButton onClick={clickShareLocal}>Share Local</IonButton>
-        <IonButton onClick={clickShareAws}>Share Aws</IonButton>
+        <button onClick={clickShareLocal}>Share Local</button>
+        <button onClick={clickShareAws}>Share Aws</button>
         <p>{bondedDevice}</p>
 
         {results.map(v => <p>count: {v.recordCount} xAxis: {v.xAxis} yAxis: {v.yAxis} zAxis: {v.zAxis}</p>)}

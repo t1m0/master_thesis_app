@@ -98,7 +98,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
 
     return (
-        <div className="game-container">
+        <div className="center-childs">
             {getContainer()}
         </div>
     );
