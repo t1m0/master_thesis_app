@@ -3,7 +3,6 @@ import { IonButton } from '@ionic/react';
 import { shareAws, shareLocal } from '../../util/share';
 import { GameSession } from './GameSession';
 import { GameType } from './GameType';
-import './ResultContainer.css';
 
 interface ColorContainerProps {
   gameSession: GameSession,
