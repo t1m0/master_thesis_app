@@ -6,17 +6,17 @@ interface GameElementContainerProps {
     valid:boolean,
     innerElement:ReactNode,
     containerStyle:String,
-    clickCallback:(valid:boolean) => void
+    clickCallback:(valid:boolean, x:number, y:number) => void
 }
 
 const GameElementContainer: React.FC<GameElementContainerProps> = (props: GameElementContainerProps) => {
   const [disabled, setDisabled]=useState(false);
 
-  function onClick(e:any) {
+  function onClick(event:React.MouseEvent<any>) {
     if(!disabled) {
       setDisabled(true)
     }
-    props.clickCallback(props.valid);
+    props.clickCallback(props.valid, event.clientX, event.clientY);
   }
 
 

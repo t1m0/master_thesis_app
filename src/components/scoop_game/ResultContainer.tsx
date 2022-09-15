@@ -13,14 +13,14 @@ interface ColorContainerProps {
 
 const ColorContainer: React.FC<ColorContainerProps> = (props: ColorContainerProps) => {
   const id = uuid();
-  let successRate = props.gameSession.validSelections / (props.gameSession.invalidSelections+props.gameSession.validSelections)*100;
+  let successRate = props.gameSession.getValidClickCount() / (props.gameSession.clicks.length)*100;
   console.log(props)
 
   function displayClickDistanceData() {
-    if (props.gameSession.clickDistance.length > 0) {
-      const n = props.gameSession.clickDistance.length;
-      const mean = props.gameSession.clickDistance.reduce((a, b) => a + b, 0) / n;
-      const standardDeviation = Math.sqrt(props.gameSession.clickDistance.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
+    if (props.gameSession.clicks.length > 0) {
+      const n = props.gameSession.clicks.length;
+      const mean = props.gameSession.clicks.filter(c=>c.valid).reduce((a, b) => a + b.distance, 0) / n;
+      const standardDeviation = Math.sqrt(props.gameSession.clicks.map(c => Math.pow(c.distance - mean, 2)).reduce((a, b) => a + b) / n);
       return [
         <p key={"mean-distance"}>Mean Click Distance: {mean}</p>,
         <p key={"sd-distance"}>Standard Deviation Click Distance: {standardDeviation}</p>

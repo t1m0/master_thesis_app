@@ -1,14 +1,21 @@
 import AccelerationRecord from "../spiral/ble/AccelerationRecord";
+import { GameClick } from "./GameClick";
 
 export class GameSession {
-    validSelections: number = 0;
-    invalidSelections: number = 0;
     duration: number = 0;
     startTime: number;
-    clickDistance = new Array<number>();
+    clicks = new Array<GameClick>();
     accelerations = new Array<AccelerationRecord>();
 
     constructor() {
         this.startTime = performance.now()
+    }
+
+    getValidClickCount() {
+        return this.clicks.filter(c => c.valid).length;
+    }
+
+    getInValidClickCount() {
+        return this.clicks.filter(c => c.valid).length;
     }
 }

@@ -7,42 +7,22 @@ import { GameSession } from "../GameSession";
 
 interface StaticGameBoardContainerProps {
     elements: StaticGameElementInput[],
-    finishedCallback:(session:GameSession)=>void
-    timeOut: number
+    clickCallback:(valid: boolean, x:number, y:number, distance:number)=>void
 }
 
 const StaticGameBoardContainer: React.FC<StaticGameBoardContainerProps> = (props: StaticGameBoardContainerProps) => {
 
-    const [gameSession, setGameSession] = useState(new GameSession());
-
     let elementCount = 1;
-
-    function isFinished() {
-        return gameSession.validSelections >= props.elements.length || gameSession.duration >= props.timeOut;
-    }
-
-    const clickCallback = (id:string, distance:number) => {
-        gameSession.validSelections += 1;
-        gameSession.clickDistance.push(distance);
-        gameSession.duration = performance.now() - gameSession.startTime;
-        if(isFinished()) {
-            props.finishedCallback(gameSession);
-        }
-    }
 
     const getElement = (input: StaticGameElementInput) => {
         const id = `${elementCount++}-static-element`;
         const top =  (getCorrectedHeight()) * (input.yPercentage / 100)+50;
         const left = getCorrectedWidth() * (input.xPercentage / 100);
-        return <StaticGameElement key={id} top={top} left={left} disabled={false} clickCallback={clickCallback} />
+        return <StaticGameElement key={id} top={top} left={left} disabled={false} clickCallback={props.clickCallback} />
     }
 
     const boardClickCallback = (event:MouseEvent<HTMLDivElement>) => {
-        gameSession.invalidSelections += 1;
-        gameSession.duration = performance.now() - gameSession.startTime;
-        if(isFinished()) {
-            props.finishedCallback(gameSession);
-        }
+        props.clickCallback(false, event.clientX, event.clientY, -1);
     }    
 
     return (

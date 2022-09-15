@@ -7,7 +7,7 @@ interface StaticGameElementProps {
     disabled:boolean,
     top:number,
     left:number,
-    clickCallback:(id:string, distance:number) => void
+    clickCallback:(valid: boolean, x:number, y:number, distance:number)=>void
 }
 
 const StaticGameElement: React.FC<StaticGameElementProps> = (props: StaticGameElementProps) => {
@@ -19,7 +19,7 @@ const StaticGameElement: React.FC<StaticGameElementProps> = (props: StaticGameEl
       setDisabled(true)
     }
     const distance = calcDistance(event.nativeEvent);
-    props.clickCallback(props.key, distance);
+    props.clickCallback(true,event.clientX, event.clientY, distance);
   }
 
   function calcDistance(event:MouseEvent) {

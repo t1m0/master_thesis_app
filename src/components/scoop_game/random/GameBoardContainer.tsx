@@ -4,20 +4,19 @@ import { GameType } from '../GameType';
 import GameElementContainer from './GameElementContainer';
 import { useState } from 'react';
 import { GameSession } from '../GameSession';
+import { GameClick } from '../GameClick';
 
 interface GameBoardContainerProps {
     gameType:GameType,
-    timeOut:number,
     invalidContainerCount: number,
     validContainerCount: number,
     placeholderContainerCount:number,
-    finishedCallback:(session:GameSession)=>void
+    clickCallback:(valid: boolean, x:number, y:number, distance:number)=>void
 }
 
 const colors = ['green', 'blue', 'red', 'yellow', 'pink'];
 
 const GameBoardContainer: React.FC<GameBoardContainerProps> = (props: GameBoardContainerProps) => {
-    const [gameSession, setGameSession] = useState(new GameSession());
 
     function getRandomColor() {
         const randomIndex = Math.floor(Math.random() * colors.length)
@@ -27,27 +26,11 @@ const GameBoardContainer: React.FC<GameBoardContainerProps> = (props: GameBoardC
     function createContainer(valid:boolean) {
         if(props.gameType == GameType.Triangle && valid) {
             const triangle = <svg><polygon points="250,60 100,400 400,400" className="triangle" /></svg>;
-            return <GameElementContainer key={uuid()} valid={valid} containerStyle={"game-element-triangle"} clickCallback={clickCallback} innerElement={triangle} />
+            return <GameElementContainer key={uuid()} valid={valid} containerStyle={"game-element-triangle"} clickCallback={(v,x,y) => props.clickCallback(v,x,y,-1)} innerElement={triangle} />
         } else if(props.gameType == GameType.Triangle && !valid) {
             return createPlaceholderContainer();
         } else {
             return createColorContainer(valid);
-        }
-    }
-
-    function isFinished() {
-        return gameSession.validSelections >= props.validContainerCount || gameSession.duration >= props.timeOut;
-    }
-
-    function clickCallback(valid: boolean) {
-        if (valid) {
-            gameSession.validSelections += 1;
-        } else {
-            gameSession.invalidSelections += 1;
-        }
-        gameSession.duration = performance.now() - gameSession.startTime;
-        if(isFinished()) {
-            props.finishedCallback(gameSession);
         }
     }
 
@@ -58,11 +41,11 @@ const GameBoardContainer: React.FC<GameBoardContainerProps> = (props: GameBoardC
         while (!valid && color === colorName) {
             colorName = getRandomColor();
         }
-        return <GameElementContainer key={uuid()} valid={valid} containerStyle={"game-element-"+color} clickCallback={clickCallback} innerElement={<p>{colorName}</p>} />
+        return <GameElementContainer key={uuid()} valid={valid} containerStyle={"game-element-"+color} clickCallback={(v,x,y) => props.clickCallback(v,x,y,-1)} innerElement={<p>{colorName}</p>} />
     }
 
     function createPlaceholderContainer() {
-        return <GameElementContainer key={uuid()} valid={false} containerStyle="game-element-placeholder" clickCallback={clickCallback} innerElement={<p></p>} />
+        return <GameElementContainer key={uuid()} valid={false} containerStyle="game-element-placeholder" clickCallback={(v,x,y) => props.clickCallback(v,x,y,-1)} innerElement={<p></p>} />
     }
 
     function shuffleArray(array:Array<JSX.Element>) {

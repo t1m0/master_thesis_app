@@ -10,12 +10,13 @@ import { GameSession } from './GameSession';
 import { subscribeToNotifications, unSubscribeToNotifications } from '../spiral/ble/BLEWrapper';
 import AccelerationRecord from '../spiral/ble/AccelerationRecord';
 import { useIonViewDidLeave } from '@ionic/react';
+import { GameClick } from './GameClick';
 
 interface GameContainerProps {
     gameType: GameType;
     totalContainerCount: number,
     placeholderRatio: number,
-    validRatio: number,
+    validRatio: number
 }
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
@@ -27,12 +28,18 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     const validContainerCount = Math.round((props.totalContainerCount - placeholderContainerCount) * props.validRatio);
     const invalidContainerCount = props.totalContainerCount - placeholderContainerCount - validContainerCount;
 
+    const timeOut = props.gameType != GameType.Static ? 1800 : getElements().length * 1500;
+
 
     function launchGameCallback() {
         setGameStarted(true);
         setGameFinished(false);
         setGameSession(new GameSession());
-        subscribeToNotifications(gameSession.accelerations.push).catch(console.error);
+        subscribeToNotifications(accelerationCallback).catch(console.error);
+    }
+
+    function accelerationCallback(accelerationRecord: AccelerationRecord) {
+        setGameSession(prevGameSession => {prevGameSession.accelerations = [...prevGameSession.accelerations,accelerationRecord];return prevGameSession} );
     }
 
     function getElements() {
@@ -47,13 +54,29 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
     function getStaticContainer() {
         const elements = getElements();
-        return <StaticGameBoardContainer elements={elements} timeOut={elements.length * 1500} finishedCallback={finishedCallback} />
+        return <StaticGameBoardContainer elements={elements} clickCallback={clickCallback} />
     }
 
     function finishedCallback(session:GameSession) {
         setGameSession(session);
         setGameFinished(true);
         unSubscribeToNotifications();
+    }
+
+    function clickCallback(valid: boolean, x:number, y:number, distance:number) {
+        const click = new GameClick(x,y,valid);
+        click.distance = distance
+        gameSession.clicks.push(click);
+        gameSession.duration = performance.now() - gameSession.startTime;
+        setGameSession(gameSession);
+        if(isFinished()) {
+            finishedCallback(gameSession);
+        }
+    }
+
+    function isFinished() {
+        const actualValidContainer = props.gameType != GameType.Static ? validContainerCount : getElements().length;
+        return gameSession.getValidClickCount() >= actualValidContainer || gameSession.duration >= timeOut
     }
 
     useIonViewDidLeave(() => {
@@ -65,7 +88,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             if (props.gameType == GameType.Static) {
                 return getStaticContainer();
             } else {
-                return <GameBoardContainer gameType={props.gameType} validContainerCount={validContainerCount} invalidContainerCount={invalidContainerCount} placeholderContainerCount={placeholderContainerCount} timeOut={18000} finishedCallback={finishedCallback} />
+                return <GameBoardContainer gameType={props.gameType} validContainerCount={validContainerCount} invalidContainerCount={invalidContainerCount} placeholderContainerCount={placeholderContainerCount} clickCallback={clickCallback}/>
             }
         } else if (gameStarted && gameFinished) {
             return <ResultContainer gameType={props.gameType} gameSession={gameSession} launchGameCallback={launchGameCallback} />
