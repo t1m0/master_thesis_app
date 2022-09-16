@@ -1,4 +1,5 @@
 import { BleClient, BleDevice, dataViewToNumbers, numbersToDataView } from '@capacitor-community/bluetooth-le';
+import { isPlatform } from '@ionic/react';
 import { readFromStorage, writeInStorage } from '../../../IonicStorage';
 import AccelerationRecord from './AccelerationRecord';
 import { mapAccelerationRecord } from './AccelerationRecordMapper';
@@ -12,6 +13,9 @@ const BLE_SERVICE = "0000180f-0000-1000-8000-00805f9b34fb";
 
 
 export async function connectToDevice(): Promise<void> {
+    if(isPlatform('desktop')) {
+        return Promise.reject("BLE not supported on Desktop!");
+    }
     try {
         const deviceId = await readFromStorage("DeviceId") as string;
         if (deviceId == undefined) {
@@ -32,6 +36,9 @@ export async function connectToDevice(): Promise<void> {
 }
 
 export async function subscribeToNotifications(dataCallback: (record: AccelerationRecord) => void): Promise<void> {
+    if(isPlatform('desktop')) {
+        return Promise.reject("BLE not supported on Desktop!");
+    }
     try {
         const deviceId = await readFromStorage("DeviceId") as string;
         await BleClient.write(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([1]));
@@ -53,6 +60,9 @@ export async function subscribeToNotifications(dataCallback: (record: Accelerati
 }
 
 export async function unSubscribeToNotifications(): Promise<void> {
+    if(isPlatform('desktop')) {
+        return Promise.reject("BLE not supported on Desktop!");
+    }
     try {
         const deviceId = await readFromStorage("DeviceId") as string;
         await BleClient.stopNotifications(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_ACCELERATION_GUID);
