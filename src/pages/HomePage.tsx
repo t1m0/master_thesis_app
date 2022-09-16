@@ -1,9 +1,9 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { getCorrectedHeight, getCorrectedWidth, isLandscape, isMobile, isPortrait } from '../util/layout';
 
-import './Home.css';
+import './HomePage.css';
 
-const Home: React.FC = () => {
+const HomePage: React.FC = () => {
   console.log(`portrait: ${isPortrait()} landscape: ${isLandscape()} mobile: ${isMobile()}`)
   console.log(`height: ${getCorrectedHeight()} width: ${getCorrectedWidth()}`)
   return (
@@ -17,8 +17,8 @@ const Home: React.FC = () => {
         <div className='center-childs'>
           <div className='activity-collection'>
             <a className='button' href="/scoop">Color Scoop Game</a><br />
-            <a className='button' href="/scoop/triangle">Color Triangle Game</a><br />
-            <a className='button' href="/scoop/static">Static Scoop Game</a><br />
+            <a className='button' href="/scoop-triangle">Color Triangle Game</a><br />
+            <a className='button' href="/scoop-static">Static Scoop Game</a><br />
             <a className='button' href="/spiral">Spiral Drawing</a><br />
             <a className='button' href="/ble">BLE Test</a>
           </div>
@@ -28,4 +28,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default HomePage;

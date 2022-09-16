@@ -3,7 +3,7 @@ import React, {useState} from "react";
 
 import './StaticGameElement.css'
 interface StaticGameElementProps {
-    key:string,
+    id:string,
     disabled:boolean,
     top:number,
     left:number,
@@ -45,7 +45,7 @@ const StaticGameElement: React.FC<StaticGameElementProps> = (props: StaticGameEl
   }
 
   return (
-    <div id={props.key} className={`center static-game-element ${getDisabledStyle()}`} onClick={onClick} style={{top: props.top, left: props.left}}>
+    <div id={props.id} className={`center static-game-element ${getDisabledStyle()}`} onClick={onClick} style={{top: props.top, left: props.left}}>
       <svg width="100" height="100" viewBox="0 0 100 100"><polygon points="40,10, 80, 80, 10 ,80" className="triangle"/></svg>
     </div>
   );

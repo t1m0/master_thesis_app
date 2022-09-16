@@ -3,9 +3,9 @@ import { IonApp, setupIonicReact } from '@ionic/react';
 import { readFromStorage } from './IonicStorage';
 import { useEffect } from 'react';
 
-import ScoopGame from './pages/ScoopGame';
-import SpiralAnalysis from './pages/SpiralAnalysis';
-import Home from './pages/Home';
+import ScoopGamePage from './pages/ScoopGamePage';
+import SpiralAnalysisPage from './pages/SpiralAnalysisPage';
+import HomePage from './pages/HomePage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -18,11 +18,12 @@ import '@ionic/react/css/typography.css';
 /* Theme variables */
 import './theme/variables.css';
 import './theme/custom.css';
-import SpiralDrawing from './pages/SpiralDrawingCanvas';
-import BLETest from './pages/BLETest';
+import SpiralDrawingPage from './pages/SpiralDrawingPage';
+import BLETestPage from './pages/BLETestPage';
 import { GameType } from './components/scoop_game/GameType';
 
 import { connectToDevice } from './components/spiral/ble/BLEWrapper';
+import ScoopGameAnalysisPage from './pages/ScoopGameAnalysisPage';
 
 setupIonicReact();
 
@@ -44,14 +45,15 @@ const App: React.FC = () => {
   return (<IonApp>
     <BrowserRouter>
       <Routes>
-          <Route path="/home" element={<Home />}/>
-          <Route path="/scoop" element={<Navigate to="/scoop/color" />}/>
-          <Route path="/scoop/color" element={<ScoopGame gameType={GameType.Color}/>}/>
-          <Route path="/scoop/triangle" element={<ScoopGame gameType={GameType.Triangle}/>}/>
-          <Route path="/scoop/static" element={<ScoopGame gameType={GameType.Static}/>}/>
-          <Route path="/spiral" element={<SpiralDrawing />}/>
-          <Route path="/ble" element={<BLETest />}/>
-          <Route path="/spiral/:uuid" element={<SpiralAnalysis />}/>
+          <Route path="/home" element={<HomePage />}/>
+          <Route path="/scoop" element={<Navigate to="/scoop-color" />}/>
+          <Route path="/scoop-color" element={<ScoopGamePage gameType={GameType.Color}/>}/>
+          <Route path="/scoop-triangle" element={<ScoopGamePage gameType={GameType.Triangle}/>}/>
+          <Route path="/scoop-static" element={<ScoopGamePage gameType={GameType.Static}/>}/>
+          <Route path="/scoop/:uuid" element={<ScoopGameAnalysisPage />}/>
+          <Route path="/spiral" element={<SpiralDrawingPage />}/>
+          <Route path="/ble" element={<BLETestPage />}/>
+          <Route path="/spiral/:uuid" element={<SpiralAnalysisPage />}/>
           <Route path="/" element={<Navigate to="/home" />}/>
         </Routes>
     </BrowserRouter>

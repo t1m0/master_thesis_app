@@ -6,7 +6,7 @@ import { subscribeToNotifications, unSubscribeToNotifications } from "../compone
 import { readFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
-const BLETest: React.FC = () => {
+const BLETestPage: React.FC = () => {
   const [bondedDevice, setBondedDevice] = useState<string>();
   const [results, setResults] = useState(new Array<AccelerationRecord>());
 
@@ -66,4 +66,4 @@ const BLETest: React.FC = () => {
   );
 };
 
-export default BLETest;
+export default BLETestPage;

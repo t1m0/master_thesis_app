@@ -3,11 +3,11 @@ import GameContainer from '../components/scoop_game/GameContainer';
 import { GameType } from '../components/scoop_game/GameType';
 import { isPortrait, isMobile, getWidth, getHeight, getCorrectedHeight } from '../util/layout';
 
-interface ScoopGameProps {
+interface ScoopGamePageProps {
   gameType:GameType
 }
 
-const ScoopGame: React.FC<ScoopGameProps> = (props: ScoopGameProps) => {
+const ScoopGamePage: React.FC<ScoopGamePageProps> = (props: ScoopGamePageProps) => {
   
   function calcRowCount() {
     return Math.round((getCorrectedHeight()) / 160);
@@ -36,4 +36,4 @@ const ScoopGame: React.FC<ScoopGameProps> = (props: ScoopGameProps) => {
   );
 };
 
-export default ScoopGame;
+export default ScoopGamePage;

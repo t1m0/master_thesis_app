@@ -11,11 +11,11 @@ import { subscribeToNotifications, unSubscribeToNotifications } from '../compone
 import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
 import { getCorrectedHeight, getCorrectedWidth } from '../util/layout';
 
-interface SpiralDrawingCanvasProps {
+interface SpiralDrawingPage {
   
 }
 
-const SpiralDrawingCanvas: React.FC<SpiralDrawingCanvasProps> = (props: SpiralDrawingCanvasProps) => {
+const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage) => {
   const navigate = useNavigate();
   const [startTime, setStartTime]=useState(0);
   const [accelerations, setAccelerations]=useState(new Array<AccelerationRecord>());
@@ -77,4 +77,4 @@ const SpiralDrawingCanvas: React.FC<SpiralDrawingCanvasProps> = (props: SpiralDr
   );
 };
 
-export default SpiralDrawingCanvas;
+export default SpiralDrawingPage;

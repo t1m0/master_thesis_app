@@ -7,7 +7,7 @@ import SpiralDrawingRating from '../components/spiral/model/SpiralDrawingRating'
 import { readFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
-const SpiralAnalysis: React.FC = () => {
+const SpiralAnalysisPage: React.FC = () => {
   const spiralRating = new SpiralRating();
   const [drawing, setDrawing] = useState<SpiralDrawing | undefined>(undefined);
   const [result, setResult] = useState<SpiralDrawingRating | undefined>(undefined);
@@ -95,4 +95,4 @@ const SpiralAnalysis: React.FC = () => {
   );
 };
 
-export default SpiralAnalysis;
+export default SpiralAnalysisPage;

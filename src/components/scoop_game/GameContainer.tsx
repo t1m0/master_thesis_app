@@ -1,6 +1,5 @@
 import GameBoardContainer from './random/GameBoardContainer';
 import LaunchGameContainer from './LaunchGameContainer';
-import ResultContainer from './ResultContainer';
 
 import React, { useState, useEffect } from "react";
 import { GameType } from './GameType';
@@ -11,6 +10,8 @@ import { subscribeToNotifications, unSubscribeToNotifications } from '../spiral/
 import AccelerationRecord from '../spiral/ble/AccelerationRecord';
 import { useIonViewDidLeave } from '@ionic/react';
 import { GameClick } from './GameClick';
+import { writeInStorage } from '../../IonicStorage';
+import { useNavigate } from 'react-router';
 
 interface GameContainerProps {
     gameType: GameType;
@@ -20,9 +21,10 @@ interface GameContainerProps {
 }
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
+    const navigate = useNavigate();
     const [gameStarted, setGameStarted] = useState(false);
     const [gameFinished, setGameFinished] = useState(false);
-    const [gameSession, setGameSession] = useState(new GameSession());
+    const [gameSession, setGameSession] = useState(new GameSession(props.gameType));
 
     const placeholderContainerCount = Math.round(props.totalContainerCount * props.placeholderRatio);
     const validContainerCount = Math.round((props.totalContainerCount - placeholderContainerCount) * props.validRatio);
@@ -34,7 +36,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     function launchGameCallback() {
         setGameStarted(true);
         setGameFinished(false);
-        setGameSession(new GameSession());
+        setGameSession(new GameSession(props.gameType));
         subscribeToNotifications(accelerationCallback).catch(console.error);
     }
 
@@ -61,6 +63,10 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setGameSession(session);
         setGameFinished(true);
         unSubscribeToNotifications();
+        writeInStorage(gameSession.uuid, gameSession).then(()=> {
+            console.log("Saved "+gameSession.uuid+" transition to analysis.")
+            navigate("/scoop/"+gameSession.uuid);
+          });
     }
 
     function clickCallback(valid: boolean, x:number, y:number, distance:number) {
@@ -90,8 +96,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             } else {
                 return <GameBoardContainer gameType={props.gameType} validContainerCount={validContainerCount} invalidContainerCount={invalidContainerCount} placeholderContainerCount={placeholderContainerCount} clickCallback={clickCallback}/>
             }
-        } else if (gameStarted && gameFinished) {
-            return <ResultContainer gameType={props.gameType} gameSession={gameSession} launchGameCallback={launchGameCallback} />
         } else {
             return <LaunchGameContainer launchGameCallback={launchGameCallback} />
         }
