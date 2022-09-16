@@ -7,7 +7,7 @@ import { GameSession } from "../GameSession";
 
 interface StaticGameBoardContainerProps {
     elements: StaticGameElementInput[],
-    clickCallback:(valid: boolean, x:number, y:number, distance:number)=>void
+    clickCallback: (valid: boolean, x: number, y: number, distance: number) => void
 }
 
 const StaticGameBoardContainer: React.FC<StaticGameBoardContainerProps> = (props: StaticGameBoardContainerProps) => {
@@ -15,18 +15,18 @@ const StaticGameBoardContainer: React.FC<StaticGameBoardContainerProps> = (props
     let elementCount = 1;
 
     const getElement = (input: StaticGameElementInput) => {
-        const id = `${elementCount++}-static-element`;
-        const top =  (getCorrectedHeight()) * (input.yPercentage / 100)+50;
+        const id = elementCount++;
+        const top = (getCorrectedHeight()) * (input.yPercentage / 100) + 50;
         const left = getCorrectedWidth() * (input.xPercentage / 100);
-        return <StaticGameElement key={id} id={id} top={top} left={left} disabled={false} clickCallback={props.clickCallback} />
+        return <StaticGameElement key={id} id={id} top={top} left={left} clickCallback={props.clickCallback} />
     }
 
-    const boardClickCallback = (event:MouseEvent<HTMLDivElement>) => {
+    const boardClickCallback = (event: MouseEvent<HTMLDivElement>) => {
         props.clickCallback(false, event.clientX, event.clientY, -1);
-    }    
+    }
 
     return (
-        <div className="static-game-container" onClick={boardClickCallback} style={{height:getHeight()}}>
+        <div className="static-game-container" onClick={boardClickCallback} style={{ height: getHeight() }}>
             {props.elements.map(getElement)}
         </div>
     );
