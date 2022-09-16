@@ -9,6 +9,7 @@
 .static-game-element:hover {
     cursor: pointer;
 }
+
 .static-game-element-disabled {
     visibility: hidden;
 }

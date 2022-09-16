@@ -1,5 +1,5 @@
 interface LaunchGameContainerProps {
-    launchGameCallback:() => void
+    launchGameCallback: () => void
 }
 
 const LaunchGameContainer: React.FC<LaunchGameContainerProps> = (props: LaunchGameContainerProps) => {
@@ -7,7 +7,7 @@ const LaunchGameContainer: React.FC<LaunchGameContainerProps> = (props: LaunchGa
         <div className="center-childs">
             <button onClick={props.launchGameCallback}>Launch Game</button>
         </div>
-  );
+    );
 };
 
 export default LaunchGameContainer;

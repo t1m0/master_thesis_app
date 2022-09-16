@@ -1,14 +1,14 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import GameContainer from '../components/scoop_game/GameContainer';
 import { GameType } from '../components/scoop_game/GameType';
-import { isPortrait, isMobile, getWidth, getHeight, getCorrectedHeight } from '../util/layout';
+import { getCorrectedHeight } from '../util/layout';
 
 interface ScoopGamePageProps {
-  gameType:GameType
+  gameType: GameType
 }
 
 const ScoopGamePage: React.FC<ScoopGamePageProps> = (props: ScoopGamePageProps) => {
-  
+
   function calcRowCount() {
     return Math.round((getCorrectedHeight()) / 160);
   }
@@ -25,12 +25,12 @@ const ScoopGamePage: React.FC<ScoopGamePageProps> = (props: ScoopGamePageProps) 
         <IonToolbar>
           <IonTitle>Color Selector</IonTitle>
           <IonButtons>
-            <IonBackButton defaultHref='/home'/>
+            <IonBackButton defaultHref='/home' />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <GameContainer gameType={props.gameType} totalContainerCount={colorContainerCount} placeholderRatio={.4} validRatio={.4}/>
+        <GameContainer gameType={props.gameType} totalContainerCount={colorContainerCount} placeholderRatio={.4} validRatio={.4} />
       </IonContent>
     </IonPage>
   );

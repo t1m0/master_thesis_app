@@ -1,4 +1,5 @@
-ion-content button, ion-content .button {
+ion-content button,
+ion-content .button {
     margin: 5px;
     padding: 0px 10px 0px;
 
@@ -34,5 +35,5 @@ ion-content button, ion-content .button {
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
 }

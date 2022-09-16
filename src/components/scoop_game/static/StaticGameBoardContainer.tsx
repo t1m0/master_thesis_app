@@ -3,7 +3,6 @@ import StaticGameElementInput from './StaticGameElementInput';
 import './StaticGameBoardContainer.css'
 import StaticGameElement from "./StaticGameElement";
 import { getCorrectedHeight, getCorrectedWidth, getHeight } from "../../../util/layout";
-import { GameSession } from "../GameSession";
 
 interface StaticGameBoardContainerProps {
     elements: StaticGameElementInput[],

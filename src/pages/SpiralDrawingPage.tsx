@@ -1,6 +1,6 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonViewDidLeave } from '@ionic/react';
-import { readFromStorage, writeInStorage } from '../IonicStorage';
-import React, { useEffect, useReducer, useState } from 'react'
+import { writeInStorage } from '../IonicStorage';
+import React, { useReducer, useState } from 'react'
 
 import { SpiralCanvasContainer } from '../components/spiral/SpiralCanvasContainer';
 import { useNavigate } from 'react-router';
@@ -12,14 +12,14 @@ import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
 import { getCorrectedHeight, getCorrectedWidth } from '../util/layout';
 
 interface SpiralDrawingPage {
-  
+
 }
 
 const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage) => {
   const navigate = useNavigate();
-  const [startTime, setStartTime]=useState(0);
-  const [accelerations, setAccelerations]=useState(new Array<AccelerationRecord>());
-  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);  
+  const [startTime, setStartTime] = useState(0);
+  const [accelerations, setAccelerations] = useState(new Array<AccelerationRecord>());
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   function restart() {
     forceUpdate();
@@ -30,27 +30,27 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
     setStartTime(Date.now());
   };
 
-  const drawingFinished = (result:SpiralDrawing) => {
-      unSubscribeToNotifications().catch(console.error);
-      const totalTime = Date.now() - startTime;
-      const updatedResult = new SpiralDrawing(result.imageWrapper, result.start, result.end, totalTime, accelerations);
-      console.log(updatedResult);
-      writeInStorage(updatedResult.uuid, updatedResult).then(()=> {
-        console.log("Saved "+updatedResult.uuid+" transition to analysis.")
-        navigate("/spiral/"+updatedResult.uuid);
-      });
+  const drawingFinished = (result: SpiralDrawing) => {
+    unSubscribeToNotifications().catch(console.error);
+    const totalTime = Date.now() - startTime;
+    const updatedResult = new SpiralDrawing(result.imageWrapper, result.start, result.end, totalTime, accelerations);
+    console.log(updatedResult);
+    writeInStorage(updatedResult.uuid, updatedResult).then(() => {
+      console.log("Saved " + updatedResult.uuid + " transition to analysis.")
+      navigate("/spiral/" + updatedResult.uuid);
+    });
   }
 
-  const dataCallback = (accelerationRecodr:AccelerationRecord) => {
-      console.log('acceleration data', accelerationRecodr);
-      setAccelerations(accelerations => [...accelerations,accelerationRecodr] );
+  const dataCallback = (accelerationRecodr: AccelerationRecord) => {
+    console.log('acceleration data', accelerationRecodr);
+    setAccelerations(accelerations => [...accelerations, accelerationRecodr]);
   }
 
   useIonViewDidLeave(() => {
     unSubscribeToNotifications().catch(console.error);
   });
-  
-  const canvasHeight = getCorrectedHeight()/*buttons*/-50;
+
+  const canvasHeight = getCorrectedHeight()/*buttons*/ - 50;
   const canvasWidth = getCorrectedWidth();
 
   return (
@@ -59,7 +59,7 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
         <IonToolbar>
           <IonTitle>Spiral Drawing</IonTitle>
           <IonButtons>
-            <IonBackButton defaultHref='/home'/>
+            <IonBackButton defaultHref='/home' />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -71,7 +71,7 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
               <button onClick={triggerSave}>Save Canvas</button>
             </div>
             <div className='spiral-canvas'>{canvas}</div>
-          </div>)}/>
+          </div>)} />
       </IonContent>
     </IonPage>
   );

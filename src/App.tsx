@@ -40,22 +40,22 @@ const App: React.FC = () => {
             .catch(err => console.log("Failed to connect!", err));
         }
       })
-	}, []);
+  }, []);
 
   return (<IonApp>
     <BrowserRouter>
       <Routes>
-          <Route path="/home" element={<HomePage />}/>
-          <Route path="/scoop" element={<Navigate to="/scoop-color" />}/>
-          <Route path="/scoop-color" element={<ScoopGamePage gameType={GameType.Color}/>}/>
-          <Route path="/scoop-triangle" element={<ScoopGamePage gameType={GameType.Triangle}/>}/>
-          <Route path="/scoop-static" element={<ScoopGamePage gameType={GameType.Static}/>}/>
-          <Route path="/scoop/:uuid" element={<ScoopGameAnalysisPage />}/>
-          <Route path="/spiral" element={<SpiralDrawingPage />}/>
-          <Route path="/ble" element={<BLETestPage />}/>
-          <Route path="/spiral/:uuid" element={<SpiralAnalysisPage />}/>
-          <Route path="/" element={<Navigate to="/home" />}/>
-        </Routes>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/scoop" element={<Navigate to="/scoop-color" />} />
+        <Route path="/scoop-color" element={<ScoopGamePage gameType={GameType.Color} />} />
+        <Route path="/scoop-triangle" element={<ScoopGamePage gameType={GameType.Triangle} />} />
+        <Route path="/scoop-static" element={<ScoopGamePage gameType={GameType.Static} />} />
+        <Route path="/scoop/:uuid" element={<ScoopGameAnalysisPage />} />
+        <Route path="/spiral" element={<SpiralDrawingPage />} />
+        <Route path="/ble" element={<BLETestPage />} />
+        <Route path="/spiral/:uuid" element={<SpiralAnalysisPage />} />
+        <Route path="/" element={<Navigate to="/home" />} />
+      </Routes>
     </BrowserRouter>
   </IonApp>)
 };

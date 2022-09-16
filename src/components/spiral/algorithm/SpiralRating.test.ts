@@ -1,5 +1,5 @@
 import SpiralDrawing from '../model/SpiralDrawing';
-import sampleDrawing from './sample_drawing.json'; 
+import sampleDrawing from './sample_drawing.json';
 
 import SpiralRating from './SpiralRating';
 

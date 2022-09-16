@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'
 import SpiralRating from '../components/spiral/algorithm/SpiralRating';

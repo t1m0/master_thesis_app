@@ -1,19 +1,19 @@
 
-import React, {ReactNode, useState} from "react";
+import React, { ReactNode, useState } from "react";
 
 import './GameElementContainer.css'
 interface GameElementContainerProps {
-    valid:boolean,
-    innerElement:ReactNode,
-    containerStyle:String,
-    clickCallback:(valid:boolean, x:number, y:number) => void
+  valid: boolean,
+  innerElement: ReactNode,
+  containerStyle: String,
+  clickCallback: (valid: boolean, x: number, y: number) => void
 }
 
 const GameElementContainer: React.FC<GameElementContainerProps> = (props: GameElementContainerProps) => {
-  const [disabled, setDisabled]=useState(false);
+  const [disabled, setDisabled] = useState(false);
 
-  function onClick(event:React.MouseEvent<any>) {
-    if(!disabled) {
+  function onClick(event: React.MouseEvent<any>) {
+    if (!disabled) {
       setDisabled(true)
     }
     props.clickCallback(props.valid, event.clientX, event.clientY);
@@ -22,7 +22,7 @@ const GameElementContainer: React.FC<GameElementContainerProps> = (props: GameEl
 
 
   function getDisabledStyle() {
-    if(disabled) {
+    if (disabled) {
       return 'game-element-disabled'
     }
     return ''

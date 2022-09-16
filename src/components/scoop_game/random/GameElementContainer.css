@@ -12,6 +12,7 @@
 .game-element:hover {
     cursor: pointer;
 }
+
 .game-element-disabled {
     visibility: hidden;
 }

@@ -4,14 +4,14 @@ import { GameClick } from "./GameClick";
 import { GameType } from "./GameType";
 
 export class GameSession {
-    uuid:string;
+    uuid: string;
     gameType: GameType;
     startTime: number;
     duration: number = 0;
     clicks = new Array<GameClick>();
     accelerations = new Array<AccelerationRecord>();
 
-    constructor(gameType:GameType) {
+    constructor(gameType: GameType) {
         this.uuid = uuid();
         this.startTime = performance.now()
         this.gameType = gameType
