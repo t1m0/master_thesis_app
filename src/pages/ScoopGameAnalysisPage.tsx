@@ -3,15 +3,14 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'
 import { GameSession } from '../components/scoop_game/GameSession';
 import { GameType } from '../components/scoop_game/GameType';
+import { analyse_scoop_game } from '../components/scoop_game/ScoopGameAnalysis';
+import { ScoopGameResult } from '../components/scoop_game/ScoopGameResult';
 
 import { readFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
 const ScoopGameAnalysisPage: React.FC = () => {
-    const [gameSession, setGameSession] = useState<GameSession | undefined>(undefined);
-    const [successRate, setSuccessRate] = useState(0);
-    const [meanDistance, setMeanDistance] = useState(0);
-    const [distanceStandardDeviation, setDistanceStandardDeviation] = useState(0);
+    const [result, setResult] = useState<ScoopGameResult | undefined>(undefined);
     const [durationInSec, setDurationInSec] = useState(0);
     const [gameType, setGameType] = useState("");
     const params = useParams();
@@ -26,37 +25,26 @@ const ScoopGameAnalysisPage: React.FC = () => {
                 loadedSession.clicks = session.clicks
                 loadedSession.accelerations = session.accelerations
                 loadedSession.duration = session.duration
-                setGameSession(loadedSession);
+                const result = analyse_scoop_game(loadedSession)
+                const localDurationInSec = Math.round((loadedSession.duration / 1000) * 100) / 100
+                setResult(result);
+                setDurationInSec(localDurationInSec)
+                setGameType(GameType[loadedSession.gameType].toLowerCase())
             }
         });
     }, []);
 
-    useEffect(() => {
-        if (gameSession != undefined && gameSession.clicks.length > 0) {
-            const n = gameSession.clicks.length;
-            const localSuccessRate = gameSession.getValidClickCount() / (n) * 100;
-            const localMeanDistance = gameSession.clicks.filter(c => c.valid).reduce((a, b) => a + b.distance, 0) / n;
-            const localDistanceStandardDeviation = Math.sqrt(gameSession.clicks.map(c => Math.pow(c.distance - localMeanDistance, 2)).reduce((a, b) => a + b) / n);
-            const localDurationInSec = Math.round((gameSession.duration / 1000) * 100) / 100
-            setSuccessRate(localSuccessRate)
-            setMeanDistance(localMeanDistance)
-            setDistanceStandardDeviation(localDistanceStandardDeviation)
-            setDurationInSec(localDurationInSec)
-            setGameType(GameType[gameSession.gameType].toLowerCase())
-        }
-    }, [gameSession]);
-
     const clickShareLocal = () => {
-        if (gameSession != undefined) {
+        if (result != undefined) {
             const fileName = `${uuid}.json`;
-            const file = new File([JSON.stringify(gameSession)], fileName, { type: "application/json" })
+            const file = new File([JSON.stringify(result)], fileName, { type: "application/json" })
             shareLocal(fileName, file);
         }
     }
 
     const clickShareAws = () => {
-        if (gameSession != undefined) {
-            shareAws(uuid, GameType[gameSession.gameType], gameSession);
+        if (result != undefined) {
+            shareAws(uuid, gameType, result);
         }
     }
 
@@ -73,9 +61,9 @@ const ScoopGameAnalysisPage: React.FC = () => {
             <IonContent fullscreen>
                 <div className='center-childs'>
                     <div>
-                    <p key={"mean-distance"}>Mean Click Distance: {meanDistance}</p>
-                    <p key={"sd-distance"}>Standard Deviation Click Distance: {distanceStandardDeviation}</p>
-                    <p key={"success-rate"}>Success Rate: {successRate}%</p>
+                    <p key={"mean-distance"}>Mean Click Distance: {result?.meanDistance}</p>
+                    <p key={"sd-distance"}>Standard Deviation Click Distance: {result?.distanceStandardDeviation}</p>
+                    <p key={"success-rate"}>Success Rate: {result?.successRate}%</p>
                     <p key={"duration"}>Duration: {durationInSec}sec</p>
                     <div className='center-childs'>
                         <button onClick={clickShareLocal}>Share Local</button>
