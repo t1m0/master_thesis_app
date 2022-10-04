@@ -60,6 +60,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
 
     function finishedCallback(session: GameSession) {
+        session.endTime = Date.now();
         setGameSession(session);
         setGameFinished(true);
         unSubscribeToNotifications();

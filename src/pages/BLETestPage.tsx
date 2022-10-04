@@ -8,6 +8,7 @@ import { shareAws, shareLocal } from '../util/share';
 
 const BLETestPage: React.FC = () => {
   const [bondedDevice, setBondedDevice] = useState<string>();
+  const [startTime, setStartTime] = useState(0);
   const [results, setResults] = useState(new Array<AccelerationRecord>());
 
 
@@ -21,6 +22,7 @@ const BLETestPage: React.FC = () => {
 
   useEffect(() => {
       subscribeToNotifications(dataCallback).catch(console.error);
+      setStartTime(Date.now());
       setTimeout(async () => {
         unSubscribeToNotifications().catch(console.error)
       }, 10000);
@@ -35,7 +37,12 @@ const BLETestPage: React.FC = () => {
   const clickShareLocal = () => {
     const date = new Date();
     const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}.json`;
-    const file = new File([JSON.stringify(results)], fileName, { type: "application/json" })
+    const result = {
+      'accelerations':results,
+      'startTime':startTime,
+      'endTime':Date.now()
+    };
+    const file = new File([JSON.stringify(result)], fileName, { type: "application/json" })
     shareLocal(fileName, file);
   }
 

@@ -7,14 +7,15 @@ export class GameSession {
     uuid: string;
     gameType: GameType;
     startTime: number;
+    endTime:number = 0;
     duration: number = 0;
     clicks = new Array<GameClick>();
     accelerations = new Array<AccelerationRecord>();
 
     constructor(gameType: GameType) {
         this.uuid = uuid();
-        this.startTime = performance.now()
-        this.gameType = gameType
+        this.startTime = Date.now();
+        this.gameType = gameType;
     }
 
     getValidClickCount() {

@@ -32,8 +32,11 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
 
   const drawingFinished = (result: SpiralDrawing) => {
     unSubscribeToNotifications().catch(console.error);
-    const totalTime = Date.now() - startTime;
+    const endTime = Date.now();
+    const totalTime = endTime - startTime;
     const updatedResult = new SpiralDrawing(result.imageWrapper, result.start, result.end, totalTime, accelerations);
+    updatedResult.startTime = startTime;
+    updatedResult.endTime = endTime;
     console.log(updatedResult);
     writeInStorage(updatedResult.uuid, updatedResult).then(() => {
       console.log("Saved " + updatedResult.uuid + " transition to analysis.")
