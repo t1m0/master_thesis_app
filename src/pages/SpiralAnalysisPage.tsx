@@ -88,7 +88,6 @@ const SpiralAnalysisPage: React.FC = () => {
             </thead>
             {getTableBody()}
           </table>
-          {drawing?.accelerations.map(v => <p>count: {v.recordCount} xAxis: {v.xAxis} yAxis: {v.yAxis} zAxis: {v.zAxis}</p>)}
         </div>
       </IonContent>
     </IonPage>
