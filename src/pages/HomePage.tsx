@@ -1,11 +1,25 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { useEffect, } from 'react';
+import { useNavigate } from 'react-router';
+import { readValueFromStorage } from '../IonicStorage';
 import { getCorrectedHeight, getCorrectedWidth, isLandscape, isMobile, isPortrait } from '../util/layout';
 
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
+
+  const navigate = useNavigate();
+
   console.log(`portrait: ${isPortrait()} landscape: ${isLandscape()} mobile: ${isMobile()}`)
   console.log(`height: ${getCorrectedHeight()} width: ${getCorrectedWidth()}`)
+
+  useEffect(() => {
+    const user = readValueFromStorage('userName');
+    if (!user) {
+      navigate("/user");
+    }
+  }, []);
+
   return (
     <IonPage>
       <IonHeader>

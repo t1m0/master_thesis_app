@@ -1,10 +1,20 @@
+import { readValueFromStorage } from "../IonicStorage";
+
 export function shareAws(uuid: string, game: string, data: any) {
   const requestConfig = {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   };
-  fetch(`https://el0evnajuh.execute-api.eu-central-1.amazonaws.com/data?uuid=${uuid}&game=${game}`, requestConfig)
+  let url = `https://el0evnajuh.execute-api.eu-central-1.amazonaws.com/data?uuid=${uuid}&game=${game}`;
+  let user = readValueFromStorage('userName');
+  console.log("User", user);
+  if(user != undefined && user.length > 0) {
+    user = user.toLowerCase();
+    user = user.replace(" ", "_");
+    url = url + `&user=${user}`;
+  }
+  fetch(url, requestConfig)
     .then(response => {
       if (response.status == 200) {
         alert("Successfully send data to AWS.");

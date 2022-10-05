@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import SpiralRating from '../components/spiral/algorithm/SpiralRating';
 import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 import SpiralDrawingRating from '../components/spiral/model/SpiralDrawingRating';
-import { readFromStorage } from '../IonicStorage';
+import { readObjectFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
 const SpiralAnalysisPage: React.FC = () => {
@@ -15,14 +15,12 @@ const SpiralAnalysisPage: React.FC = () => {
   const uuid = params["uuid"] as string;
 
   useEffect(() => {
-    readFromStorage<SpiralDrawing>(uuid).then(d => {
-      if (d != undefined) {
-        console.log(d);
-        setDrawing(d);
-        const result = spiralRating.rate(d);
-        setResult(result);
-      }
-    });
+    const currentDrawing = readObjectFromStorage<SpiralDrawing>(uuid);
+    if (currentDrawing) {
+      setDrawing(currentDrawing);
+      const result = spiralRating.rate(currentDrawing);
+      setResult(result);
+    }
   }, []);
 
   useEffect(() => {

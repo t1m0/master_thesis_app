@@ -6,7 +6,7 @@ import { GameType } from '../components/scoop_game/GameType';
 import { analyse_scoop_game } from '../components/scoop_game/ScoopGameAnalysis';
 import { ScoopGameResult } from '../components/scoop_game/ScoopGameResult';
 
-import { readFromStorage } from '../IonicStorage';
+import { readObjectFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
 const ScoopGameAnalysisPage: React.FC = () => {
@@ -17,21 +17,21 @@ const ScoopGameAnalysisPage: React.FC = () => {
     const uuid = params["uuid"] as string;
 
     useEffect(() => {
-        readFromStorage<GameSession>(uuid).then(session => {
-            if (session != undefined) {
-                const loadedSession = new GameSession(session.gameType)
-                loadedSession.uuid = session.uuid
-                loadedSession.startTime = session.startTime
-                loadedSession.clicks = session.clicks
-                loadedSession.accelerations = session.accelerations
-                loadedSession.duration = session.duration
-                const result = analyse_scoop_game(loadedSession)
-                const localDurationInSec = Math.round((loadedSession.duration / 1000) * 100) / 100
-                setResult(result);
-                setDurationInSec(localDurationInSec)
-                setGameType(GameType[loadedSession.gameType].toLowerCase())
-            }
-        });
+        const session = readObjectFromStorage<GameSession>(uuid)
+        if (session != undefined) {
+            const loadedSession = new GameSession(session.gameType)
+            loadedSession.uuid = session.uuid
+            loadedSession.startTime = session.startTime
+            loadedSession.clicks = session.clicks
+            loadedSession.accelerations = session.accelerations
+            loadedSession.duration = session.duration
+            const result = analyse_scoop_game(loadedSession)
+            const localDurationInSec = Math.round((loadedSession.duration / 1000) * 100) / 100
+            setResult(result);
+            setDurationInSec(localDurationInSec)
+            setGameType(GameType[loadedSession.gameType].toLowerCase())
+        }
+
     }, []);
 
     const clickShareLocal = () => {
@@ -61,14 +61,14 @@ const ScoopGameAnalysisPage: React.FC = () => {
             <IonContent fullscreen>
                 <div className='center-childs'>
                     <div>
-                    <p key={"mean-distance"}>Mean Click Distance: {result?.meanDistance}</p>
-                    <p key={"sd-distance"}>Standard Deviation Click Distance: {result?.distanceStandardDeviation}</p>
-                    <p key={"success-rate"}>Success Rate: {result?.successRate}%</p>
-                    <p key={"duration"}>Duration: {durationInSec}sec</p>
-                    <div className='center-childs'>
-                        <button onClick={clickShareLocal}>Share Local</button>
-                        <button onClick={clickShareAws}>Share Aws</button>
-                    </div>
+                        <p key={"mean-distance"}>Mean Click Distance: {result?.meanDistance}</p>
+                        <p key={"sd-distance"}>Standard Deviation Click Distance: {result?.distanceStandardDeviation}</p>
+                        <p key={"success-rate"}>Success Rate: {result?.successRate}%</p>
+                        <p key={"duration"}>Duration: {durationInSec}sec</p>
+                        <div className='center-childs'>
+                            <button onClick={clickShareLocal}>Share Local</button>
+                            <button onClick={clickShareAws}>Share Aws</button>
+                        </div>
                     </div>
                 </div>
             </IonContent>

@@ -1,6 +1,6 @@
 import { BleClient, BleDevice, dataViewToNumbers, numbersToDataView } from '@capacitor-community/bluetooth-le';
 import { isPlatform } from '@ionic/react';
-import { readFromStorage, writeInStorage } from '../../../IonicStorage';
+import { readValueFromStorage, writeInStorage } from '../../../IonicStorage';
 import AccelerationRecord from './AccelerationRecord';
 import { mapAccelerationRecord } from './AccelerationRecordMapper';
 
@@ -13,11 +13,11 @@ const BLE_SERVICE = "0000180f-0000-1000-8000-00805f9b34fb";
 
 
 export async function connectToDevice(): Promise<void> {
-    if(isPlatform('desktop')) {
+    if (isPlatform('desktop')) {
         return Promise.reject("BLE not supported on Desktop!");
     }
     try {
-        const deviceId = await readFromStorage("DeviceId") as string;
+        const deviceId = readValueFromStorage("DeviceId");
         if (deviceId == undefined) {
             BleClient.initialize();
 
@@ -36,22 +36,24 @@ export async function connectToDevice(): Promise<void> {
 }
 
 export async function subscribeToNotifications(dataCallback: (record: AccelerationRecord) => void): Promise<void> {
-    if(isPlatform('desktop')) {
+    if (isPlatform('desktop')) {
         return Promise.reject("BLE not supported on Desktop!");
     }
     try {
-        const deviceId = await readFromStorage("DeviceId") as string;
-        await BleClient.write(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([1]));
-        console.log('live sensor flag updated');
-        await BleClient.startNotifications(
-            deviceId,
-            LIVE_SENSOR_SERVICE_UUID,
-            LIVE_SENSOR_ACCELERATION_GUID,
-            value => {
-                const record = mapAccelerationRecord(value);
-                console.log(record);
-                dataCallback(record);
-            });
+        const deviceId = readValueFromStorage("DeviceId");
+        if (deviceId) {
+            await BleClient.write(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([1]));
+            console.log('live sensor flag updated');
+            await BleClient.startNotifications(
+                deviceId,
+                LIVE_SENSOR_SERVICE_UUID,
+                LIVE_SENSOR_ACCELERATION_GUID,
+                value => {
+                    const record = mapAccelerationRecord(value);
+                    console.log(record);
+                    dataCallback(record);
+                });
+        }
         return Promise.resolve();
     } catch (error) {
         console.error(error)
@@ -60,14 +62,16 @@ export async function subscribeToNotifications(dataCallback: (record: Accelerati
 }
 
 export async function unSubscribeToNotifications(): Promise<void> {
-    if(isPlatform('desktop')) {
+    if (isPlatform('desktop')) {
         return Promise.reject("BLE not supported on Desktop!");
     }
     try {
-        const deviceId = await readFromStorage("DeviceId") as string;
-        await BleClient.stopNotifications(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_ACCELERATION_GUID);
-        await BleClient.write(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([0]));
-        console.log('disconnected from device', deviceId);
+        const deviceId = await readValueFromStorage("DeviceId");
+        if (deviceId) {
+            await BleClient.stopNotifications(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_ACCELERATION_GUID);
+            await BleClient.write(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([0]));
+            console.log('disconnected from device', deviceId);
+        }
         return Promise.resolve()
     } catch (error) {
         console.error(error)

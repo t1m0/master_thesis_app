@@ -64,10 +64,9 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setGameSession(session);
         setGameFinished(true);
         unSubscribeToNotifications();
-        writeInStorage(gameSession.uuid, gameSession).then(() => {
-            console.log("Saved " + gameSession.uuid + " transition to analysis.")
-            navigate("/scoop/" + gameSession.uuid);
-        });
+        writeInStorage(gameSession.uuid, gameSession);
+        console.log("Saved " + gameSession.uuid + " transition to analysis.")
+        navigate("/scoop/" + gameSession.uuid);
     }
 
     function clickCallback(valid: boolean, x: number, y: number, distance: number) {

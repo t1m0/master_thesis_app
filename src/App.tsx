@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { IonApp, setupIonicReact } from '@ionic/react';
-import { readFromStorage } from './IonicStorage';
+import { readValueFromStorage } from './IonicStorage';
 import { useEffect } from 'react';
 
 import ScoopGamePage from './pages/ScoopGamePage';
@@ -24,6 +24,7 @@ import { GameType } from './components/scoop_game/GameType';
 
 import { connectToDevice } from './components/spiral/ble/BLEWrapper';
 import ScoopGameAnalysisPage from './pages/ScoopGameAnalysisPage';
+import UserPage from './pages/UserPage';
 
 setupIonicReact();
 
@@ -32,14 +33,12 @@ const App: React.FC = () => {
   document.body.classList.toggle('dark', true);
 
   useEffect(() => {
-    readFromStorage("BleDeviceId")
-      .then(deviceId => {
-        if (deviceId == undefined) {
-          connectToDevice()
-            .then(() => console.log("Connected to a device"))
-            .catch(err => console.log("Failed to connect!", err));
-        }
-      })
+    const deviceId = readValueFromStorage("BleDeviceId");
+    if (deviceId == undefined) {
+      connectToDevice()
+        .then(() => console.log("Connected to a device"))
+        .catch(err => console.log("Failed to connect!", err));
+    }
   }, []);
 
   return (<IonApp>
@@ -54,6 +53,7 @@ const App: React.FC = () => {
         <Route path="/spiral" element={<SpiralDrawingPage />} />
         <Route path="/ble" element={<BLETestPage />} />
         <Route path="/spiral/:uuid" element={<SpiralAnalysisPage />} />
+        <Route path="/user" element={<UserPage />} />
         <Route path="/" element={<Navigate to="/home" />} />
       </Routes>
     </BrowserRouter>

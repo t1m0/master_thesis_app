@@ -38,10 +38,9 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
     updatedResult.startTime = startTime;
     updatedResult.endTime = endTime;
     console.log(updatedResult);
-    writeInStorage(updatedResult.uuid, updatedResult).then(() => {
-      console.log("Saved " + updatedResult.uuid + " transition to analysis.")
-      navigate("/spiral/" + updatedResult.uuid);
-    });
+    writeInStorage(updatedResult.uuid, updatedResult);
+    console.log("Saved " + updatedResult.uuid + " transition to analysis.");
+    navigate("/spiral/" + updatedResult.uuid);
   }
 
   const dataCallback = (accelerationRecodr: AccelerationRecord) => {

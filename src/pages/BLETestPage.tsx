@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
 
 import { subscribeToNotifications, unSubscribeToNotifications } from "../components/spiral/ble/BLEWrapper";
-import { readFromStorage } from '../IonicStorage';
+import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
 const BLETestPage: React.FC = () => {
@@ -14,9 +14,8 @@ const BLETestPage: React.FC = () => {
 
   useEffect(() => {
     console.log("Connecting to Live Data")
-    readFromStorage<string>("DeviceId")
-      .then(setBondedDevice)
-      .catch(console.error);
+    const deviceId = readValueFromStorage("DeviceId");
+    setBondedDevice(deviceId);
 
   }, []);
 
