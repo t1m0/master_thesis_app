@@ -73,7 +73,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         const click = new GameClick(x, y, valid);
         click.distance = distance
         gameSession.clicks.push(click);
-        gameSession.duration = performance.now() - gameSession.startTime;
         setGameSession(gameSession);
         if (isFinished()) {
             finishedCallback(gameSession);
@@ -82,7 +81,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
     function isFinished() {
         const actualValidContainer = props.gameType != GameType.Static ? validContainerCount : getElements().length;
-        return gameSession.getValidClickCount() >= actualValidContainer || gameSession.duration >= timeOut
+        const duration = Date.now() - gameSession.startTime;
+        return gameSession.getValidClickCount() >= actualValidContainer || duration >= timeOut
     }
 
     useIonViewDidLeave(() => {

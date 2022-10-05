@@ -24,9 +24,9 @@ const ScoopGameAnalysisPage: React.FC = () => {
             loadedSession.startTime = session.startTime
             loadedSession.clicks = session.clicks
             loadedSession.accelerations = session.accelerations
-            loadedSession.duration = session.duration
+            const duration = session.endTime - session.startTime
             const result = analyse_scoop_game(loadedSession)
-            const localDurationInSec = Math.round((loadedSession.duration / 1000) * 100) / 100
+            const localDurationInSec = Math.round((duration / 1000) * 100) / 100
             setResult(result);
             setDurationInSec(localDurationInSec)
             setGameType(GameType[loadedSession.gameType].toLowerCase())

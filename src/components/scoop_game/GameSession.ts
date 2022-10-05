@@ -8,7 +8,6 @@ export class GameSession {
     gameType: GameType;
     startTime: number;
     endTime:number = 0;
-    duration: number = 0;
     clicks = new Array<GameClick>();
     accelerations = new Array<AccelerationRecord>();
 
