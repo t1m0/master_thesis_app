@@ -33,8 +33,7 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
   const drawingFinished = (result: SpiralDrawing) => {
     unSubscribeToNotifications().catch(console.error);
     const endTime = Date.now();
-    const totalTime = endTime - startTime;
-    const updatedResult = new SpiralDrawing(result.imageWrapper, result.start, result.end, totalTime, accelerations);
+    const updatedResult = new SpiralDrawing(result.imageWrapper, result.start, result.end, accelerations);
     updatedResult.startTime = startTime;
     updatedResult.endTime = endTime;
     console.log(updatedResult);

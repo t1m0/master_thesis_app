@@ -9,15 +9,13 @@ export default class SpiralDrawing {
     endTime:number = 0;
     start:ImageCoordinate;
     end:ImageCoordinate;
-    time:number;
     accelerations:AccelerationRecord[];
-    constructor(imageWrapper:ImageWrapper, start:ImageCoordinate, end:ImageCoordinate, time:number, accelerations:AccelerationRecord[]) {
+    constructor(imageWrapper:ImageWrapper, start:ImageCoordinate, end:ImageCoordinate, accelerations:AccelerationRecord[]) {
         this.uuid = uuid();
         this.startTime = Date.now();
         this.imageWrapper = imageWrapper;
         this.start = start;
         this.end = end;
-        this.time = time;
         this.accelerations = accelerations;
     }
 }

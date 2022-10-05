@@ -214,7 +214,7 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
                         then((arrayBuffer:ArrayBuffer) => {
                             const uintArry = Array.from(new Uint8Array(arrayBuffer))
                             const imageWrapper = new ImageWrapper(uintArry,coordinates,height,width)
-                            const result = new SpiralDrawing(imageWrapper, start, end, 0, new Array<AccelerationRecord>());
+                            const result = new SpiralDrawing(imageWrapper, start, end, new Array<AccelerationRecord>());
                             this.props.onSave(result); 
                         })
                         .catch(err => console.error('Failed to extract ArrayBuffer', err));
