@@ -22,6 +22,7 @@ const ScoopGameAnalysisPage: React.FC = () => {
             const loadedSession = new GameSession(session.gameType)
             loadedSession.uuid = session.uuid
             loadedSession.startTime = session.startTime
+            loadedSession.endTime = session.endTime
             loadedSession.clicks = session.clicks
             loadedSession.accelerations = session.accelerations
             const duration = session.endTime - session.startTime
