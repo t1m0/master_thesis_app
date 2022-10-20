@@ -28,6 +28,7 @@ const ScoopGameAnalysisPage: React.FC = () => {
             const duration = session.endTime - session.startTime
             const result = analyse_scoop_game(loadedSession)
             const localDurationInSec = Math.round((duration / 1000) * 100) / 100
+            shareAws(uuid, gameType, result);
             setResult(result);
             setDurationInSec(localDurationInSec)
             setGameType(GameType[loadedSession.gameType].toLowerCase())
@@ -40,12 +41,6 @@ const ScoopGameAnalysisPage: React.FC = () => {
             const fileName = `${uuid}.json`;
             const file = new File([JSON.stringify(result)], fileName, { type: "application/json" })
             shareLocal(fileName, file);
-        }
-    }
-
-    const clickShareAws = () => {
-        if (result != undefined) {
-            shareAws(uuid, gameType, result);
         }
     }
 
@@ -67,8 +62,7 @@ const ScoopGameAnalysisPage: React.FC = () => {
                         <p key={"success-rate"}>Success Rate: {result?.successRate}%</p>
                         <p key={"duration"}>Duration: {durationInSec}sec</p>
                         <div className='center-childs'>
-                            <button onClick={clickShareLocal}>Share Local</button>
-                            <button onClick={clickShareAws}>Share Aws</button>
+                            <button onClick={clickShareLocal}>Share</button>
                         </div>
                     </div>
                 </div>

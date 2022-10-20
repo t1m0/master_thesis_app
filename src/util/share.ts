@@ -17,9 +17,9 @@ export function shareAws(uuid: string, game: string, data: any) {
   fetch(url, requestConfig)
     .then(response => {
       if (response.status == 200) {
-        alert("Successfully send data to AWS.");
+        console.log("Successfully send data to AWS.");
       } else {
-        alert("Failed to send data to AWS!");
+        console.log("Failed to send data to AWS!");
       }
     });
 }

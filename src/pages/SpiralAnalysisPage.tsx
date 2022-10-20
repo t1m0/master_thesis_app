@@ -17,18 +17,12 @@ const SpiralAnalysisPage: React.FC = () => {
   useEffect(() => {
     const currentDrawing = readObjectFromStorage<SpiralDrawing>(uuid);
     if (currentDrawing) {
-      setDrawing(currentDrawing);
       const result = spiralRating.rate(currentDrawing);
+      shareToAws(result, currentDrawing)
       setResult(result);
+      setDrawing(currentDrawing);
     }
   }, []);
-
-  useEffect(() => {
-    if (drawing != undefined) {
-      const result = spiralRating.rate(drawing);
-      setResult(result);
-    }
-  }, [drawing]);
 
 
   const clickShareLocal = () => {
@@ -40,7 +34,7 @@ const SpiralAnalysisPage: React.FC = () => {
     }
   }
 
-  const clickShareAWS = () => {
+  const shareToAws = (result:SpiralDrawingRating, drawing: SpiralDrawing) => {
     if (result != undefined && drawing != undefined) {
       const data = { "drawing": drawing, "result": result };
       shareAws(drawing.uuid, 'spiral', data);
@@ -58,7 +52,6 @@ const SpiralAnalysisPage: React.FC = () => {
         <tr><td>Severity Level</td><td>{result.severityLevel}</td></tr>
         <tr><td>Total Time</td><td>{Math.round((drawing.endTime - drawing.startTime) / 1000 * 100) / 100}sec</td></tr>
         <tr><td><button onClick={clickShareLocal}>Share Local</button></td></tr>
-        <tr><td><button onClick={clickShareAWS}>Share AWS</button></td></tr>
       </tbody>
     } else {
       return <tbody></tbody>
