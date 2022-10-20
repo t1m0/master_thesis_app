@@ -10,31 +10,12 @@ const BLETestPage: React.FC = () => {
   const [bondedDevice, setBondedDevice] = useState<string>();
   const [startTime, setStartTime] = useState(0);
   const [results, setResults] = useState(new Array<AccelerationRecord>());
-  const [finished, setFinished] = useState(false);
+  const [running, setRunning] = useState(false);
 
 
   useEffect(() => {
-    console.log("Connecting to Live Data")
-    const deviceId = readValueFromStorage("DeviceId");
-    setBondedDevice(deviceId);
-
+    caputeAccelerometer();
   }, []);
-
-
-  useEffect(() => {
-    subscribeToNotifications(dataCallback).catch(console.error);
-    setStartTime(Date.now());
-    setTimeout(async () => {
-      unSubscribeToNotifications().catch(console.error);
-      setFinished(true);
-    }, 10000);
-  }, [bondedDevice]);
-
-  useEffect(() => {
-    if (finished) {
-      shareToAws();
-    }
-  }, [finished]);
 
 
   const dataCallback = (accelerationRecodr: AccelerationRecord) => {
@@ -69,6 +50,21 @@ const BLETestPage: React.FC = () => {
     shareAws(fileName, 'ble-test', result);
   }
 
+  const caputeAccelerometer = () => {
+    setRunning(true)
+    setResults([]);
+    console.log("Connecting to Live Data")
+    const deviceId = readValueFromStorage("DeviceId");
+    setBondedDevice(deviceId);
+    subscribeToNotifications(dataCallback).catch(console.error);
+    setStartTime(Date.now());
+    setTimeout(async () => {
+      unSubscribeToNotifications().catch(console.error);
+      shareToAws();
+      setRunning(false);
+    }, 10000);
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -80,7 +76,10 @@ const BLETestPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <button onClick={clickShareLocal}>Share Local</button>
+        <button onClick={clickShareLocal} hidden={running}>Share</button>
+        <button onClick={caputeAccelerometer} hidden={running}>Try Again</button>
+
+        <p hidden={!running}>Capturing accelerometer data</p>
 
         <p>{bondedDevice}</p>
 

@@ -1,6 +1,6 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import SpiralRating from '../components/spiral/algorithm/SpiralRating';
 import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 import SpiralDrawingRating from '../components/spiral/model/SpiralDrawingRating';
@@ -13,6 +13,8 @@ const SpiralAnalysisPage: React.FC = () => {
   const [result, setResult] = useState<SpiralDrawingRating | undefined>(undefined);
   const params = useParams();
   const uuid = params["uuid"] as string;
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const currentDrawing = readObjectFromStorage<SpiralDrawing>(uuid);
@@ -34,11 +36,15 @@ const SpiralAnalysisPage: React.FC = () => {
     }
   }
 
-  const shareToAws = (result:SpiralDrawingRating, drawing: SpiralDrawing) => {
+  const shareToAws = (result: SpiralDrawingRating, drawing: SpiralDrawing) => {
     if (result != undefined && drawing != undefined) {
       const data = { "drawing": drawing, "result": result };
       shareAws(drawing.uuid, 'spiral', data);
     }
+  }
+
+  const tryAgain = () => {
+    navigate("/spiral");
   }
 
   const getTableBody = () => {
@@ -51,7 +57,8 @@ const SpiralAnalysisPage: React.FC = () => {
         <tr><td>Degree of Severity</td><td>{result.degreeOfSeverity}</td></tr>
         <tr><td>Severity Level</td><td>{result.severityLevel}</td></tr>
         <tr><td>Total Time</td><td>{Math.round((drawing.endTime - drawing.startTime) / 1000 * 100) / 100}sec</td></tr>
-        <tr><td><button onClick={clickShareLocal}>Share Local</button></td></tr>
+        <tr><td><button onClick={clickShareLocal}>Share</button></td></tr>
+        <tr><td><button onClick={tryAgain}>Try Again</button></td></tr>
       </tbody>
     } else {
       return <tbody></tbody>

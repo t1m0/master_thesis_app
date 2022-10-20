@@ -1,6 +1,6 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { GameSession } from '../components/scoop_game/GameSession';
 import { GameType } from '../components/scoop_game/GameType';
 import { analyse_scoop_game } from '../components/scoop_game/ScoopGameAnalysis';
@@ -15,6 +15,8 @@ const ScoopGameAnalysisPage: React.FC = () => {
     const [gameType, setGameType] = useState("");
     const params = useParams();
     const uuid = params["uuid"] as string;
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const session = readObjectFromStorage<GameSession>(uuid)
@@ -44,6 +46,10 @@ const ScoopGameAnalysisPage: React.FC = () => {
         }
     }
 
+    const tryAgain = () => {
+        navigate("/scoop/" + gameType);
+    }
+
     return (
         <IonPage>
             <IonHeader>
@@ -63,6 +69,7 @@ const ScoopGameAnalysisPage: React.FC = () => {
                         <p key={"duration"}>Duration: {durationInSec}sec</p>
                         <div className='center-childs'>
                             <button onClick={clickShareLocal}>Share</button>
+                            <button onClick={tryAgain}>Try Again</button>
                         </div>
                     </div>
                 </div>
