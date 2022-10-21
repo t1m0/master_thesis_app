@@ -44,7 +44,8 @@ const BLETestPage: React.FC = () => {
       'accelerations': results,
       'startTime': startTime,
       'endTime': endTime,
-      'duration': duration
+      'duration': duration,
+      'device': bondedDevice
     };
     const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     shareAws(fileName, 'ble-test', result);

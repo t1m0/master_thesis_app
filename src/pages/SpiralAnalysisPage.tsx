@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import SpiralRating from '../components/spiral/algorithm/SpiralRating';
 import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 import SpiralDrawingRating from '../components/spiral/model/SpiralDrawingRating';
-import { readObjectFromStorage } from '../IonicStorage';
+import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
 const SpiralAnalysisPage: React.FC = () => {
@@ -29,7 +29,8 @@ const SpiralAnalysisPage: React.FC = () => {
 
   const clickShareLocal = () => {
     if (result != undefined && drawing != undefined) {
-      const data = { "drawing": drawing, "result": result };
+      const deviceId = readValueFromStorage("DeviceId");
+      const data = { "drawing": drawing, "result": result, "device": deviceId };
       const fileName = `${drawing.uuid}.json`;
       const file = new File([JSON.stringify(data)], fileName, { type: "application/json" });
       shareLocal(fileName, file);

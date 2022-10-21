@@ -6,7 +6,7 @@ import { GameType } from '../components/scoop_game/GameType';
 import { analyse_scoop_game } from '../components/scoop_game/ScoopGameAnalysis';
 import { ScoopGameResult } from '../components/scoop_game/ScoopGameResult';
 
-import { readObjectFromStorage } from '../IonicStorage';
+import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
 const ScoopGameAnalysisPage: React.FC = () => {
@@ -29,6 +29,10 @@ const ScoopGameAnalysisPage: React.FC = () => {
             loadedSession.accelerations = session.accelerations
             const duration = session.endTime - session.startTime
             const result = analyse_scoop_game(loadedSession)
+            const deviceId = readValueFromStorage("DeviceId");
+            if (deviceId != undefined) {
+                result.device = deviceId;
+            }
             const localDurationInSec = Math.round((duration / 1000) * 100) / 100
             shareAws(uuid, gameType, result);
             setResult(result);

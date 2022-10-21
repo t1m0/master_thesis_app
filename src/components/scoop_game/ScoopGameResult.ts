@@ -5,6 +5,7 @@ export class ScoopGameResult {
     successRate: number;
     meanDistance: number;
     distanceStandardDeviation: number;
+    device: string = "";
 
     constructor(gameSession: GameSession, successRate: number, meanDistance: number, distanceStandardDeviation: number) {
         this.gameSession = gameSession;
