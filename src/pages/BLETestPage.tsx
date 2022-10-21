@@ -1,9 +1,9 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useEffect, useState } from "react";
 import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
 
 import { subscribeToNotifications, unSubscribeToNotifications } from "../components/spiral/ble/BLEWrapper";
-import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
+import { readValueFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
 const BLETestPage: React.FC = () => {
