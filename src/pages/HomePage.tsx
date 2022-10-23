@@ -30,8 +30,6 @@ const HomePage: React.FC = () => {
       <IonContent fullscreen>
         <div className='center-childs'>
           <div className='activity-collection'>
-            <a className='button' href="/scoop">Color Scoop Game</a><br />
-            <a className='button' href="/scoop-triangle">Color Triangle Game</a><br />
             <a className='button' href="/scoop-static">Static Scoop Game</a><br />
             <a className='button' href="/spiral">Spiral Drawing</a><br />
             <a className='button' href="/ble">BLE Test</a>
