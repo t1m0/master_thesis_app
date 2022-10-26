@@ -9,6 +9,7 @@ import { shareAws, shareLocal } from '../util/share';
 const BLETestPage: React.FC = () => {
   const [bondedDevice, setBondedDevice] = useState<string>();
   const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
   const [results, setResults] = useState(new Array<AccelerationRecord>());
   const [running, setRunning] = useState(false);
 
@@ -23,30 +24,29 @@ const BLETestPage: React.FC = () => {
     setResults(results => [...results, accelerationRecodr]);
   }
 
-  const clickShareLocal = () => {
-    const endTime = Date.now();
-    const date = new Date(endTime);
-    const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}.json`;
-    const result = {
-      'accelerations': results,
-      'startTime': startTime,
-      'endTime': Date.now()
-    };
-    const file = new File([JSON.stringify(result)], fileName, { type: "application/json" })
-    shareLocal(fileName, file);
-  }
-
-  const shareToAws = () => {
-    const endTime = Date.now();
-    const date = new Date(endTime);
+  const getShareObejct = () => {
+    const hand = readValueFromStorage("hand");
     const duration = endTime - startTime;
-    const result = {
+    return {
       'accelerations': results,
       'startTime': startTime,
       'endTime': endTime,
       'duration': duration,
       'device': bondedDevice
     };
+  }
+
+  const clickShareLocal = () => {
+    const date = new Date(endTime);
+    const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}.json`;
+    const result = getShareObejct();
+    const file = new File([JSON.stringify(result)], fileName, { type: "application/json" })
+    shareLocal(fileName, file);
+  }
+
+  const shareToAws = () => {
+    const result = getShareObejct();
+    const date = new Date(endTime);
     const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     shareAws(fileName, 'ble-test', result);
   }
@@ -61,8 +61,9 @@ const BLETestPage: React.FC = () => {
     setStartTime(Date.now());
     setTimeout(async () => {
       unSubscribeToNotifications().catch(console.error);
-      shareToAws();
+      setEndTime(Date.now())
       setRunning(false);
+      shareToAws();
     }, 10000);
   }
 

@@ -30,8 +30,12 @@ const ScoopGameAnalysisPage: React.FC = () => {
             const duration = session.endTime - session.startTime
             const result = analyse_scoop_game(loadedSession)
             const deviceId = readValueFromStorage("DeviceId");
+            const hand = readValueFromStorage("hand");
             if (deviceId != undefined) {
                 result.device = deviceId;
+            }
+            if(hand != undefined) {
+                result.hand = hand;
             }
             const localDurationInSec = Math.round((duration / 1000) * 100) / 100
             shareAws(uuid, gameType, result);
@@ -41,6 +45,11 @@ const ScoopGameAnalysisPage: React.FC = () => {
         }
 
     }, []);
+
+    const getShareObject = () => {
+        
+        return 
+    }
 
     const clickShareLocal = () => {
         if (result != undefined) {
