@@ -56,7 +56,6 @@ const SpiralAnalysisPage: React.FC = () => {
         <tr><td>Tightness</td><td>{result.thightness}</td></tr>
         <tr><td>Zero Crossing Rate</td><td>{result.zeroCrossingRate}</td></tr>
         <tr><td>Degree of Severity</td><td>{result.degreeOfSeverity}</td></tr>
-        <tr><td>Severity Level</td><td>{result.severityLevel}</td></tr>
         <tr><td>Total Time</td><td>{Math.round((drawing.endTime - drawing.startTime) / 1000 * 100) / 100}sec</td></tr>
         <tr><td><button onClick={clickShareLocal}>Share</button></td></tr>
         <tr><td><button onClick={tryAgain}>Try Again</button></td></tr>
