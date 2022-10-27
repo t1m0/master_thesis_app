@@ -38,18 +38,13 @@ const ScoopGameAnalysisPage: React.FC = () => {
                 result.hand = hand;
             }
             const localDurationInSec = Math.round((duration / 1000) * 100) / 100
-            shareAws(uuid, gameType, result);
+            shareAws(uuid, GameType[loadedSession.gameType].toLowerCase(), result);
             setResult(result);
             setDurationInSec(localDurationInSec)
             setGameType(GameType[loadedSession.gameType].toLowerCase())
         }
 
     }, []);
-
-    const getShareObject = () => {
-        
-        return 
-    }
 
     const clickShareLocal = () => {
         if (result != undefined) {
