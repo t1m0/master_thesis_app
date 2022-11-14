@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import AccelerationRecord from '../ble/AccelerationRecord';
 
 import { subscribeToNotifications, unSubscribeToNotifications } from "..//ble/BLEWrapper";
-import { readValueFromStorage } from '../IonicStorage';
+import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
+import { Hand } from '../Hand';
 
 const BLETestPage: React.FC = () => {
+  const hand = readObjectFromStorage("hand") as Hand;
   const [bondedDevice, setBondedDevice] = useState<string>();
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
@@ -25,13 +27,13 @@ const BLETestPage: React.FC = () => {
   }
 
   const getShareObejct = () => {
-    const hand = readValueFromStorage("hand");
     const duration = endTime - startTime;
     return {
       'accelerations': results,
       'startTime': startTime,
       'endTime': endTime,
       'duration': duration,
+      'hand':Hand[hand].toLowerCase(),
       'device': bondedDevice
     };
   }
@@ -55,7 +57,7 @@ const BLETestPage: React.FC = () => {
     setRunning(true)
     setResults([]);
     console.log("Connecting to Live Data")
-    const deviceId = readValueFromStorage("DeviceId");
+    const deviceId = readValueFromStorage(hand + "DeviceId");
     setBondedDevice(deviceId);
     subscribeToNotifications(dataCallback).catch(console.error);
     setStartTime(Date.now());

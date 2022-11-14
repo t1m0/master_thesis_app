@@ -1,5 +1,5 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonViewDidLeave } from '@ionic/react';
-import { writeInStorage } from '../IonicStorage';
+import { readObjectFromStorage, writeInStorage } from '../IonicStorage';
 import React, { useReducer, useState } from 'react'
 
 import { SpiralCanvasContainer } from '../components/spiral/SpiralCanvasContainer';
@@ -10,6 +10,7 @@ import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 import { subscribeToNotifications, unSubscribeToNotifications } from '../ble/BLEWrapper';
 import AccelerationRecord from '../ble/AccelerationRecord';
 import { getCorrectedHeight, getCorrectedWidth } from '../util/layout';
+import { Hand } from '../Hand';
 
 interface SpiralDrawingPage {
 

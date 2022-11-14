@@ -10,8 +10,9 @@ import { subscribeToNotifications, unSubscribeToNotifications } from '../../ble/
 import AccelerationRecord from '../../ble/AccelerationRecord';
 import { useIonViewDidLeave } from '@ionic/react';
 import { GameClick } from './GameClick';
-import { writeInStorage } from '../../IonicStorage';
+import { readObjectFromStorage, writeInStorage } from '../../IonicStorage';
 import { useNavigate } from 'react-router';
+import { Hand } from '../../Hand';
 
 interface GameContainerProps {
     gameType: GameType;

@@ -1,6 +1,7 @@
 import { IonContent, IonHeader, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, } from 'react';
 import { useNavigate } from 'react-router';
+import { Hand } from '../Hand';
 import { readValueFromStorage, writeInStorage } from '../IonicStorage';
 import { getCorrectedHeight, getCorrectedWidth, isLandscape, isMobile, isPortrait } from '../util/layout';
 
@@ -18,11 +19,11 @@ const HomePage: React.FC = () => {
     if (!user) {
       navigate("/user");
     } else {
-      setHand('dominant');
+      setHand(Hand.DOMINANT);
     }
   }, []);
 
-  const setHand = (hand: String) => {
+  const setHand = (hand: Hand) => {
     writeInStorage("hand", hand);
   }
 
@@ -37,10 +38,10 @@ const HomePage: React.FC = () => {
         <div className='center-childs'>
           <div className='hand-switch'>
             <IonSegment value="dominant">
-              <IonSegmentButton value="dominant" onClick={() => setHand('dominant')}>
+              <IonSegmentButton value="dominant" onClick={() => setHand(Hand.DOMINANT)}>
                 <label>Dominant Hand</label>
               </IonSegmentButton>
-              <IonSegmentButton value="nondominant" onClick={() => setHand('non-dominant')}>
+              <IonSegmentButton value="nondominant" onClick={() => setHand(Hand.NON_DOMINANT)}>
                 <label>Non-Dominant Hand</label>
               </IonSegmentButton>
             </IonSegment>

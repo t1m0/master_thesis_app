@@ -22,7 +22,7 @@ import SpiralDrawingPage from './pages/SpiralDrawingPage';
 import BLETestPage from './pages/BLETestPage';
 import { GameType } from './components/stroop_game/GameType';
 
-import { connectToDevice } from './ble/BLEWrapper';
+import { connectToDevices } from './ble/BLEWrapper';
 import StroopGameAnalysisPage from './pages/StroopGameAnalysisPage';
 import UserPage from './pages/UserPage';
 
@@ -35,7 +35,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const deviceId = readValueFromStorage("BleDeviceId");
     if (deviceId == undefined) {
-      connectToDevice()
+      connectToDevices()
         .then(() => console.log("Connected to a device"))
         .catch(err => console.log("Failed to connect!", err));
     }

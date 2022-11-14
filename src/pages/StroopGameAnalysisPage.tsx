@@ -5,6 +5,7 @@ import { GameSession } from '../components/stroop_game/GameSession';
 import { GameType } from '../components/stroop_game/GameType';
 import { analyse_stroop_game } from '../components/stroop_game/StroopGameAnalysis';
 import { StroopGameResult } from '../components/stroop_game/StroopGameResult';
+import { Hand } from '../Hand';
 
 import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
@@ -29,13 +30,13 @@ const StroopGameAnalysisPage: React.FC = () => {
             loadedSession.accelerations = session.accelerations
             const duration = session.endTime - session.startTime
             const result = analyse_stroop_game(loadedSession)
-            const deviceId = readValueFromStorage("DeviceId");
-            const hand = readValueFromStorage("hand");
+            const hand = readObjectFromStorage("hand") as Hand;
+            const deviceId = readValueFromStorage(hand+"DeviceId");
             if (deviceId != undefined) {
                 result.device = deviceId;
             }
             if(hand != undefined) {
-                result.hand = hand;
+                result.hand = Hand[hand].toLowerCase();
             }
             const localDurationInSec = Math.round((duration / 1000) * 100) / 100
             shareAws(uuid, GameType[loadedSession.gameType].toLowerCase(), result);

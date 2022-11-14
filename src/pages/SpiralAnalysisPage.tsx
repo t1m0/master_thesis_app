@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import SpiralRating from '../components/spiral/algorithm/SpiralRating';
 import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 import SpiralDrawingRating from '../components/spiral/model/SpiralDrawingRating';
+import { Hand } from '../Hand';
 import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
@@ -28,9 +29,9 @@ const SpiralAnalysisPage: React.FC = () => {
 
 
   const getShareObject = () => {
-    const deviceId = readValueFromStorage("DeviceId");
-    const hand = readValueFromStorage("hand");
-    return { "drawing": drawing, "result": result, "device": deviceId, "hand": hand };
+    const hand = readObjectFromStorage("hand") as Hand;
+    const deviceId = readValueFromStorage(hand+"DeviceId");
+    return { "drawing": drawing, "result": result, "device": deviceId, "hand": Hand[hand].toLowerCase() };
   }
 
   const clickShareLocal = () => {
