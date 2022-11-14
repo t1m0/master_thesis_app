@@ -1,13 +1,13 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import GameContainer from '../components/scoop_game/GameContainer';
-import { GameType } from '../components/scoop_game/GameType';
+import GameContainer from '../components/stroop_game/GameContainer';
+import { GameType } from '../components/stroop_game/GameType';
 import { getCorrectedHeight } from '../util/layout';
 
-interface ScoopGamePageProps {
+interface StroopGamePageProps {
   gameType: GameType
 }
 
-const ScoopGamePage: React.FC<ScoopGamePageProps> = (props: ScoopGamePageProps) => {
+const StroopGamePage: React.FC<StroopGamePageProps> = (props: StroopGamePageProps) => {
 
   function calcRowCount() {
     return Math.round((getCorrectedHeight()) / 160);
@@ -36,4 +36,4 @@ const ScoopGamePage: React.FC<ScoopGamePageProps> = (props: ScoopGamePageProps) 
   );
 };
 
-export default ScoopGamePage;
+export default StroopGamePage;

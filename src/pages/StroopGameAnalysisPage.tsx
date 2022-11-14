@@ -1,16 +1,16 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
-import { GameSession } from '../components/scoop_game/GameSession';
-import { GameType } from '../components/scoop_game/GameType';
-import { analyse_scoop_game } from '../components/scoop_game/ScoopGameAnalysis';
-import { ScoopGameResult } from '../components/scoop_game/ScoopGameResult';
+import { GameSession } from '../components/stroop_game/GameSession';
+import { GameType } from '../components/stroop_game/GameType';
+import { analyse_stroop_game } from '../components/stroop_game/StroopGameAnalysis';
+import { StroopGameResult } from '../components/stroop_game/StroopGameResult';
 
 import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 
-const ScoopGameAnalysisPage: React.FC = () => {
-    const [result, setResult] = useState<ScoopGameResult | undefined>(undefined);
+const StroopGameAnalysisPage: React.FC = () => {
+    const [result, setResult] = useState<StroopGameResult | undefined>(undefined);
     const [durationInSec, setDurationInSec] = useState(0);
     const [gameType, setGameType] = useState("");
     const params = useParams();
@@ -28,7 +28,7 @@ const ScoopGameAnalysisPage: React.FC = () => {
             loadedSession.clicks = session.clicks
             loadedSession.accelerations = session.accelerations
             const duration = session.endTime - session.startTime
-            const result = analyse_scoop_game(loadedSession)
+            const result = analyse_stroop_game(loadedSession)
             const deviceId = readValueFromStorage("DeviceId");
             const hand = readValueFromStorage("hand");
             if (deviceId != undefined) {
@@ -55,16 +55,16 @@ const ScoopGameAnalysisPage: React.FC = () => {
     }
 
     const tryAgain = () => {
-        navigate("/scoop/" + gameType);
+        navigate("/stroop/" + gameType);
     }
 
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Scoop Analysis {uuid}</IonTitle>
+                    <IonTitle>Stroop Analysis {uuid}</IonTitle>
                     <IonButtons>
-                        <IonBackButton defaultHref={'/scoop-' + gameType} />
+                        <IonBackButton defaultHref={'/stroop-' + gameType} />
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>
@@ -86,4 +86,4 @@ const ScoopGameAnalysisPage: React.FC = () => {
     );
 };
 
-export default ScoopGameAnalysisPage;
+export default StroopGameAnalysisPage;

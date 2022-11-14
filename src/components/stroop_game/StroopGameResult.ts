@@ -1,6 +1,6 @@
 import { GameSession } from './GameSession';
 
-export class ScoopGameResult {
+export class StroopGameResult {
     gameSession: GameSession;
     successRate: number;
     meanDistance: number;

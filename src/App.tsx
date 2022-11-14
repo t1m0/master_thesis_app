@@ -3,7 +3,7 @@ import { IonApp, setupIonicReact } from '@ionic/react';
 import { readValueFromStorage } from './IonicStorage';
 import { useEffect } from 'react';
 
-import ScoopGamePage from './pages/ScoopGamePage';
+import StroopGamePage from './pages/StroopGamePage';
 import SpiralAnalysisPage from './pages/SpiralAnalysisPage';
 import HomePage from './pages/HomePage';
 
@@ -20,10 +20,10 @@ import './theme/variables.css';
 import './theme/custom.css';
 import SpiralDrawingPage from './pages/SpiralDrawingPage';
 import BLETestPage from './pages/BLETestPage';
-import { GameType } from './components/scoop_game/GameType';
+import { GameType } from './components/stroop_game/GameType';
 
 import { connectToDevice } from './components/spiral/ble/BLEWrapper';
-import ScoopGameAnalysisPage from './pages/ScoopGameAnalysisPage';
+import StroopGameAnalysisPage from './pages/StroopGameAnalysisPage';
 import UserPage from './pages/UserPage';
 
 setupIonicReact();
@@ -45,11 +45,11 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/home" element={<HomePage />} />
-        <Route path="/scoop" element={<Navigate to="/scoop-color" />} />
-        <Route path="/scoop-color" element={<ScoopGamePage gameType={GameType.Color} />} />
-        <Route path="/scoop-triangle" element={<ScoopGamePage gameType={GameType.Triangle} />} />
-        <Route path="/scoop-static" element={<ScoopGamePage gameType={GameType.Static} />} />
-        <Route path="/scoop/:uuid" element={<ScoopGameAnalysisPage />} />
+        <Route path="/stroop" element={<Navigate to="/stroop-color" />} />
+        <Route path="/stroop-color" element={<StroopGamePage gameType={GameType.Color} />} />
+        <Route path="/stroop-triangle" element={<StroopGamePage gameType={GameType.Triangle} />} />
+        <Route path="/stroop-static" element={<StroopGamePage gameType={GameType.Static} />} />
+        <Route path="/stroop/:uuid" element={<StroopGameAnalysisPage />} />
         <Route path="/spiral" element={<SpiralDrawingPage />} />
         <Route path="/ble" element={<BLETestPage />} />
         <Route path="/spiral/:uuid" element={<SpiralAnalysisPage />} />

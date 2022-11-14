@@ -14,7 +14,7 @@ const StaticGameElement: React.FC<StaticGameElementProps> = (props: StaticGameEl
   const [disabled, setDisabled] = useState(!isFirstElement);
 
   useEffect(() => {
-    window.addEventListener('static-scoop-game-click', (event) => {
+    window.addEventListener('static-stroop-game-click', (event) => {
       const clickedId = (event as CustomEvent).detail as number;
       if (clickedId + 1 == props.id) {
         setDisabled(false)
@@ -30,7 +30,7 @@ const StaticGameElement: React.FC<StaticGameElementProps> = (props: StaticGameEl
     }
     const distance = calcDistance(event.nativeEvent);
     props.clickCallback(true, event.clientX, event.clientY, distance);
-    window.dispatchEvent(new CustomEvent('static-scoop-game-click', { detail: props.id }))
+    window.dispatchEvent(new CustomEvent('static-stroop-game-click', { detail: props.id }))
   }
 
   function calcDistance(event: MouseEvent) {
