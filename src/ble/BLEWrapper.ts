@@ -1,6 +1,6 @@
 import { BleClient, BleDevice, dataViewToNumbers, numbersToDataView } from '@capacitor-community/bluetooth-le';
 import { isPlatform } from '@ionic/react';
-import { readValueFromStorage, writeInStorage } from '../../../IonicStorage';
+import { readValueFromStorage, writeInStorage } from '../IonicStorage';
 import AccelerationRecord from './AccelerationRecord';
 import { mapAccelerationRecord } from './AccelerationRecordMapper';
 

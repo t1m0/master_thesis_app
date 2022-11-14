@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import AccelerationRecord from "../spiral/ble/AccelerationRecord";
+import AccelerationRecord from "../../ble/AccelerationRecord";
 import { GameClick } from "./GameClick";
 import { GameType } from "./GameType";
 

@@ -1,8 +1,8 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useEffect, useState } from "react";
-import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
+import AccelerationRecord from '../ble/AccelerationRecord';
 
-import { subscribeToNotifications, unSubscribeToNotifications } from "../components/spiral/ble/BLEWrapper";
+import { subscribeToNotifications, unSubscribeToNotifications } from "..//ble/BLEWrapper";
 import { readValueFromStorage } from '../IonicStorage';
 import { shareAws, shareLocal } from '../util/share';
 

@@ -1,6 +1,6 @@
 import { connectToDevice, subscribeToNotifications, unSubscribeToNotifications } from "./BLEWrapper";
 import { BleClient } from '@capacitor-community/bluetooth-le';
-import { readValueFromStorage } from "../../../IonicStorage";
+import { readValueFromStorage } from "../IonicStorage";
 
 jest.mock('@capacitor-community/bluetooth-le');
 

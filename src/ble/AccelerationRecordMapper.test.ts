@@ -1,5 +1,4 @@
 import { mapAccelerationRecord } from "./AccelerationRecordMapper";
-import * as bluetoothLe from '@capacitor-community/bluetooth-le';
 jest.mock('@capacitor-community/bluetooth-le')
 
 test('Handle Notifications', () => {

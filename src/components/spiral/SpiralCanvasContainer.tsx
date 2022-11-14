@@ -2,7 +2,7 @@ import ImageCoordinate from './model/ImageCoordinate';
 import SpiralDrawing from './model/SpiralDrawing';
 import React, { SyntheticEvent } from 'react';
 import ImageWrapper from './model/ImageWrapper';
-import AccelerationRecord from './ble/AccelerationRecord';
+import AccelerationRecord from '../../ble/AccelerationRecord';
 
 type AnyFunction = (...params: any[]) => any;
 

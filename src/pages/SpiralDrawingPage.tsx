@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router';
 
 import './SpiralDrawing.css';
 import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
-import { subscribeToNotifications, unSubscribeToNotifications } from '../components/spiral/ble/BLEWrapper';
-import AccelerationRecord from '../components/spiral/ble/AccelerationRecord';
+import { subscribeToNotifications, unSubscribeToNotifications } from '../ble/BLEWrapper';
+import AccelerationRecord from '../ble/AccelerationRecord';
 import { getCorrectedHeight, getCorrectedWidth } from '../util/layout';
 
 interface SpiralDrawingPage {

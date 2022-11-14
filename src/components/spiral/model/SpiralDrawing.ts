@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import AccelerationRecord from '../ble/AccelerationRecord';
+import AccelerationRecord from '../../../ble/AccelerationRecord';
 import  ImageCoordinate  from "./ImageCoordinate";
 import ImageWrapper from "./ImageWrapper";
 export default class SpiralDrawing {
