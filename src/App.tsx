@@ -38,7 +38,10 @@ const App: React.FC = () => {
     if (deviceId == undefined) {
       connectToDevices()
         .then(() => console.log("Connected to a device"))
-        .catch(err => console.log("Failed to connect!", err));
+        .catch(err => {
+          alert("Failed to connect to ble device!");
+          console.log("Failed to connect!", err);
+        });
     }
   }, []);
 
