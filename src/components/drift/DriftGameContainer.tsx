@@ -30,6 +30,7 @@ const DriftGameContainer: React.FC = () => {
     }
 
     function finishedCallback() {
+        console.log("Finished drift test");
         driftSession.endTime = Date.now();
         const dominantDevice = readValueFromStorage(Hand.DOMINANT+"DeviceId");
         if (dominantDevice) {
