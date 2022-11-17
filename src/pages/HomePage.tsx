@@ -1,8 +1,8 @@
 import { IonContent, IonHeader, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar } from '@ionic/react';
-import { useEffect, } from 'react';
+import { useEffect, useState, } from 'react';
 import { useNavigate } from 'react-router';
 import { Hand } from '../Hand';
-import { readValueFromStorage, writeInStorage } from '../IonicStorage';
+import { readObjectFromStorage, readValueFromStorage, writeInStorage } from '../IonicStorage';
 import { getCorrectedHeight, getCorrectedWidth, isLandscape, isMobile, isPortrait } from '../util/layout';
 
 import './HomePage.css';
@@ -11,21 +11,26 @@ const HomePage: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const [hand, setHand] = useState(Hand.DOMINANT)
+
   console.log(`portrait: ${isPortrait()} landscape: ${isLandscape()} mobile: ${isMobile()}`)
   console.log(`height: ${getCorrectedHeight()} width: ${getCorrectedWidth()}`)
 
   useEffect(() => {
     const user = readValueFromStorage('userName');
+    const hand = readObjectFromStorage('hand') as Hand;
     if (!user) {
       navigate("/user");
+    } else if (hand) {
+      setHand(hand);
     } else {
       setHand(Hand.DOMINANT);
     }
   }, []);
 
-  const setHand = (hand: Hand) => {
+  useEffect(() => {
     writeInStorage("hand", hand);
-  }
+  }, [hand]);
 
   return (
     <IonPage>
@@ -37,11 +42,11 @@ const HomePage: React.FC = () => {
       <IonContent fullscreen>
         <div className='center-childs'>
           <div className='hand-switch'>
-            <IonSegment value="dominant">
-              <IonSegmentButton value="dominant" onClick={() => setHand(Hand.DOMINANT)}>
+            <IonSegment value={Hand[hand]}>
+              <IonSegmentButton value={Hand[Hand.DOMINANT]} onClick={() => setHand(Hand.DOMINANT)}>
                 <label>Dominant Hand</label>
               </IonSegmentButton>
-              <IonSegmentButton value="nondominant" onClick={() => setHand(Hand.NON_DOMINANT)}>
+              <IonSegmentButton value={Hand[Hand.NON_DOMINANT]} onClick={() => setHand(Hand.NON_DOMINANT)}>
                 <label>Non-Dominant Hand</label>
               </IonSegmentButton>
             </IonSegment>
