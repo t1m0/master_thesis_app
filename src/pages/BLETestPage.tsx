@@ -4,7 +4,7 @@ import AccelerationRecord from '../ble/AccelerationRecord';
 
 import { subscribeToNotifications, unSubscribeToNotifications } from "..//ble/BLEWrapper";
 import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
-import { shareAws, shareLocal } from '../util/share';
+import { shareCloud, shareLocal } from '../util/share';
 import { Hand } from '../Hand';
 
 const BLETestPage: React.FC = () => {
@@ -46,11 +46,11 @@ const BLETestPage: React.FC = () => {
     shareLocal(fileName, file);
   }
 
-  const shareToAws = () => {
+  const shareToCloud = () => {
     const result = getShareObejct();
     const date = new Date(endTime);
     const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
-    shareAws(fileName, 'ble-test', result);
+    shareCloud(fileName, 'ble-test', result);
   }
 
   const caputeAccelerometer = () => {
@@ -65,7 +65,7 @@ const BLETestPage: React.FC = () => {
       unSubscribeToNotifications().catch(console.error);
       setEndTime(Date.now())
       setRunning(false);
-      shareToAws();
+      shareToCloud();
     }, 10000);
   }
 

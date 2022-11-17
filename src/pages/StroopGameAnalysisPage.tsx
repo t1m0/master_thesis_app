@@ -8,7 +8,7 @@ import { StroopGameResult } from '../components/stroop_game/StroopGameResult';
 import { Hand } from '../Hand';
 
 import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
-import { shareAws, shareLocal } from '../util/share';
+import { shareCloud, shareLocal } from '../util/share';
 
 const StroopGameAnalysisPage: React.FC = () => {
     const [result, setResult] = useState<StroopGameResult | undefined>(undefined);
@@ -39,7 +39,7 @@ const StroopGameAnalysisPage: React.FC = () => {
                 result.hand = Hand[hand].toLowerCase();
             }
             const localDurationInSec = Math.round((duration / 1000) * 100) / 100
-            shareAws(uuid, GameType[loadedSession.gameType].toLowerCase(), result);
+            shareCloud(uuid, GameType[loadedSession.gameType].toLowerCase(), result);
             setResult(result);
             setDurationInSec(localDurationInSec)
             setGameType(GameType[loadedSession.gameType].toLowerCase())

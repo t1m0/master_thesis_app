@@ -7,7 +7,7 @@ import { Hand } from '../../Hand';
 import { DriftSession } from "./DriftSession";
 import LaunchDriftGameContainer from "./LaunchDriftGameContainer";
 import DriftContainer from "./DriftContainer";
-import { shareAws } from "../../util/share";
+import { shareCloud } from "../../util/share";
 
 const DriftGameContainer: React.FC = () => {
     const timeOutSec = 40
@@ -43,7 +43,7 @@ const DriftGameContainer: React.FC = () => {
         setFinished(true);
         setStarted(false);
         unsubscribNotifications();
-        shareAws(driftSession.uuid, 'drift', driftSession);
+        shareCloud(driftSession.uuid, 'drift', driftSession);
     }
 
 

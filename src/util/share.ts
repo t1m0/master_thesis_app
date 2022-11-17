@@ -1,6 +1,6 @@
 import { readValueFromStorage } from "../IonicStorage";
 
-export function shareAws(uuid: string, game: string, data: any) {
+export function shareCloud(uuid: string, game: string, data: any) {
   const requestConfig = {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },

@@ -6,7 +6,7 @@ import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 import SpiralDrawingRating from '../components/spiral/model/SpiralDrawingRating';
 import { Hand } from '../Hand';
 import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
-import { shareAws, shareLocal } from '../util/share';
+import { shareCloud, shareLocal } from '../util/share';
 
 const SpiralAnalysisPage: React.FC = () => {
   const spiralRating = new SpiralRating();
@@ -21,7 +21,7 @@ const SpiralAnalysisPage: React.FC = () => {
     const currentDrawing = readObjectFromStorage<SpiralDrawing>(uuid);
     if (currentDrawing) {
       const result = spiralRating.rate(currentDrawing);
-      shareToAws(result, currentDrawing)
+      shareToCloud(result, currentDrawing)
       setResult(result);
       setDrawing(currentDrawing);
     }
@@ -43,10 +43,10 @@ const SpiralAnalysisPage: React.FC = () => {
     }
   }
 
-  const shareToAws = (result: SpiralDrawingRating, drawing: SpiralDrawing) => {
+  const shareToCloud = (result: SpiralDrawingRating, drawing: SpiralDrawing) => {
     if (result != undefined && drawing != undefined) {
       const data = getShareObject();
-      shareAws(drawing.uuid, 'spiral', data);
+      shareCloud(drawing.uuid, 'spiral', data);
     }
   }
 
