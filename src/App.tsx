@@ -26,6 +26,7 @@ import { connectToDevices } from './ble/BLEWrapper';
 import StroopGameAnalysisPage from './pages/StroopGameAnalysisPage';
 import UserPage from './pages/UserPage';
 import DriftPage from './pages/DriftPage';
+import { initCrypto } from './util/encrypt';
 
 setupIonicReact();
 
@@ -35,6 +36,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const deviceId = readValueFromStorage("BleDeviceId");
+    initCrypto();
     if (deviceId == undefined) {
       connectToDevices()
         .then(() => console.log("Connected to a device"))

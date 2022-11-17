@@ -1,27 +1,32 @@
 import { readValueFromStorage } from "../IonicStorage";
+import { encrypt } from "./encrypt";
 
 export function shareCloud(uuid: string, game: string, data: any) {
-  const requestConfig = {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  };
-  let url = `https://master-thesis-data-function.azurewebsites.net/api/data?uuid=${uuid}&game=${game}`
-  let user = readValueFromStorage('userName');
-  console.log("User", user);
-  if(user != undefined && user.length > 0) {
-    user = user.toLowerCase();
-    user = user.replace(" ", "_");
-    url = url + `&user=${user}`;
+  console.log(data);
+  const body = encrypt(JSON.stringify(data));
+  if (body != false) {
+    const requestConfig = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: body
+    };
+    let url = `https://master-thesis-data-function.azurewebsites.net/api/data?uuid=${uuid}&game=${game}`
+    let user = readValueFromStorage('userName');
+    console.log("User", user);
+    if (user != undefined && user.length > 0) {
+      user = user.toLowerCase();
+      user = user.replace(" ", "_");
+      url = url + `&user=${user}`;
+    }
+    fetch(url, requestConfig)
+      .then(response => {
+        if (response.status == 200 || response.status == 201) {
+          console.log("Successfully send data to the cloud.");
+        } else {
+          console.log("Failed to send data to the cloud!");
+        }
+      });
   }
-  fetch(url, requestConfig)
-    .then(response => {
-      if (response.status == 200 || response.status == 201) {
-        console.log("Successfully send data to the cloud.");
-      } else {
-        console.log("Failed to send data to the cloud!");
-      }
-    });
 }
 
 export function shareLocal(fileName: string, file: File) {
