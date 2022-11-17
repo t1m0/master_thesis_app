@@ -6,7 +6,7 @@ export function shareCloud(uuid: string, game: string, data: any) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   };
-  let url = `https://el0evnajuh.execute-api.eu-central-1.amazonaws.com/data?uuid=${uuid}&game=${game}`;
+  let url = `https://master-thesis-data-function.azurewebsites.net/api/data?uuid=${uuid}&game=${game}`
   let user = readValueFromStorage('userName');
   console.log("User", user);
   if(user != undefined && user.length > 0) {
@@ -16,10 +16,10 @@ export function shareCloud(uuid: string, game: string, data: any) {
   }
   fetch(url, requestConfig)
     .then(response => {
-      if (response.status == 200) {
-        console.log("Successfully send data to AWS.");
+      if (response.status == 200 || response.status == 201) {
+        console.log("Successfully send data to the cloud.");
       } else {
-        console.log("Failed to send data to AWS!");
+        console.log("Failed to send data to the cloud!");
       }
     });
 }
