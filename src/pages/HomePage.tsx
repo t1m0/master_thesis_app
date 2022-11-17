@@ -50,6 +50,7 @@ const HomePage: React.FC = () => {
             <div className='activity-collection'>
               <a className='button' href="/stroop-static">Static Stroop Game</a><br />
               <a className='button' href="/spiral">Spiral Drawing</a><br />
+              <a className='button' href="/drift">Drift</a><br />
               <a className='button' href="/ble">BLE Test</a>
             </div>
           </div>

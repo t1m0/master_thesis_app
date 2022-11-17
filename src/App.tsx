@@ -25,6 +25,7 @@ import { GameType } from './components/stroop_game/GameType';
 import { connectToDevices } from './ble/BLEWrapper';
 import StroopGameAnalysisPage from './pages/StroopGameAnalysisPage';
 import UserPage from './pages/UserPage';
+import DriftPage from './pages/DriftPage';
 
 setupIonicReact();
 
@@ -51,6 +52,7 @@ const App: React.FC = () => {
         <Route path="/stroop-static" element={<StroopGamePage gameType={GameType.Static} />} />
         <Route path="/stroop/:uuid" element={<StroopGameAnalysisPage />} />
         <Route path="/spiral" element={<SpiralDrawingPage />} />
+        <Route path="/drift" element={<DriftPage />} />
         <Route path="/ble" element={<BLETestPage />} />
         <Route path="/spiral/:uuid" element={<SpiralAnalysisPage />} />
         <Route path="/user" element={<UserPage />} />
