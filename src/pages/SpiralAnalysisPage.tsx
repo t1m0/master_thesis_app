@@ -21,32 +21,25 @@ const SpiralAnalysisPage: React.FC = () => {
     const currentDrawing = readObjectFromStorage<SpiralDrawing>(uuid);
     if (currentDrawing) {
       const result = spiralRating.rate(currentDrawing);
-      shareToCloud(result, currentDrawing)
       setResult(result);
       setDrawing(currentDrawing);
+      shareCloud(currentDrawing.uuid, 'spiral', getShareObject(currentDrawing, result));
     }
   }, []);
 
 
-  const getShareObject = () => {
+  const getShareObject = (drawing:SpiralDrawing, rating:SpiralDrawingRating) => {
     const hand = readObjectFromStorage("hand") as Hand;
     const deviceId = readValueFromStorage(hand+"DeviceId");
-    return { "drawing": drawing, "result": result, "device": deviceId, "hand": Hand[hand].toLowerCase() };
+    return { "drawing": drawing, "result": rating, "device": deviceId, "hand": Hand[hand].toLowerCase() };
   }
 
   const clickShareLocal = () => {
     if (result != undefined && drawing != undefined) {
-      const data = getShareObject();
+      const data = getShareObject(drawing, result);
       const fileName = `${drawing.uuid}.json`;
       const file = new File([JSON.stringify(data)], fileName, { type: "application/json" });
       shareLocal(fileName, file);
-    }
-  }
-
-  const shareToCloud = (result: SpiralDrawingRating, drawing: SpiralDrawing) => {
-    if (result != undefined && drawing != undefined) {
-      const data = getShareObject();
-      shareCloud(drawing.uuid, 'spiral', data);
     }
   }
 
