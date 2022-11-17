@@ -99,7 +99,6 @@ export async function unSubscribeToNotificationsForHand(hand:Hand): Promise<void
         return Promise.reject("BLE not supported on Desktop!");
     }
     try {
-        const hand = readObjectFromStorage("hand") as Hand;
         const deviceId = readValueFromStorage(hand + "DeviceId");
         if (deviceId) {
             await BleClient.stopNotifications(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_ACCELERATION_GUID);
