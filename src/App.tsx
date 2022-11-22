@@ -19,7 +19,7 @@ import '@ionic/react/css/typography.css';
 import './theme/variables.css';
 import './theme/custom.css';
 import SpiralDrawingPage from './pages/SpiralDrawingPage';
-import BLETestPage from './pages/BLETestPage';
+import CalibrationPage from './pages/CalibrationPage';
 import { GameType } from './components/stroop_game/GameType';
 
 import { connectToDevices } from './ble/BLEWrapper';
@@ -58,7 +58,7 @@ const App: React.FC = () => {
         <Route path="/stroop/:uuid" element={<StroopGameAnalysisPage />} />
         <Route path="/spiral" element={<SpiralDrawingPage />} />
         <Route path="/drift" element={<DriftPage />} />
-        <Route path="/ble" element={<BLETestPage />} />
+        <Route path="/calibration" element={<CalibrationPage />} />
         <Route path="/spiral/:uuid" element={<SpiralAnalysisPage />} />
         <Route path="/user" element={<UserPage />} />
         <Route path="/" element={<Navigate to="/home" />} />

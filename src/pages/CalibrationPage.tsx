@@ -2,12 +2,12 @@ import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, Io
 import React, { useEffect, useState } from "react";
 import AccelerationRecord from '../ble/AccelerationRecord';
 
-import { subscribeToNotifications, unSubscribeToNotifications } from "..//ble/BLEWrapper";
+import { subscribeToNotifications, unSubscribeToNotifications } from "../ble/BLEWrapper";
 import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareCloud, shareLocal } from '../util/share';
 import { Hand } from '../Hand';
 
-const BLETestPage: React.FC = () => {
+const CalibrationPage: React.FC = () => {
   const hand = readObjectFromStorage("hand") as Hand;
   const [bondedDevice, setBondedDevice] = useState<string>();
   const [startTime, setStartTime] = useState(0);
@@ -63,9 +63,9 @@ const BLETestPage: React.FC = () => {
     setStartTime(Date.now());
     setTimeout(async () => {
       unSubscribeToNotifications().catch(console.error);
-      setEndTime(Date.now())
-      setRunning(false);
+      setEndTime(Date.now());
       shareToCloud();
+      setRunning(false);
     }, 10000);
   }
 
@@ -73,7 +73,7 @@ const BLETestPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>BLETest</IonTitle>
+          <IonTitle>Calibration {Hand[hand]} Hand</IonTitle>
           <IonButtons>
             <IonBackButton defaultHref='/home' />
           </IonButtons>
@@ -81,16 +81,13 @@ const BLETestPage: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <button onClick={clickShareLocal} hidden={running}>Share</button>
-        <button onClick={caputeAccelerometer} hidden={running}>Try Again</button>
-
-        <p hidden={!running}>Capturing accelerometer data</p>
-
+        <button onClick={caputeAccelerometer} hidden={running}>Capture Again</button>
         <p>{bondedDevice}</p>
-
-        {results.map(v => <p>count: {v.recordCount} xAxis: {v.xAxis} yAxis: {v.yAxis} zAxis: {v.zAxis}</p>)}
+        <p hidden={!running}>Capturing calibration data - don't move the device</p>
+        <p hidden={running}>Finished Capturing calibration data.</p>
       </IonContent>
     </IonPage>
   );
 };
 
-export default BLETestPage;
+export default CalibrationPage;
