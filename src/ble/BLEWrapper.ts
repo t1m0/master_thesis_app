@@ -37,13 +37,27 @@ export async function connectToDevice(hand: Hand): Promise<void> {
                 services: [BLE_SERVICE]
             });
             console.log(`connecting to device '${device.deviceId}' for hand '${hand}'`,);
-            await BleClient.connect(device.deviceId, onDisconnect, { timeout: 10000 });
+            await BleClient.connect(device.deviceId, onDisconnect);
             console.log(`connected to device '${device.deviceId}' for hand '${hand}'`);
             writeInStorage(key, device.deviceId);
         }
         return Promise.resolve();
     } catch (error) {
         return Promise.reject(error);
+    }
+}
+
+export async function connectIfNotConnected(deviceId: string) {
+    const devices = await BleClient.getConnectedDevices([BLE_SERVICE])
+    let connected = false;
+    devices.forEach(d => {
+        if(deviceId == d.deviceId) {
+            connected = true;
+        }
+    })
+    if(!connected) {
+        console.log(`Connecting to ${deviceId} again`);
+        await BleClient.connect(deviceId, onDisconnect);
     }
 }
 
@@ -65,6 +79,7 @@ export async function subscribeToNotificationsForHand(hand:Hand, dataCallback: (
     try {
         const deviceId = readValueFromStorage(hand + "DeviceId");
         if (deviceId) {
+            connectIfNotConnected(deviceId);
             await BleClient.write(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([1]));
             console.log('live sensor flag updated');
             await BleClient.startNotifications(
@@ -101,6 +116,7 @@ export async function unSubscribeToNotificationsForHand(hand:Hand): Promise<void
     try {
         const deviceId = readValueFromStorage(hand + "DeviceId");
         if (deviceId) {
+            connectIfNotConnected(deviceId);
             await BleClient.stopNotifications(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_ACCELERATION_GUID);
             await BleClient.write(deviceId, LIVE_SENSOR_SERVICE_UUID, LIVE_SENSOR_FLAG_GUID, numbersToDataView([0]));
             console.log('disconnected from device', deviceId);
