@@ -56,7 +56,7 @@ const StroopGameAnalysisPage: React.FC = () => {
     }
 
     const tryAgain = () => {
-        navigate("/stroop/" + gameType);
+        navigate("/stroop-" + gameType);
     }
 
     return (
