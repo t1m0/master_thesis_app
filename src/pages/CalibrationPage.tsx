@@ -50,7 +50,7 @@ const CalibrationPage: React.FC = () => {
     const result = getShareObejct();
     const date = new Date(endTime);
     const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
-    shareCloud(fileName, 'ble-test', result);
+    shareCloud(fileName, 'calibration', result);
   }
 
   const caputeAccelerometer = () => {
