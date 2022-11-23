@@ -5,9 +5,9 @@ export class DriftSession {
     uuid = uuid();
     startTime = Date.now();
     endTime:number = 0;
-    accelerations:{[hand in Hand] : Array<AccelerationRecord>} = {
-        [Hand.DOMINANT]: new Array<AccelerationRecord>(),
-        [Hand.NON_DOMINANT]: new Array<AccelerationRecord>()
+    accelerations:{[hand: string] : Array<AccelerationRecord>} = {
+        [Hand[Hand.DOMINANT].toLowerCase()]: new Array<AccelerationRecord>(),
+        [Hand[Hand.NON_DOMINANT].toLowerCase()]: new Array<AccelerationRecord>()
     };
     nonDominantDevice:string = "";
     dominantDevice:string = "";
