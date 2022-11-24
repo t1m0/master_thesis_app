@@ -5,13 +5,14 @@ import SpiralRating from '../components/spiral/algorithm/SpiralRating';
 import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
 import SpiralDrawingRating from '../components/spiral/model/SpiralDrawingRating';
 import { Hand } from '../Hand';
-import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
+import { appendSessionUuid, readObjectFromStorage, readValueFromStorage, writeInStorage } from '../IonicStorage';
 import { shareCloud, shareLocal } from '../util/share';
 
 const SpiralAnalysisPage: React.FC = () => {
   const spiralRating = new SpiralRating();
   const [drawing, setDrawing] = useState<SpiralDrawing | undefined>(undefined);
   const [result, setResult] = useState<SpiralDrawingRating | undefined>(undefined);
+  const [spiralIterations, setSpiralIterations] = useState(0);
   const params = useParams();
   const uuid = params["uuid"] as string;
 
@@ -20,23 +21,24 @@ const SpiralAnalysisPage: React.FC = () => {
   useEffect(() => {
     const currentDrawing = readObjectFromStorage<SpiralDrawing>(uuid);
     if (currentDrawing) {
+      const hand = readObjectFromStorage("hand") as Hand;
+      setSpiralIterations(appendSessionUuid('spiral-'+Hand[hand], currentDrawing.uuid));
       const result = spiralRating.rate(currentDrawing);
       setResult(result);
       setDrawing(currentDrawing);
-      shareCloud(currentDrawing.uuid, 'spiral', getShareObject(currentDrawing, result));
+      shareCloud(currentDrawing.uuid, 'spiral', getShareObject(currentDrawing, result, hand));
     }
   }, []);
 
-
-  const getShareObject = (drawing:SpiralDrawing, rating:SpiralDrawingRating) => {
-    const hand = readObjectFromStorage("hand") as Hand;
+  const getShareObject = (drawing:SpiralDrawing, rating:SpiralDrawingRating, hand: Hand) => {
     const deviceId = readValueFromStorage(hand+"DeviceId");
     return { "drawing": drawing, "result": rating, "device": deviceId, "hand": Hand[hand].toLowerCase() };
   }
 
   const clickShareLocal = () => {
     if (result != undefined && drawing != undefined) {
-      const data = getShareObject(drawing, result);
+      const hand = readObjectFromStorage("hand") as Hand;
+      const data = getShareObject(drawing, result, hand);
       const fileName = `${drawing.uuid}.json`;
       const file = new File([JSON.stringify(data)], fileName, { type: "application/json" });
       shareLocal(fileName, file);
@@ -68,7 +70,7 @@ const SpiralAnalysisPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Spiral Analysis {uuid}</IonTitle>
+          <IonTitle>Spiral Analysis {spiralIterations} | {uuid}</IonTitle>
           <IonButtons>
             <IonBackButton defaultHref='/spiral' />
           </IonButtons>

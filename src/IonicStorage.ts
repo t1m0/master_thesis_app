@@ -1,6 +1,6 @@
 export const writeInStorage = <T>(key: string, val: T) => {
-    let localValue:string;
-    if (typeof(val) === 'string' || val instanceof String) {
+    let localValue: string;
+    if (typeof (val) === 'string' || val instanceof String) {
         localValue = val as string
     } else {
         localValue = JSON.stringify(val);
@@ -20,4 +20,25 @@ export const readValueFromStorage = (key: string): string | undefined => {
     if (val != null)
         return val;
     return undefined;
+}
+
+export const appendSessionUuid = (key: string, uuid: string) => {
+    let uuids = readObjectFromStorage(key) as Array<string>;
+    if (uuids == undefined) {
+        uuids = new Array<string>()
+    }
+    if (!uuids.includes(uuid)) {
+        uuids.push(uuid);
+    }
+    writeInStorage(key, uuids);
+    return uuids.length;
+}
+
+export const getSessionCount = (key: string) => {
+    const uuids = readObjectFromStorage(key) as [string];
+    if (uuids != undefined) {
+        return uuids.length;
+    } else {
+        return 0;
+    }
 }

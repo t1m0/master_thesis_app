@@ -2,8 +2,10 @@ import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, Io
 import React, { useEffect, useState } from "react";
 import AccelerationRecord from '../ble/AccelerationRecord';
 
+import { v4 as uuid } from 'uuid';
+
 import { subscribeToNotifications, unSubscribeToNotifications } from "../ble/BLEWrapper";
-import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
+import { appendSessionUuid, readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareCloud, shareLocal } from '../util/share';
 import { Hand } from '../Hand';
 
@@ -14,6 +16,8 @@ const CalibrationPage: React.FC = () => {
   const [endTime, setEndTime] = useState(0);
   const [results, setResults] = useState(new Array<AccelerationRecord>());
   const [running, setRunning] = useState(false);
+  const [calibrationUuid, setCalibrationUuid] = useState("");
+  const [calibrationIterations, setCalibrationIterations] = useState(0);
 
 
   useEffect(() => {
@@ -29,6 +33,7 @@ const CalibrationPage: React.FC = () => {
   const getShareObejct = () => {
     const duration = endTime - startTime;
     return {
+      'uuid': calibrationUuid,
       'accelerations': results,
       'startTime': startTime,
       'endTime': endTime,
@@ -54,6 +59,8 @@ const CalibrationPage: React.FC = () => {
   }
 
   const caputeAccelerometer = () => {
+    setCalibrationUuid(uuid());
+    setCalibrationIterations(calibrationIterations+1);
     setRunning(true)
     setResults([]);
     console.log("Connecting to Live Data")
@@ -66,6 +73,7 @@ const CalibrationPage: React.FC = () => {
       setEndTime(Date.now());
       shareToCloud();
       setRunning(false);
+      setCalibrationIterations(appendSessionUuid('calibration-'+Hand[hand], calibrationUuid));
     }, 10000);
   }
 
@@ -73,7 +81,7 @@ const CalibrationPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Calibration {Hand[hand]} Hand</IonTitle>
+          <IonTitle>Calibration {Hand[hand]} Hand - {calibrationIterations}</IonTitle>
           <IonButtons>
             <IonBackButton defaultHref='/home' />
           </IonButtons>

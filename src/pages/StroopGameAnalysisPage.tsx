@@ -7,13 +7,14 @@ import { analyse_stroop_game } from '../components/stroop_game/StroopGameAnalysi
 import { StroopGameResult } from '../components/stroop_game/StroopGameResult';
 import { Hand } from '../Hand';
 
-import { readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
+import { appendSessionUuid, readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareCloud, shareLocal } from '../util/share';
 
 const StroopGameAnalysisPage: React.FC = () => {
     const [result, setResult] = useState<StroopGameResult | undefined>(undefined);
     const [durationInSec, setDurationInSec] = useState(0);
     const [gameType, setGameType] = useState("");
+    const [stroopIterations, setStroopIterations] = useState(0);
     const params = useParams();
     const uuid = params["uuid"] as string;
 
@@ -43,6 +44,7 @@ const StroopGameAnalysisPage: React.FC = () => {
             setResult(result);
             setDurationInSec(localDurationInSec)
             setGameType(GameType[loadedSession.gameType].toLowerCase())
+            setStroopIterations(appendSessionUuid('stroop-'+gameType+'-'+Hand[hand], loadedSession.uuid));
         }
 
     }, []);
@@ -63,7 +65,7 @@ const StroopGameAnalysisPage: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Stroop Analysis {uuid}</IonTitle>
+                    <IonTitle>Stroop Analysis {stroopIterations} | {uuid}</IonTitle>
                     <IonButtons>
                         <IonBackButton defaultHref={'/stroop-' + gameType} />
                     </IonButtons>
