@@ -43,9 +43,9 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
     navigate("/spiral/" + updatedResult.uuid);
   }
 
-  const dataCallback = (accelerationRecodr: AccelerationRecord) => {
-    console.log('acceleration data', accelerationRecodr);
-    setAccelerations(accelerations => [...accelerations, accelerationRecodr]);
+  const dataCallback = (accelerationRecord: AccelerationRecord) => {
+    console.log('acceleration data', accelerationRecord);
+    setAccelerations(accelerations => [...accelerations, accelerationRecord]);
   }
 
   useIonViewDidLeave(() => {
