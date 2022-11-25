@@ -1,3 +1,7 @@
+export const clearStorage = () => {
+    sessionStorage.clear();
+}
+
 export const writeInStorage = <T>(key: string, val: T) => {
     let localValue: string;
     if (typeof (val) === 'string' || val instanceof String) {

@@ -35,16 +35,7 @@ const App: React.FC = () => {
   document.body.classList.toggle('dark', true);
 
   useEffect(() => {
-    const deviceId = readValueFromStorage("BleDeviceId");
     initCrypto();
-    if (deviceId == undefined) {
-      connectToDevices()
-        .then(() => console.log("Connected to a device"))
-        .catch(err => {
-          alert("Failed to connect to ble device!");
-          console.log("Failed to connect!", err);
-        });
-    }
   }, []);
 
   return (<IonApp>

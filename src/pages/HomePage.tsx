@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState, } from 'react';
 import { useNavigate } from 'react-router';
 import { Hand } from '../Hand';
@@ -37,6 +37,9 @@ const HomePage: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Sample App</IonTitle>
+          <IonButtons>
+            <IonButton href='/user'>Switch User</IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

@@ -1,8 +1,9 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { writeInStorage } from '../IonicStorage';
+import { clearStorage, writeInStorage } from '../IonicStorage';
 import { useNavigate } from 'react-router';
 import './HomePage.css';
+import { connectToDevices } from '../ble/BLEWrapper';
 
 const UserPage: React.FC = () => {
     const navigate = useNavigate();
@@ -17,7 +18,14 @@ const UserPage: React.FC = () => {
 
     const handleSubmit = () => {
         if(userName != undefined) {
+            clearStorage();
             writeInStorage('userName', userName);
+            connectToDevices()
+                .then(() => console.log("Connected to a device"))
+                .catch(err => {
+                    alert("Failed to connect to ble device!");
+                    console.log("Failed to connect!", err);
+                });
             navigate("/home");
         }
     }
