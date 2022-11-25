@@ -1,4 +1,4 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonViewDidLeave } from '@ionic/react';
 import React, { useEffect, useState } from "react";
 import AccelerationRecord from '../ble/AccelerationRecord';
 
@@ -78,6 +78,10 @@ const CalibrationPage: React.FC = () => {
       setCalibrationIterations(appendSessionUuid('calibration-' + Hand[hand], calibrationUuid));
     }, 10000);
   }
+
+  useIonViewDidLeave(() => {
+    unSubscribeToNotifications().catch(handleBleError);
+  });
 
   return (
     <IonPage>
