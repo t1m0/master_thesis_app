@@ -3,6 +3,9 @@ import { encrypt } from "./encrypt";
 
 export function shareCloud(uuid: string, game: string, data: any) {
   console.log(data);
+  let user = readValueFromStorage('userName');
+  data['subject'] = user;
+  console.log(data);
   const body = encrypt(JSON.stringify(data));
   if (body != false) {
     const requestConfig = {
@@ -11,8 +14,7 @@ export function shareCloud(uuid: string, game: string, data: any) {
       body: body
     };
     let url = `https://master-thesis-data-function.azurewebsites.net/api/data?uuid=${uuid}&game=${game}`
-    let user = readValueFromStorage('userName');
-    console.log("User", user);
+    
     if (user != undefined && user.length > 0) {
       user = user.toLowerCase();
       user = user.replace(" ", "_");
