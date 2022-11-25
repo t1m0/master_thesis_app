@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { subscribeToNotificationsForHand, unSubscribeToNotifications, unSubscribeToNotificationsForHand } from '../../ble/BLEWrapper';
+import { handleBleError, subscribeToNotificationsForHand, unSubscribeToNotifications, unSubscribeToNotificationsForHand } from '../../ble/BLEWrapper';
 import AccelerationRecord from '../../ble/AccelerationRecord';
 import { useIonViewDidLeave } from '@ionic/react';
 import { appendSessionUuid, readValueFromStorage } from '../../IonicStorage';
@@ -19,15 +19,14 @@ const DriftGameContainer: React.FC<DriftGameContainerProbs> = (props: DriftGameC
     const [started, setStarted] = useState(false);
     const [finished, setFinished] = useState(false);
 
-
     function launchGameCallback() {
         setDriftSession(new DriftSession());
         setStarted(true);
         setFinished(false);
         driftSession.startTime = Date.now();
         setDriftSession(driftSession);
-        subscribeToNotificationsForHand(Hand.DOMINANT, ac => accelerationCallback(Hand.DOMINANT, ac)).catch(console.error);
-        subscribeToNotificationsForHand(Hand.NON_DOMINANT, ac => accelerationCallback(Hand.NON_DOMINANT, ac)).catch(console.error);
+        subscribeToNotificationsForHand(Hand.DOMINANT, ac => accelerationCallback(Hand.DOMINANT, ac)).catch(handleBleError);
+        subscribeToNotificationsForHand(Hand.NON_DOMINANT, ac => accelerationCallback(Hand.NON_DOMINANT, ac)).catch(handleBleError);
     }
 
     function accelerationCallback(hand: Hand, accelerationRecord: AccelerationRecord) {
@@ -57,8 +56,8 @@ const DriftGameContainer: React.FC<DriftGameContainerProbs> = (props: DriftGameC
 
 
     function unsubscribNotifications() {
-        unSubscribeToNotificationsForHand(Hand.DOMINANT).catch(console.error);
-        unSubscribeToNotificationsForHand(Hand.NON_DOMINANT).catch(console.error);
+        unSubscribeToNotificationsForHand(Hand.DOMINANT).catch(handleBleError);
+        unSubscribeToNotificationsForHand(Hand.NON_DOMINANT).catch(handleBleError);
     }
 
     useIonViewDidLeave(() => {

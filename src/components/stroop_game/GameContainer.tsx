@@ -6,7 +6,7 @@ import { GameType } from './GameType';
 import StaticGameBoardContainer from './static/StaticGameBoardContainer';
 import StaticGameElementInput from './static/StaticGameElementInput';
 import { GameSession } from './GameSession';
-import { subscribeToNotifications, unSubscribeToNotifications } from '../../ble/BLEWrapper';
+import { handleBleError, subscribeToNotifications, unSubscribeToNotifications } from '../../ble/BLEWrapper';
 import AccelerationRecord from '../../ble/AccelerationRecord';
 import { useIonViewDidLeave } from '@ionic/react';
 import { GameClick } from './GameClick';
@@ -33,12 +33,11 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
     const timeOut = props.gameType != GameType.Static ? 1800 : getElements().length * 1500;
 
-
     function launchGameCallback() {
         setGameStarted(true);
         setGameFinished(false);
         setGameSession(new GameSession(props.gameType));
-        subscribeToNotifications(accelerationCallback).catch(console.error);
+        subscribeToNotifications(accelerationCallback).catch(handleBleError);
     }
 
     function accelerationCallback(accelerationRecord: AccelerationRecord) {
@@ -64,7 +63,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         session.endTime = Date.now();
         setGameSession(session);
         setGameFinished(true);
-        unSubscribeToNotifications();
+        unSubscribeToNotifications().catch(handleBleError);
         writeInStorage(gameSession.uuid, gameSession);
         console.log("Saved " + gameSession.uuid + " transition to analysis.")
         navigate("/stroop/" + gameSession.uuid);
@@ -87,7 +86,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
 
     useIonViewDidLeave(() => {
-        unSubscribeToNotifications().catch(console.error);
+        unSubscribeToNotifications().catch(handleBleError);
     });
 
     function getContainer() {

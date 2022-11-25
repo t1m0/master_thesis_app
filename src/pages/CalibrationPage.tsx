@@ -4,7 +4,7 @@ import AccelerationRecord from '../ble/AccelerationRecord';
 
 import { v4 as uuid } from 'uuid';
 
-import { subscribeToNotifications, unSubscribeToNotifications } from "../ble/BLEWrapper";
+import { handleBleError, subscribeToNotifications, unSubscribeToNotifications } from "../ble/BLEWrapper";
 import { appendSessionUuid, readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareCloud, shareLocal } from '../util/share';
 import { Hand } from '../Hand';
@@ -38,7 +38,7 @@ const CalibrationPage: React.FC = () => {
       'startTime': startTime,
       'endTime': endTime,
       'duration': duration,
-      'hand':Hand[hand].toLowerCase(),
+      'hand': Hand[hand].toLowerCase(),
       'device': bondedDevice
     };
   }
@@ -58,22 +58,24 @@ const CalibrationPage: React.FC = () => {
     shareCloud(fileName, 'calibration', result);
   }
 
+  
+
   const caputeAccelerometer = () => {
     setCalibrationUuid(uuid());
-    setCalibrationIterations(calibrationIterations+1);
+    setCalibrationIterations(calibrationIterations + 1);
     setRunning(true)
     setResults([]);
     console.log("Connecting to Live Data")
     const deviceId = readValueFromStorage(hand + "DeviceId");
     setBondedDevice(deviceId);
-    subscribeToNotifications(dataCallback).catch(console.error);
+    subscribeToNotifications(dataCallback).catch(handleBleError);
     setStartTime(Date.now());
     setTimeout(async () => {
-      unSubscribeToNotifications().catch(console.error);
+      unSubscribeToNotifications().catch(handleBleError);
       setEndTime(Date.now());
       shareToCloud();
       setRunning(false);
-      setCalibrationIterations(appendSessionUuid('calibration-'+Hand[hand], calibrationUuid));
+      setCalibrationIterations(appendSessionUuid('calibration-' + Hand[hand], calibrationUuid));
     }, 10000);
   }
 

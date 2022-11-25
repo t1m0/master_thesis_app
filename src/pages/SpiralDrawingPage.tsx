@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router';
 
 import './SpiralDrawing.css';
 import SpiralDrawing from '../components/spiral/model/SpiralDrawing';
-import { subscribeToNotifications, unSubscribeToNotifications } from '../ble/BLEWrapper';
+import { handleBleError, subscribeToNotifications, unSubscribeToNotifications } from '../ble/BLEWrapper';
 import AccelerationRecord from '../ble/AccelerationRecord';
 import { getCorrectedHeight, getCorrectedWidth } from '../util/layout';
 import { Hand } from '../Hand';
@@ -27,12 +27,12 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
   }
 
   const drawingStarted = () => {
-    subscribeToNotifications(dataCallback).catch(console.error);
+    subscribeToNotifications(dataCallback).catch(handleBleError);
     setStartTime(Date.now());
   };
 
   const drawingFinished = (result: SpiralDrawing) => {
-    unSubscribeToNotifications().catch(console.error);
+    unSubscribeToNotifications().catch(handleBleError);
     const endTime = Date.now();
     const updatedResult = new SpiralDrawing(result.imageWrapper, result.start, result.end, accelerations);
     updatedResult.startTime = startTime;
@@ -48,7 +48,7 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
   }
 
   useIonViewDidLeave(() => {
-    unSubscribeToNotifications().catch(console.error);
+    unSubscribeToNotifications().catch(handleBleError);
   });
 
   const canvasHeight = getCorrectedHeight()/*buttons*/ - 50;

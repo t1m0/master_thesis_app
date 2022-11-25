@@ -52,11 +52,11 @@ export async function connectIfNotConnected(deviceId: string) {
     const devices = await BleClient.getConnectedDevices([BLE_SERVICE])
     let connected = false;
     devices.forEach(d => {
-        if(deviceId == d.deviceId) {
+        if (deviceId == d.deviceId) {
             connected = true;
         }
     })
-    if(!connected && !isPlatform('desktop')) {
+    if (!connected && !isPlatform('desktop')) {
         console.log(`Connecting to ${deviceId} again`);
         await BleClient.connect(deviceId, onDisconnect);
     }
@@ -64,7 +64,7 @@ export async function connectIfNotConnected(deviceId: string) {
 
 export async function subscribeToNotifications(dataCallback: (record: AccelerationRecord) => void): Promise<void> {
     const hand = readObjectFromStorage("hand") as Hand;
-    
+
     try {
         await subscribeToNotificationsForHand(hand, dataCallback);
         return Promise.resolve();
@@ -73,7 +73,7 @@ export async function subscribeToNotifications(dataCallback: (record: Accelerati
     }
 }
 
-export async function subscribeToNotificationsForHand(hand:Hand, dataCallback: (record: AccelerationRecord) => void): Promise<void> {
+export async function subscribeToNotificationsForHand(hand: Hand, dataCallback: (record: AccelerationRecord) => void): Promise<void> {
     if (isPlatform('desktop')) {
         console.log("BLE not supported on Desktop!");
         return Promise.resolve()
@@ -111,7 +111,7 @@ export async function unSubscribeToNotifications(): Promise<void> {
     }
 }
 
-export async function unSubscribeToNotificationsForHand(hand:Hand): Promise<void> {
+export async function unSubscribeToNotificationsForHand(hand: Hand): Promise<void> {
     if (isPlatform('desktop')) {
         console.log("BLE not supported on Desktop!");
         return Promise.resolve()
@@ -131,6 +131,13 @@ export async function unSubscribeToNotificationsForHand(hand:Hand): Promise<void
     }
 }
 
+export function handleBleError(error: any) {
+    console.log(error);
+    alert("Failed to connect to device - please try again!");
+}
+
 function onDisconnect(deviceId: string): void {
     console.log(`device ${deviceId} disconnected`);
 }
+
+
