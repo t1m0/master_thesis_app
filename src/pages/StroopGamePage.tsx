@@ -23,7 +23,7 @@ const StroopGamePage: React.FC<StroopGamePageProps> = (props: StroopGamePageProp
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Color Selector</IonTitle>
+          <IonTitle>Stroop Game</IonTitle>
           <IonButtons>
             <IonBackButton defaultHref='/home' />
           </IonButtons>
