@@ -25,7 +25,8 @@ export async function connectToDevices(): Promise<void> {
 
 export async function connectToDevice(hand: Hand): Promise<void> {
     if (isPlatform('desktop')) {
-        return Promise.reject("BLE not supported on Desktop!");
+        console.log("BLE not supported on Desktop!");
+        return Promise.resolve()
     }
     const key = hand + "DeviceId";
     try {
@@ -55,7 +56,7 @@ export async function connectIfNotConnected(deviceId: string) {
             connected = true;
         }
     })
-    if(!connected) {
+    if(!connected && !isPlatform('desktop')) {
         console.log(`Connecting to ${deviceId} again`);
         await BleClient.connect(deviceId, onDisconnect);
     }
@@ -74,7 +75,8 @@ export async function subscribeToNotifications(dataCallback: (record: Accelerati
 
 export async function subscribeToNotificationsForHand(hand:Hand, dataCallback: (record: AccelerationRecord) => void): Promise<void> {
     if (isPlatform('desktop')) {
-        return Promise.reject("BLE not supported on Desktop!");
+        console.log("BLE not supported on Desktop!");
+        return Promise.resolve()
     }
     try {
         const deviceId = readValueFromStorage(hand + "DeviceId");
@@ -111,7 +113,8 @@ export async function unSubscribeToNotifications(): Promise<void> {
 
 export async function unSubscribeToNotificationsForHand(hand:Hand): Promise<void> {
     if (isPlatform('desktop')) {
-        return Promise.reject("BLE not supported on Desktop!");
+        console.log("BLE not supported on Desktop!");
+        return Promise.resolve()
     }
     try {
         const deviceId = readValueFromStorage(hand + "DeviceId");
