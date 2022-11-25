@@ -1,8 +1,10 @@
 export default class ImageCoordinate {
     x: number;
     y: number;
+    timeStamp: number;
 
     constructor(x:number,y:number) {
+        this.timeStamp = Date.now();
         this.x = x;
         this.y = y;
     }

@@ -203,8 +203,8 @@ export class SpiralCanvasContainer extends React.Component<SpiralCanvasContainer
 
     handleSave = () => {
         if(this.canvasRef) {
-            const start = new ImageCoordinate(this.firstX,this.firstY);
-            const end = new ImageCoordinate(this.lastX,this.lastY);
+            const start = this.spiralCoordinates[0];
+            const end = this.spiralCoordinates[this.spiralCoordinates.length-1];
             const height = this.canvasRef.height;
             const width = this.canvasRef.width;
             const coordinates = this.spiralCoordinates;
