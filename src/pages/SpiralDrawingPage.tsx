@@ -37,7 +37,6 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
     const updatedResult = new SpiralDrawing(result.imageWrapper, result.start, result.end, accelerations);
     updatedResult.startTime = startTime;
     updatedResult.endTime = endTime;
-    console.log(updatedResult);
     writeInStorage(updatedResult.uuid, updatedResult);
     console.log("Saved " + updatedResult.uuid + " transition to analysis.");
     navigate("/spiral/" + updatedResult.uuid);
