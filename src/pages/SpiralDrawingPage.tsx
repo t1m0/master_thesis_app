@@ -23,6 +23,7 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   function restart() {
+    unSubscribeToNotifications().catch(handleBleError);
     forceUpdate();
   }
 
