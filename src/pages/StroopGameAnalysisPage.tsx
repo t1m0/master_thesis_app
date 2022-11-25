@@ -39,12 +39,13 @@ const StroopGameAnalysisPage: React.FC = () => {
             if(hand != undefined) {
                 result.hand = Hand[hand].toLowerCase();
             }
-            const localDurationInSec = Math.round((duration / 1000) * 100) / 100
-            shareCloud(uuid, GameType[loadedSession.gameType].toLowerCase(), result);
+            const localDurationInSec = Math.round((duration / 1000) * 100) / 100;
+            const gameTypeValue = GameType[loadedSession.gameType].toLowerCase();
+            shareCloud(uuid, gameTypeValue, result);
             setResult(result);
             setDurationInSec(localDurationInSec)
-            setGameType(GameType[loadedSession.gameType].toLowerCase())
-            setStroopIterations(appendSessionUuid('stroop-'+gameType+'-'+Hand[hand], loadedSession.uuid));
+            setGameType(gameTypeValue)
+            setStroopIterations(appendSessionUuid('stroop-'+gameTypeValue+'-'+Hand[hand], loadedSession.uuid));
         }
 
     }, []);

@@ -1,6 +1,6 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonViewDidLeave } from '@ionic/react';
-import { readObjectFromStorage, writeInStorage } from '../IonicStorage';
-import React, { useReducer, useState } from 'react'
+import { getSessionCount, readObjectFromStorage, writeInStorage } from '../IonicStorage';
+import React, { useEffect, useReducer, useState } from 'react'
 
 import { SpiralCanvasContainer } from '../components/spiral/SpiralCanvasContainer';
 import { useNavigate } from 'react-router';
@@ -12,15 +12,18 @@ import AccelerationRecord from '../ble/AccelerationRecord';
 import { getCorrectedHeight, getCorrectedWidth } from '../util/layout';
 import { Hand } from '../Hand';
 
-interface SpiralDrawingPage {
-
-}
-
-const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage) => {
+const SpiralDrawingPage: React.FC = () => {
   const navigate = useNavigate();
   const [startTime, setStartTime] = useState(0);
   const [accelerations, setAccelerations] = useState(new Array<AccelerationRecord>());
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+  const [spiralSession, setSpiralSession] = useState(0);
+
+  useEffect(() => {
+    const hand = readObjectFromStorage("hand") as Hand;
+    const sessionCount = getSessionCount('spiral-' + Hand[hand]);
+    setSpiralSession(sessionCount+1);
+  }, []);
 
   function restart() {
     unSubscribeToNotifications().catch(handleBleError);
@@ -59,7 +62,7 @@ const SpiralDrawingPage: React.FC<SpiralDrawingPage> = (props: SpiralDrawingPage
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Spiral Drawing</IonTitle>
+          <IonTitle>Spiral Drawing {spiralSession}</IonTitle>
           <IonButtons>
             <IonBackButton defaultHref='/home' />
           </IonButtons>
