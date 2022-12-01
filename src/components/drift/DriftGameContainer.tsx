@@ -8,6 +8,7 @@ import { DriftSession } from "./DriftSession";
 import LaunchDriftGameContainer from "./LaunchDriftGameContainer";
 import DriftContainer from "./DriftContainer";
 import { shareCloud } from "../../util/share";
+import { v4 as uuid } from 'uuid';
 
 interface DriftGameContainerProbs {
     incrementSessionCount: (currentCount: number) => void
@@ -23,6 +24,7 @@ const DriftGameContainer: React.FC<DriftGameContainerProbs> = (props: DriftGameC
         setDriftSession(new DriftSession());
         setStarted(true);
         setFinished(false);
+        driftSession.uuid = uuid();
         driftSession.startTime = Date.now();
         setDriftSession(driftSession);
         subscribeToNotificationsForHand(Hand.DOMINANT, ac => accelerationCallback(Hand.DOMINANT, ac)).catch(handleBleError);
