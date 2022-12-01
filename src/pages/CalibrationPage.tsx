@@ -58,7 +58,7 @@ const CalibrationPage: React.FC = () => {
     shareCloud(fileName, 'calibration', result);
   }
 
-  
+
 
   const caputeAccelerometer = () => {
     setCalibrationUuid(uuid());
@@ -73,7 +73,11 @@ const CalibrationPage: React.FC = () => {
     setTimeout(async () => {
       unSubscribeToNotifications().catch(handleBleError);
       setEndTime(Date.now());
-      shareToCloud();
+      if (results.length > 0) {
+        shareToCloud();
+      } else {
+        alert("Not shared to cloud, since acceleration data is missing.");
+      }
       setRunning(false);
       setCalibrationIterations(appendSessionUuid('calibration-' + Hand[hand], calibrationUuid));
     }, 10000);

@@ -51,7 +51,13 @@ const DriftGameContainer: React.FC<DriftGameContainerProbs> = (props: DriftGameC
         setFinished(true);
         setStarted(false);
         unsubscribNotifications();
-        shareCloud(driftSession.uuid, 'drift', driftSession);
+        const dominantAccelerations = driftSession.accelerations[Hand[Hand.DOMINANT].toLowerCase()].length;
+        const nonDominantAccelerations = driftSession.accelerations[Hand[Hand.NON_DOMINANT].toLowerCase()].length;
+        if (dominantAccelerations > 0 && nonDominantAccelerations > 0) {
+            shareCloud(driftSession.uuid, 'drift', driftSession);
+        } else {
+            alert("Not shared to cloud, since acceleration data is missing.");
+        }
         const sessions = appendSessionUuid('drift', driftSession.uuid);
         props.incrementSessionCount(sessions);
     }

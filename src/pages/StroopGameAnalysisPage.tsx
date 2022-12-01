@@ -32,20 +32,25 @@ const StroopGameAnalysisPage: React.FC = () => {
             const duration = session.endTime - session.startTime
             const result = analyse_stroop_game(loadedSession)
             const hand = readObjectFromStorage("hand") as Hand;
-            const deviceId = readValueFromStorage(hand+"DeviceId");
+            const deviceId = readValueFromStorage(hand + "DeviceId");
             if (deviceId != undefined) {
                 result.device = deviceId;
             }
-            if(hand != undefined) {
+            if (hand != undefined) {
                 result.hand = Hand[hand].toLowerCase();
             }
             const localDurationInSec = Math.round((duration / 1000) * 100) / 100;
             const gameTypeValue = GameType[loadedSession.gameType].toLowerCase();
-            shareCloud(uuid, gameTypeValue, result);
+            if (loadedSession.accelerations.length > 0) {
+                shareCloud(uuid, gameTypeValue, result);
+            } else {
+                alert("Not shared to cloud, since acceleration data is missing.");
+            }
+
             setResult(result);
             setDurationInSec(localDurationInSec)
             setGameType(gameTypeValue)
-            setStroopIterations(appendSessionUuid('stroop-'+gameTypeValue+'-'+Hand[hand], loadedSession.uuid));
+            setStroopIterations(appendSessionUuid('stroop-' + gameTypeValue + '-' + Hand[hand], loadedSession.uuid));
         }
 
     }, []);

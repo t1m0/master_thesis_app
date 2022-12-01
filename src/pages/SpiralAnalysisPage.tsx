@@ -22,16 +22,20 @@ const SpiralAnalysisPage: React.FC = () => {
     const currentDrawing = readObjectFromStorage<SpiralDrawing>(uuid);
     if (currentDrawing) {
       const hand = readObjectFromStorage("hand") as Hand;
-      setSpiralIterations(appendSessionUuid('spiral-'+Hand[hand], currentDrawing.uuid));
+      setSpiralIterations(appendSessionUuid('spiral-' + Hand[hand], currentDrawing.uuid));
       const result = spiralRating.rate(currentDrawing);
       setResult(result);
       setDrawing(currentDrawing);
-      shareCloud(currentDrawing.uuid, 'spiral', getShareObject(currentDrawing, result, hand));
+      if (currentDrawing.accelerations.length > 0) {
+        shareCloud(currentDrawing.uuid, 'spiral', getShareObject(currentDrawing, result, hand));
+      } else {
+        alert("Not shared to cloud, since acceleration data is missing.");
+      }
     }
   }, []);
 
-  const getShareObject = (drawing:SpiralDrawing, rating:SpiralDrawingRating, hand: Hand) => {
-    const deviceId = readValueFromStorage(hand+"DeviceId");
+  const getShareObject = (drawing: SpiralDrawing, rating: SpiralDrawingRating, hand: Hand) => {
+    const deviceId = readValueFromStorage(hand + "DeviceId");
     return { "drawing": drawing, "result": rating, "device": deviceId, "hand": Hand[hand].toLowerCase() };
   }
 
