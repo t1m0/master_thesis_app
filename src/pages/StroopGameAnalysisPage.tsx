@@ -68,7 +68,7 @@ const StroopGameAnalysisPage: React.FC = () => {
                 <IonToolbar>
                     <IonTitle>Stroop Analysis {stroopIterations} | {uuid}</IonTitle>
                     <IonButtons>
-                        <IonBackButton defaultHref={'/stroop-' + gameType} />
+                        <IonBackButton defaultHref={'/home'} />
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>

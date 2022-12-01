@@ -72,7 +72,7 @@ const SpiralAnalysisPage: React.FC = () => {
         <IonToolbar>
           <IonTitle>Spiral Analysis {spiralIterations} | {uuid}</IonTitle>
           <IonButtons>
-            <IonBackButton defaultHref='/spiral' />
+            <IonBackButton defaultHref='/home' />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
