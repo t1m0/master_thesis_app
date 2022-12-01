@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { clearStorage, writeInStorage } from '../IonicStorage';
 import { useNavigate } from 'react-router';
 import './HomePage.css';
-import { connectToDevices } from '../ble/BLEWrapper';
+import { connectToDevices, disconnectFromDevice, disconnectFromDevices } from '../ble/BLEWrapper';
 
 const UserPage: React.FC = () => {
     const navigate = useNavigate();
@@ -18,18 +18,23 @@ const UserPage: React.FC = () => {
 
     const handleSubmit = () => {
         if (userName != undefined) {
-            clearStorage();
-            writeInStorage('userName', userName);
-            connectToDevices()
-                .then(() => {
-                    console.log("Connected to devices.")
-                    navigate("/home");
-                })
-                .catch(err => {
-                    alert("Failed to connect to ble device!");
-                    console.log("Failed to connect!", err);
-                });
+            disconnectFromDevices()
+                .finally(connect);
         }
+    }
+
+    const connect = () => {
+        clearStorage();
+        writeInStorage('userName', userName);
+        connectToDevices()
+            .then(() => {
+                console.log("Connected to devices.")
+                navigate("/home");
+            })
+            .catch(err => {
+                alert("Failed to connect to ble device!");
+                console.log("Failed to connect!", err);
+            });
     }
 
     return (

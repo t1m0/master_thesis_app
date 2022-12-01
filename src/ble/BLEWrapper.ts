@@ -38,12 +38,39 @@ export async function connectToDevice(hand: Hand): Promise<void> {
                 services: [BLE_SERVICE]
             });
             console.log(`connecting to device '${device.deviceId}' for hand '${hand}'`,);
-            await BleClient.connect(device.deviceId, onDisconnect);
+            await BleClient.connect(device.deviceId, onDisconnect, { timeout: 30000 });
             console.log(`connected to device '${device.deviceId}' for hand '${hand}'`);
             writeInStorage(key, device.deviceId);
         }
         return Promise.resolve();
     } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+export async function disconnectFromDevices(): Promise<void> {
+    try {
+        await disconnectFromDevice(Hand.DOMINANT);
+        await disconnectFromDevice(Hand.NON_DOMINANT);
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+export async function disconnectFromDevice(hand: Hand): Promise<void> {
+    if (isPlatform('desktop')) {
+        alert("BLE not supported on Desktop!");
+        return Promise.reject()
+    }
+    try {
+        const deviceId = readValueFromStorage(hand + "DeviceId");
+        if (deviceId) {
+            BleClient.disconnect(deviceId)
+            console.log(`disconnected from device '${deviceId}'.`,);
+        }
+        return Promise.resolve();
+    } catch (error) {
+        console.error(`failed to disconnect from device.`, error);
         return Promise.reject(error);
     }
 }
