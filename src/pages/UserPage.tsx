@@ -17,16 +17,18 @@ const UserPage: React.FC = () => {
     }
 
     const handleSubmit = () => {
-        if(userName != undefined) {
+        if (userName != undefined) {
             clearStorage();
             writeInStorage('userName', userName);
             connectToDevices()
-                .then(() => console.log("Connected to a device"))
+                .then(() => {
+                    console.log("Connected to devices.")
+                    navigate("/home");
+                })
                 .catch(err => {
                     alert("Failed to connect to ble device!");
                     console.log("Failed to connect!", err);
                 });
-            navigate("/home");
         }
     }
 
@@ -42,12 +44,12 @@ const UserPage: React.FC = () => {
             </IonHeader>
             <IonContent fullscreen>
                 <div className='center-childs'>
-                    <form onSubmit={handleSubmit}>
+                    <form>
                         <label>
                             Name:
                             <input type="text" value={userName} onChange={handleChange} />
                         </label>
-                        <input type="submit" value="Submit" />
+                        <button type="button" onClick={handleSubmit}>Submit</button>
                     </form>
                 </div>
             </IonContent>

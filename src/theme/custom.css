@@ -38,3 +38,9 @@ ion-content .button {
     align-items: center;
     flex-direction: column;
 }
+label {
+    display: block;
+}
+input {
+    display: block;
+}
