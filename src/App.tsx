@@ -27,6 +27,7 @@ import StroopGameAnalysisPage from './pages/StroopGameAnalysisPage';
 import UserPage from './pages/UserPage';
 import DriftPage from './pages/DriftPage';
 import { initCrypto } from './util/encrypt';
+import SlowMovePage from './pages/SlowMovePage';
 
 setupIonicReact();
 
@@ -51,6 +52,7 @@ const App: React.FC = () => {
         <Route path="/drift" element={<DriftPage />} />
         <Route path="/calibration" element={<CalibrationPage />} />
         <Route path="/spiral/:uuid" element={<SpiralAnalysisPage />} />
+        <Route path="/slow-move" element={<SlowMovePage />} />
         <Route path="/user" element={<UserPage />} />
         <Route path="/" element={<Navigate to="/home" />} />
       </Routes>

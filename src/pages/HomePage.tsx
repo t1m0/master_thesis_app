@@ -58,6 +58,7 @@ const HomePage: React.FC = () => {
             <div className='activity-collection'>
               <a className='button' href="/stroop-static">Static Stroop Game</a><br />
               <a className='button' href="/spiral">Spiral Drawing</a><br />
+              <a className='button' href="/slow-move">Slow Move</a><br />
               <a className='button' href="/drift">Drift</a><br />
               <a className='button' href="/calibration">Calibration</a>
             </div>
