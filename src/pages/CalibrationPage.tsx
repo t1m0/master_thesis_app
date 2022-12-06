@@ -26,7 +26,6 @@ const CalibrationPage: React.FC = () => {
 
 
   const dataCallback = (accelerationRecodr: AccelerationRecord) => {
-    console.log('acceleration data', accelerationRecodr);
     setResults(results => [...results, accelerationRecodr]);
   }
 
@@ -55,7 +54,12 @@ const CalibrationPage: React.FC = () => {
     const result = getShareObejct();
     const date = new Date(endTime);
     const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
-    shareCloud(fileName, 'calibration', result);
+    console.log(`captured ${result.accelerations.length} or ${results.length} accelerations`);
+    if (result.accelerations.length > 0) {
+      shareCloud(fileName, 'calibration', result);
+    } else {
+      alert("Not shared to cloud, since acceleration data is missing.");
+    }
   }
 
 
@@ -73,11 +77,7 @@ const CalibrationPage: React.FC = () => {
     setTimeout(async () => {
       unSubscribeToNotifications().catch(handleBleError);
       setEndTime(Date.now());
-      if (results.length > 0) {
-        shareToCloud();
-      } else {
-        alert("Not shared to cloud, since acceleration data is missing.");
-      }
+      shareToCloud();
       setRunning(false);
       setCalibrationIterations(appendSessionUuid('calibration-' + Hand[hand], calibrationUuid));
     }, 10000);
@@ -93,7 +93,7 @@ const CalibrationPage: React.FC = () => {
         <IonToolbar>
           <IonTitle>Calibration {Hand[hand]} Hand - {calibrationIterations}</IonTitle>
           <IonButtons>
-            <IonBackButton defaultHref='/home' />
+            <IonBackButton defaultHref='/home'/>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -102,6 +102,7 @@ const CalibrationPage: React.FC = () => {
         <button onClick={caputeAccelerometer} hidden={running}>Capture Again</button>
         <p>{bondedDevice}</p>
         <p hidden={!running}>Capturing calibration data - don't move the device</p>
+        <p>Captured {results.length} data points.</p>
         <p hidden={running}>Finished Capturing calibration data.</p>
       </IonContent>
     </IonPage>

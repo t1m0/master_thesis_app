@@ -13,6 +13,7 @@ import { shareCloud, shareLocal } from '../util/share';
 const StroopGameAnalysisPage: React.FC = () => {
     const [result, setResult] = useState<StroopGameResult | undefined>(undefined);
     const [durationInSec, setDurationInSec] = useState(0);
+    const [accelerometerEntries, setAccelerometerEntries] = useState(0);
     const [gameType, setGameType] = useState("");
     const [stroopIterations, setStroopIterations] = useState(0);
     const params = useParams();
@@ -41,6 +42,7 @@ const StroopGameAnalysisPage: React.FC = () => {
             }
             const localDurationInSec = Math.round((duration / 1000) * 100) / 100;
             const gameTypeValue = GameType[loadedSession.gameType].toLowerCase();
+            setAccelerometerEntries(loadedSession.accelerations.length)
             if (loadedSession.accelerations.length > 0) {
                 shareCloud(uuid, gameTypeValue, result);
             } else {
@@ -83,6 +85,7 @@ const StroopGameAnalysisPage: React.FC = () => {
                         <p key={"mean-distance"}>Mean Click Distance: {result?.meanDistance}</p>
                         <p key={"sd-distance"}>Standard Deviation Click Distance: {result?.distanceStandardDeviation}</p>
                         <p key={"success-rate"}>Success Rate: {result?.successRate}%</p>
+                        <p key={"accelerometer"}>Accelerometer Data Points: {accelerometerEntries}</p>
                         <p key={"duration"}>Duration: {durationInSec}sec</p>
                         <div className='center-childs'>
                             <button onClick={clickShareLocal}>Share</button>
