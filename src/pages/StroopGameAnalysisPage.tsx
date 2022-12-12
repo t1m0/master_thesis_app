@@ -45,6 +45,7 @@ const StroopGameAnalysisPage: React.FC = () => {
             setAccelerometerEntries(loadedSession.accelerations.length)
             if (loadedSession.accelerations.length > 0) {
                 shareCloud(uuid, gameTypeValue, result);
+                navigate("/home");
             } else {
                 alert("Not shared to cloud, since acceleration data is missing.");
             }

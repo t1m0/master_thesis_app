@@ -10,10 +10,13 @@ import { Hand } from '../Hand';
 import { handleBleError, subscribeToNotifications, unSubscribeToNotifications } from '../ble/BLEWrapper';
 import { shareCloud } from '../util/share';
 import Movement from '../components/slow_move/Movement';
+import { useNavigate } from 'react-router';
 
 const SlowMovePage: React.FC = () => {
+    const navigate = useNavigate();
     const hand = readObjectFromStorage("hand") as Hand;
     const deviceId = readValueFromStorage(hand + "DeviceId");
+
     const [sessionUuid, setSessionUuid] = useState("");
     const [slowMoveSessions, setSlowMoveSessions] = useState(0);
     const [running, setRunning] = useState(false);
@@ -142,6 +145,7 @@ const SlowMovePage: React.FC = () => {
         console.log(result);
         if (result.accelerations.length > 0) {
             shareCloud(sessionUuid, 'slow-move', result);
+            navigate("/home");
         } else {
             alert("Not shared to cloud, since acceleration data is missing.");
         }

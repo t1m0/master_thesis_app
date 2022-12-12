@@ -28,6 +28,7 @@ const SpiralAnalysisPage: React.FC = () => {
       setDrawing(currentDrawing);
       if (currentDrawing.accelerations.length > 0) {
         shareCloud(currentDrawing.uuid, 'spiral', getShareObject(currentDrawing, result, hand));
+        navigate("/home");
       } else {
         alert("Not shared to cloud, since acceleration data is missing.");
       }
