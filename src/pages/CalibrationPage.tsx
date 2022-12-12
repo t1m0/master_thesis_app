@@ -5,13 +5,13 @@ import AccelerationRecord from '../ble/AccelerationRecord';
 import { v4 as uuid } from 'uuid';
 
 import { handleBleError, subscribeToNotifications, unSubscribeToNotifications } from "../ble/BLEWrapper";
-import { appendSessionUuid, readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
+import { appendSessionUuid, getSessionCount, readObjectFromStorage, readValueFromStorage } from '../IonicStorage';
 import { shareCloud, shareLocal } from '../util/share';
 import { Hand } from '../Hand';
 
 const CalibrationPage: React.FC = () => {
   const hand = readObjectFromStorage("hand") as Hand;
-  const [bondedDevice, setBondedDevice] = useState<string>();
+  const bondedDevice = readValueFromStorage(hand + "DeviceId");
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [results, setResults] = useState(new Array<AccelerationRecord>());
@@ -21,8 +21,17 @@ const CalibrationPage: React.FC = () => {
 
 
   useEffect(() => {
+    setCalibrationIterations(getSessionCount('calibration-' + Hand[hand]));
     caputeAccelerometer();
   }, []);
+
+  useEffect(() => {
+    if(!running && startTime > 0) {
+      unSubscribeToNotifications().catch(handleBleError);
+      setEndTime(Date.now());
+      shareToCloud();
+    }
+  }, [running]);
 
 
   const dataCallback = (accelerationRecodr: AccelerationRecord) => {
@@ -67,18 +76,14 @@ const CalibrationPage: React.FC = () => {
 
   const caputeAccelerometer = () => {
     setCalibrationUuid(uuid());
-    setCalibrationIterations(calibrationIterations + 1);
+    setStartTime(0);
+    setEndTime(0);
     setRunning(true)
     setResults([]);
     console.log("Connecting to Live Data")
-    const deviceId = readValueFromStorage(hand + "DeviceId");
-    setBondedDevice(deviceId);
     subscribeToNotifications(dataCallback).catch(handleBleError);
     setStartTime(Date.now());
-    setTimeout(async () => {
-      unSubscribeToNotifications().catch(handleBleError);
-      setEndTime(Date.now());
-      shareToCloud();
+    setTimeout(() => {
       setRunning(false);
     }, 10000);
   }
@@ -91,9 +96,9 @@ const CalibrationPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Calibration {Hand[hand]} Hand - {calibrationIterations}</IonTitle>
+          <IonTitle>Calibration {Hand[hand]} Hand - {calibrationIterations + 1}</IonTitle>
           <IonButtons>
-            <IonBackButton defaultHref='/home'/>
+            <IonBackButton defaultHref='/home' />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
