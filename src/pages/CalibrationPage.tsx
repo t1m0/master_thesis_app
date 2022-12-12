@@ -57,6 +57,7 @@ const CalibrationPage: React.FC = () => {
     console.log(`captured ${result.accelerations.length} or ${results.length} accelerations`);
     if (result.accelerations.length > 0) {
       shareCloud(fileName, 'calibration', result);
+      setCalibrationIterations(appendSessionUuid('calibration-' + Hand[hand], calibrationUuid));
     } else {
       alert("Not shared to cloud, since acceleration data is missing.");
     }
@@ -79,7 +80,6 @@ const CalibrationPage: React.FC = () => {
       setEndTime(Date.now());
       shareToCloud();
       setRunning(false);
-      setCalibrationIterations(appendSessionUuid('calibration-' + Hand[hand], calibrationUuid));
     }, 10000);
   }
 

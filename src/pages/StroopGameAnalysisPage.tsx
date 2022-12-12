@@ -45,6 +45,7 @@ const StroopGameAnalysisPage: React.FC = () => {
             setAccelerometerEntries(loadedSession.accelerations.length)
             if (loadedSession.accelerations.length > 0) {
                 shareCloud(uuid, gameTypeValue, result);
+                setStroopIterations(appendSessionUuid('stroop-' + gameTypeValue + '-' + Hand[hand], loadedSession.uuid));
                 navigate("/home");
             } else {
                 alert("Not shared to cloud, since acceleration data is missing.");
@@ -53,7 +54,6 @@ const StroopGameAnalysisPage: React.FC = () => {
             setResult(result);
             setDurationInSec(localDurationInSec)
             setGameType(gameTypeValue)
-            setStroopIterations(appendSessionUuid('stroop-' + gameTypeValue + '-' + Hand[hand], loadedSession.uuid));
         }
 
     }, []);

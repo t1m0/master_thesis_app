@@ -22,12 +22,12 @@ const SpiralAnalysisPage: React.FC = () => {
     const currentDrawing = readObjectFromStorage<SpiralDrawing>(uuid);
     if (currentDrawing) {
       const hand = readObjectFromStorage("hand") as Hand;
-      setSpiralIterations(appendSessionUuid('spiral-' + Hand[hand], currentDrawing.uuid));
       const result = spiralRating.rate(currentDrawing);
       setResult(result);
       setDrawing(currentDrawing);
       if (currentDrawing.accelerations.length > 0) {
         shareCloud(currentDrawing.uuid, 'spiral', getShareObject(currentDrawing, result, hand));
+        setSpiralIterations(appendSessionUuid('spiral-' + Hand[hand], currentDrawing.uuid));
         navigate("/home");
       } else {
         alert("Not shared to cloud, since acceleration data is missing.");

@@ -56,7 +56,6 @@ const SlowMovePage: React.FC = () => {
         unSubscribeToNotifications().catch(handleBleError);
         shareToCloud();
         setRunning(false);
-        setSlowMoveSessions(appendSessionUuid('slow-move-' + Hand[hand], sessionUuid));
     }
 
     const onTouchStart = (event: React.TouchEvent) => {
@@ -145,6 +144,7 @@ const SlowMovePage: React.FC = () => {
         console.log(result);
         if (result.accelerations.length > 0) {
             shareCloud(sessionUuid, 'slow-move', result);
+            setSlowMoveSessions(appendSessionUuid('slow-move-' + Hand[hand], sessionUuid));
             navigate("/home");
         } else {
             alert("Not shared to cloud, since acceleration data is missing.");
