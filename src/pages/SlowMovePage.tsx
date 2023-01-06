@@ -19,7 +19,6 @@ const SlowMovePage: React.FC = () => {
 
     const [sessionUuid, setSessionUuid] = useState("");
     const [slowMoveSessions, setSlowMoveSessions] = useState(0);
-    const [running, setRunning] = useState(false);
     const [moving, setMoving] = useState(false);
     const [startTime, setStartTime] = useState(0);
     const [endTime, setEndTime] = useState(0);
@@ -36,15 +35,11 @@ const SlowMovePage: React.FC = () => {
         setAccelerations(accelerations => [...accelerations, accelerationRecord]);
     }
 
-    const launchGameCallback = () => {
-        setRunning(true);
+    const start = () => {
         setSessionUuid(uuid());
         setAccelerations([]);
         setStartTime(0);
         setEndTime(0);
-    }
-
-    const start = () => {
         setMoving(true);
         subscribeToNotifications(dataCallback).catch(handleBleError);
         setStartTime(Date.now());
@@ -55,7 +50,6 @@ const SlowMovePage: React.FC = () => {
         setEndTime(Date.now());
         unSubscribeToNotifications().catch(handleBleError);
         shareToCloud();
-        setRunning(false);
     }
 
     const onTouchStart = (event: React.TouchEvent) => {
@@ -167,15 +161,12 @@ const SlowMovePage: React.FC = () => {
             </IonHeader>
             <IonContent fullscreen>
                 <div className='slow-move-container'>
-                    <div className='slow-move center-childs' hidden={!running}>
+                    <div className='slow-move center-childs'>
                         <div className='line-container' onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} >
                             <span id='start-point' className="dot"></span>
                             <div className='line'></div>
                             <span id='end-point' className="dot"></span>
                         </div>
-                    </div>
-                    <div className="center-childs" hidden={running}>
-                        <button onClick={launchGameCallback}>Launch Game</button>
                     </div>
                 </div>
             </IonContent>
