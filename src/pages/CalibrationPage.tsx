@@ -52,8 +52,7 @@ const CalibrationPage: React.FC = () => {
   }
 
   const clickShareLocal = () => {
-    const date = new Date(endTime);
-    const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}.json`;
+    const fileName = `${calibrationUuid}.json`;
     const result = getShareObejct();
     const file = new File([JSON.stringify(result)], fileName, { type: "application/json" })
     shareLocal(fileName, file);
@@ -61,11 +60,9 @@ const CalibrationPage: React.FC = () => {
 
   const shareToCloud = () => {
     const result = getShareObejct();
-    const date = new Date(endTime);
-    const fileName = `acceleration_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     console.log(`captured ${result.accelerations.length} or ${results.length} accelerations`);
     if (result.accelerations.length > 0) {
-      shareCloud(fileName, 'calibration', result);
+      shareCloud(calibrationUuid, 'calibration', result);
       setCalibrationIterations(appendSessionUuid('calibration-' + Hand[hand], calibrationUuid));
     } else {
       alert("Not shared to cloud, since acceleration data is missing.");
